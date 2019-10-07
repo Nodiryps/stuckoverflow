@@ -1,0 +1,9 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\Spy\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\Spy\\.nuget\\packages",
+      "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\prid1920-g10\\dotnet-sdk-2.2.401-win-x64\\sdk\\NuGetFallbackFolder"
+    ]
+  }
+}

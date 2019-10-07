@@ -1,0 +1,34 @@
+K:\EPFC\PRID\2019-2020\PRID1920\versions\V02 - DTO + Date de naissance + gestion des validations\prid1920-g10\bin\Debug\netcoreapp2.2\prid1920-g10.deps.json
+K:\EPFC\PRID\2019-2020\PRID1920\versions\V02 - DTO + Date de naissance + gestion des validations\prid1920-g10\bin\Debug\netcoreapp2.2\prid1920-g10.runtimeconfig.json
+K:\EPFC\PRID\2019-2020\PRID1920\versions\V02 - DTO + Date de naissance + gestion des validations\prid1920-g10\bin\Debug\netcoreapp2.2\prid1920-g10.runtimeconfig.dev.json
+K:\EPFC\PRID\2019-2020\PRID1920\versions\V02 - DTO + Date de naissance + gestion des validations\prid1920-g10\bin\Debug\netcoreapp2.2\prid1920-g10.dll
+K:\EPFC\PRID\2019-2020\PRID1920\versions\V02 - DTO + Date de naissance + gestion des validations\prid1920-g10\bin\Debug\netcoreapp2.2\prid1920-g10.pdb
+K:\EPFC\PRID\2019-2020\PRID1920\versions\V02 - DTO + Date de naissance + gestion des validations\prid1920-g10\bin\Debug\netcoreapp2.2\PRID_Framework.dll
+K:\EPFC\PRID\2019-2020\PRID1920\versions\V02 - DTO + Date de naissance + gestion des validations\prid1920-g10\bin\Debug\netcoreapp2.2\PRID_Framework.pdb
+K:\EPFC\PRID\2019-2020\PRID1920\versions\V02 - DTO + Date de naissance + gestion des validations\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.csprojAssemblyReference.cache
+K:\EPFC\PRID\2019-2020\PRID1920\versions\V02 - DTO + Date de naissance + gestion des validations\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.csproj.CoreCompileInputs.cache
+K:\EPFC\PRID\2019-2020\PRID1920\versions\V02 - DTO + Date de naissance + gestion des validations\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.RazorAssemblyInfo.cache
+K:\EPFC\PRID\2019-2020\PRID1920\versions\V02 - DTO + Date de naissance + gestion des validations\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.RazorAssemblyInfo.cs
+K:\EPFC\PRID\2019-2020\PRID1920\versions\V02 - DTO + Date de naissance + gestion des validations\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.AssemblyInfoInputs.cache
+K:\EPFC\PRID\2019-2020\PRID1920\versions\V02 - DTO + Date de naissance + gestion des validations\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.AssemblyInfo.cs
+K:\EPFC\PRID\2019-2020\PRID1920\versions\V02 - DTO + Date de naissance + gestion des validations\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.RazorTargetAssemblyInfo.cache
+K:\EPFC\PRID\2019-2020\PRID1920\versions\V02 - DTO + Date de naissance + gestion des validations\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.csproj.CopyComplete
+K:\EPFC\PRID\2019-2020\PRID1920\versions\V02 - DTO + Date de naissance + gestion des validations\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.dll
+K:\EPFC\PRID\2019-2020\PRID1920\versions\V02 - DTO + Date de naissance + gestion des validations\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.pdb
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\prid1920-g10\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-tuto.csprojAssemblyReference.cache
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\prid1920-g10\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-tuto.csproj.CoreCompileInputs.cache
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\prid1920-g10\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-tuto.RazorAssemblyInfo.cache
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\prid1920-g10\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-tuto.RazorAssemblyInfo.cs
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\prid1920-g10\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-tuto.AssemblyInfoInputs.cache
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\prid1920-g10\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-tuto.AssemblyInfo.cs
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\prid1920-g10\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-tuto.dll
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\prid1920-g10\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-tuto.pdb
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\prid1920-g10\prid1920-g10\bin\Debug\netcoreapp2.2\prid1920-tuto.deps.json
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\prid1920-g10\prid1920-g10\bin\Debug\netcoreapp2.2\prid1920-tuto.runtimeconfig.json
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\prid1920-g10\prid1920-g10\bin\Debug\netcoreapp2.2\prid1920-tuto.runtimeconfig.dev.json
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\prid1920-g10\prid1920-g10\bin\Debug\netcoreapp2.2\prid1920-tuto.dll
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\prid1920-g10\prid1920-g10\bin\Debug\netcoreapp2.2\prid1920-tuto.pdb
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\prid1920-g10\prid1920-g10\bin\Debug\netcoreapp2.2\PRID_Framework.dll
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\prid1920-g10\prid1920-g10\bin\Debug\netcoreapp2.2\PRID_Framework.pdb
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\prid1920-g10\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-tuto.RazorTargetAssemblyInfo.cache
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\prid1920-g10\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-tuto.csproj.CopyComplete
