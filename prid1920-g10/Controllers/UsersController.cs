@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using prid1920_g10.Models;
-using System.ComponentModel.DataAnnotations;
 using PRID_Framework;
 
 namespace prid1920_g10.Controllers

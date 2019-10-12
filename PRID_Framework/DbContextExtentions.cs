@@ -31,7 +31,7 @@ namespace PRID_Framework
         {
             var result = new List<ValidationResult>();
             foreach (var entry in context.ChangeTracker.Entries().Where(
-                e => (e.State == EntityState.Added) || (e.State == EntityState.Modified)))
+                e => (e.State == EntityState.Added) || (e.State == EntityState.Modified)).ToList())
             {
                 var entity = entry.Entity;
                 var valProvider = new ValidationDbContextServiceProvider(context);
