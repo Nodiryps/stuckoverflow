@@ -86,12 +86,12 @@ namespace prid1920_g10.Controllers
             return CreatedAtAction(nameof(GetOne), new { Id = newUser.Id }, newUser.ToDTO());
         }
 
-        // private int GetIdByPseudo(string pseudo)
-        // {
-        //     return (from u in _context.Users
-        //             where u.Pseudo == pseudo
-        //             select u.Id).FirstOrDefault();
-        // }
+        private int GetIdByPseudo(string pseudo)
+        {
+            return (from u in _context.Users
+                    where u.Pseudo == pseudo
+                    select u.Id).FirstOrDefault();
+        }
 
         [HttpPut("{pseudo}")]
         public async Task<IActionResult> PutUser(string pseudo, UserDTO userDTO)
@@ -99,7 +99,7 @@ namespace prid1920_g10.Controllers
             if (pseudo != userDTO.Pseudo)
                 return BadRequest();
 
-            var user = await _context.Users.FindAsync(userDTO.Id);
+            var user = await _context.Users.FindAsync(GetIdByPseudo(userDTO.Id));
 
             if (user == null)
                 return NotFound();
@@ -118,7 +118,7 @@ namespace prid1920_g10.Controllers
         [HttpDelete("{pseudo}")]
         public async Task<IActionResult> DeleteUser(string pseudo)
         {
-            var user = await _context.Users.FindAsync(pseudo);
+            var user = await _context.Users.FindAsync(GetIdByPseudo(pseudo));
 
             if (user == null)
                 return NotFound();
