@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920-g10\\PRID_Framework\\PRID_Framework.csproj": {}
+    "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920-g10\\prid1920-g10.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920-g10\\PRID_Framework\\PRID_Framework.csproj": {
+    "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920-g10\\prid1920-g10.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920-g10\\PRID_Framework\\PRID_Framework.csproj",
-        "projectName": "PRID_Framework",
-        "projectPath": "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920-g10\\PRID_Framework\\PRID_Framework.csproj",
+        "projectUniqueName": "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920-g10\\prid1920-g10.csproj",
+        "projectName": "prid1920-tuto",
+        "projectPath": "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920-g10\\prid1920-g10.csproj",
         "packagesPath": "C:\\Users\\Spy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920-g10\\PRID_Framework\\obj\\",
+        "outputPath": "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920-g10\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\dotnet-sdk-2.2.401-win-x64\\sdk\\NuGetFallbackFolder"
@@ -41,19 +41,22 @@
       "frameworks": {
         "netcoreapp2.2": {
           "dependencies": {
-            "Microsoft.EntityFrameworkCore": {
+            "Microsoft.AspNetCore.App": {
+              "suppressParent": "All",
               "target": "Package",
-              "version": "[2.2.6, )"
+              "version": "[2.2.0, )",
+              "autoReferenced": true
+            },
+            "Microsoft.AspNetCore.Razor.Design": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )"
             },
             "Microsoft.NETCore.App": {
               "suppressParent": "All",
               "target": "Package",
               "version": "[2.2.0, )",
               "autoReferenced": true
-            },
-            "Newtonsoft.Json": {
-              "target": "Package",
-              "version": "[12.0.2, )"
             }
           },
           "imports": [

@@ -1,0 +1,14 @@
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920-g10\bin\Debug\netcoreapp2.2\prid1920-g10.deps.json
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920-g10\bin\Debug\netcoreapp2.2\prid1920-g10.runtimeconfig.json
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920-g10\bin\Debug\netcoreapp2.2\prid1920-g10.runtimeconfig.dev.json
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920-g10\bin\Debug\netcoreapp2.2\prid1920-g10.dll
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920-g10\bin\Debug\netcoreapp2.2\prid1920-g10.pdb
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.csprojAssemblyReference.cache
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.csproj.CoreCompileInputs.cache
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.RazorAssemblyInfo.cache
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.RazorAssemblyInfo.cs
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.AssemblyInfoInputs.cache
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.AssemblyInfo.cs
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.RazorTargetAssemblyInfo.cache
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.dll
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920-g10\obj\Debug\netcoreapp2.2\prid1920-g10.pdb
