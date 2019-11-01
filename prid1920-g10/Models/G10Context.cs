@@ -11,10 +11,10 @@ namespace prid1920_g10.Models
 {
     public class G10Context : DbContext
     {
+        public DbSet<User> Users { get; set; }
+
         public G10Context(DbContextOptions<G10Context> options)
             : base(options) { }
-
-        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -23,12 +23,18 @@ namespace prid1920_g10.Models
             builder.Entity<User>().HasData(
                 new User
                 {
-                    Id = 1, Pseudo = "yas", Password = "epfc", Email = "yas@epfc.eu",
+                    Id = 1, Pseudo = "admin", Password = "epfc", Email = "admin@epfc.eu",
+                    FirstName = "Nimda", LastName = "Rotartsi", BirthDate = new DateTime(1990, 1, 27),
+                    Role = Role.Admin
+                },
+                new User
+                {
+                    Id = 2, Pseudo = "yas", Password = "epfc", Email = "yas@epfc.eu",
                     FirstName = "Yasmina", LastName = "El Ghouate", BirthDate = new DateTime(1983, 1, 27)
                 },
                 new User
                 {
-                    Id = 2, Pseudo = "oth", Password = "epfc", Email = "oth@epfc.eu",
+                    Id = 3, Pseudo = "oth", Password = "epfc", Email = "oth@epfc.eu",
                     FirstName = "Othman", LastName = "Zamzam", BirthDate = new DateTime(2000, 1, 27)
                 }
             );

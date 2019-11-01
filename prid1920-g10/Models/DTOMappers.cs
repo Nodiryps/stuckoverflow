@@ -14,6 +14,7 @@ namespace prid1920_g10.Models {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 BirthDate = user.BirthDate,
+                Role = user.Role
             };
         }
 

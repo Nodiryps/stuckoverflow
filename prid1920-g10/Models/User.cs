@@ -9,6 +9,8 @@ using System.Linq;
 
 namespace prid1920_g10.Models
 {
+    public enum Role { Admin = 2, Manager = 1, Member = 0 }
+
     public class User : IValidatableObject
     {
         private const int PasswordAndPseudoMinLength = 3;
@@ -35,6 +37,14 @@ namespace prid1920_g10.Models
 
         public DateTime? BirthDate { get; set; }
 
+        [Required(ErrorMessage = "Required")]
+        public int Reputation { get; set; }
+
+        public Role Role { get; set; } = Role.Member;
+
+        [NotMapped]
+        public string Token { get; set; }
+
         public int? Age
         {
             get
@@ -48,8 +58,6 @@ namespace prid1920_g10.Models
             }
         }
 
-        [Required(ErrorMessage = "Required")]
-        public int Reputation { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

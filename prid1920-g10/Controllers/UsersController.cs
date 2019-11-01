@@ -4,11 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using System.Text;
+using System.Security.Claims;
+using prid1920_g10.Helpers;
 using prid1920_g10.Models;
 using PRID_Framework;
 
 namespace prid1920_g10.Controllers
 {
+    [Authorize]
     [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -20,14 +29,16 @@ namespace prid1920_g10.Controllers
             _context = context;
         }
 
+        [Authorized(Role.Admin)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll()
         {
             return (await _context.Users.ToListAsync()).ToDTO();
         }
 
+        [Authorized(Role.Admin)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserDTO>> GetOne(int id)
+        public async Task<ActionResult<UserDTO>> GetUserById(int id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
@@ -35,8 +46,9 @@ namespace prid1920_g10.Controllers
             return user.ToDTO();
         }
 
+        [Authorized(Role.Admin)]
         [HttpPost]
-        public async Task<ActionResult<UserDTO>> PostUser(UserDTO data)
+        public async Task<ActionResult<UserDTO>> AddUser(UserDTO data)
         {
             var user = await _context.Users.FindAsync(data.Id);
 
@@ -59,7 +71,7 @@ namespace prid1920_g10.Controllers
             if (!res.IsEmpty)
                 return BadRequest(res);
 
-            return CreatedAtAction(nameof(GetOne), new { Id = newUser.Id }, newUser.ToDTO());
+            return CreatedAtAction(nameof(GetUserById), new { Id = newUser.Id }, newUser.ToDTO());
         }
 
         private int GetIdByPseudo(string pseudo)
@@ -69,6 +81,7 @@ namespace prid1920_g10.Controllers
                     select u.Id).FirstOrDefault();
         }
 
+        [Authorized(Role.Admin)]
         [HttpPut("{pseudo}")]
         public async Task<IActionResult> PutUser(string pseudo, UserDTO userDTO)
         {
@@ -91,6 +104,7 @@ namespace prid1920_g10.Controllers
             return NoContent();
         }
 
+        [Authorized(Role.Admin)]
         [HttpDelete("{pseudo}")]
         public async Task<IActionResult> DeleteUser(string pseudo)
         {
@@ -103,6 +117,54 @@ namespace prid1920_g10.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public async Task<ActionResult<User>> Authenticate(UserDTO data) 
+        {
+            var user = await Authenticate(data.Pseudo, data.Password);
+
+            if(user == null)
+                return BadRequest(new ValidationErrors().Add("User not found", "Pseudo"));
+            if(user.Token == null)
+                return BadRequest(new ValidationErrors().Add("Incorrect password", "Password"));
+            return Ok(user);
+        }
+
+        private async Task<User> Authenticate(string pseudo, string password)
+        {
+            var user = await _context.Users.FindAsync(pseudo);
+
+            if(user == null)
+                return null;
+            if(user.Password == password)
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes("my-super-secret-key");
+                var tokenDescriptor = new SecurityTokenDescriptor 
+                {
+                    Subject = new ClaimsIdentity
+                    (
+                        new Claim[]
+                        {
+                            new Claim(ClaimTypes.Name, user.Pseudo),
+                            new Claim(ClaimTypes.Role, user.Role.ToString())
+                        }
+                    ),
+                    IssuedAt = DateTime.UtcNow,
+                    Expires = DateTime.UtcNow.AddMinutes(10),
+                        SigningCredentials = new SigningCredentials
+                        (
+                            new SymmetricSecurityKey(key), 
+                            SecurityAlgorithms.HmacSha256Signature
+                        )
+                };
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                user.Token = tokenHandler.WriteToken(token);
+            }
+            user.Password = null;
+            return user;
         }
     }
 }

@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Text;
+using System.Threading.Tasks;
 using prid1920_g10.Models;
 
 namespace prid1920_g10
@@ -36,6 +41,47 @@ namespace prid1920_g10
             services.AddSpaStaticFiles(configuration => {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            // JWT super secret key
+            var key = Encoding.ASCII.GetBytes("my-super-secret-key");
+            // JWT for authentication && checking of authen.
+            services.AddAuthentication(x => {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x => {
+                // only httpS
+                x.RequireHttpsMetadata = true;
+                x.SaveToken = true;
+                // how to validate the received token
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    // check if it's signed with the key 
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    // not checking the sender
+                    ValidateIssuer = false,
+                    // not checking the dest.
+                    ValidateAudience = false,
+                    // check lifetime
+                    ValidateLifetime = true,
+                    // zero tolerance time validity
+                    ClockSkew = TimeSpan.Zero
+                };
+                // link events to the token
+                x.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed  = context => 
+                    {
+                        // if token expired
+                        if(context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                        {
+                            // add to header for the front-end to tell it
+                            context.Response.Headers.Add("Token-Expired", "true"); 
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP 
@@ -57,6 +103,7 @@ namespace prid1920_g10
             app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseSpaStaticFiles();
+            app.UseAuthentication();
             app.UseMvc(routes => {
                 routes.MapRoute(
                     name: "default",
