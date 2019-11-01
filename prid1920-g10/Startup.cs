@@ -23,8 +23,10 @@ namespace prid1920_g10
         //container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<G10Context>(opt =>
-                opt.UseInMemoryDatabase("G10"));
+            // services.AddDbContext<G10Context>(opt =>
+            //     opt.UseInMemoryDatabase("G10"));
+            services.AddDbContext<G10Context>(opt => 
+                opt.UseSqlServer(Configuration.GetConnectionString("G10")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration => {

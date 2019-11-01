@@ -11,11 +11,11 @@
 <div *ngIf="users.length > 0" class="row">
     <div class="col-sm-12">
         <ul *ngFor="let user of users">
-            <li>{{user.pseudo}}</li>
-            <li>{{user.email}}</li>
-            <li>{{user.firstName}} {{user.lastName}}</li>
-            <li>{{user.birthDate}}</li>
-            <li>{{user.reputation}}</li>
+            <li>Username: {{user.pseudo}}</li>
+            <li>Email: {{user.email}}</li>
+            <li>Fullname: {{user.firstName}} {{user.lastName}}</li>
+            <li>Birthdate: {{user.birthDate}}</li>
+            <li>Reputation: {{user.reputation}}</li>
         </ul>
         <h4 *ngIf="users.length == 0">Nobody...</h4>
     </div>
