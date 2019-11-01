@@ -18,30 +18,6 @@ namespace prid1920_g10.Controllers
         public UsersController(G10Context context)
         {
             _context = context;
-            if (_context.Users.Count() == 0)
-            {
-                _context.Users.Add(new User
-                {
-                    Pseudo = "yas",
-                    Password = "epfc",
-                    Email = "yas@epfc.eu",
-                    FirstName = "Yasmina",
-                    LastName = "El Ghouate",
-                    BirthDate = new DateTime(1983, 1, 27)
-                }
-                );
-                _context.Users.Add(new User
-                {
-                    Pseudo = "oth",
-                    Password = "epfc",
-                    Email = "oth@epfc.eu",
-                    FirstName = "Othman",
-                    LastName = "Zamzam",
-                    BirthDate = new DateTime(2000, 1, 27)
-                }
-                );
-                _context.SaveChanges();
-            }
         }
 
         [HttpGet]

@@ -31,6 +31,7 @@ namespace prid1920_g10
                 opt.UseMySql(Configuration.GetConnectionString("G10-mysql")));
             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+   
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration => {
                 configuration.RootPath = "ClientApp/dist";

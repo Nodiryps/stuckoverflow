@@ -21,24 +21,16 @@ namespace prid1920_g10.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Required")]
-        // [MinLength(PasswordAndPseudoMinLength, ErrorMessage = "Minimum 3 characters")]
-        // [MaxLength(PasswordAndPseudoMaxLength, ErrorMessage = "Maximum 10 characters")]
         public string Pseudo { get; set; }
 
         [Required(ErrorMessage = "Required")]
-        // [MinLength(PasswordAndPseudoMinLength, ErrorMessage = "Minimum 3 characters")]
-        // [MaxLength(PasswordAndPseudoMaxLength, ErrorMessage = "Maximum 10 characters")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Required")]
         public string Email { get; set; }
 
-        // [MinLength(NameMinLength, ErrorMessage = "Minimum 3 characters")]
-        // [MaxLength(NameMaxLength, ErrorMessage = "Maximum 50 characters")]
         public string FirstName { get; set; }
 
-        // [MinLength(NameMinLength, ErrorMessage = "Minimum 3 characters")]
-        // [MaxLength(NameMaxLength, ErrorMessage = "Maximum 50 characters")]
         public string LastName { get; set; }
 
         public DateTime? BirthDate { get; set; }
