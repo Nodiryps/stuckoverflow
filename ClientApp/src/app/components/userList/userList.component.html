@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="col-sm-12">
+        <h1>Users</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <h3>I found the following user(s):</h3>
+    </div>
+</div>
+<div *ngIf="users.length > 0" class="row">
+    <div class="col-sm-12">
+        <ul *ngFor="let user of users">
+            <li>{{user.pseudo}}</li>
+            <li>{{user.email}}</li>
+            <li>{{user.firstName}} {{user.lastName}}</li>
+            <li>{{user.birthDate}}</li>
+            <li>{{user.reputation}}</li>
+        </ul>
+        <h4 *ngIf="users.length == 0">Nobody...</h4>
+    </div>
+</div>
