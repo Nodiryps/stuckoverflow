@@ -1,3 +1,5 @@
+export enum Role { Member = 0, Manager = 1, Admin = 2 }
+
 export class User {
     id: number;
     pseudo: string;
@@ -7,6 +9,8 @@ export class User {
     lastName: string;
     birthDate: string;
     reputation: number;
+    role: Role;
+    token: string;
 
     constructor(data: any) {
         if(data) { 
@@ -20,7 +24,12 @@ export class User {
                 && data.birthDate.length > 10 ? 
                 data.birthDate.substring(0, 10) : data.birthDate;
             this.reputation = data.reputation;
-            
+            this.role = data.role || Role.Member;
+            this.token = data.token;
         }
+    }
+
+    public get roleAsString(): string {
+        return Role[this.role];
     }
 }

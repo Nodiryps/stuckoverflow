@@ -134,7 +134,7 @@ namespace prid1920_g10.Controllers
 
         private async Task<User> Authenticate(string pseudo, string password)
         {
-            var user = await _context.Users.FindAsync(pseudo);
+            var user = await _context.Users.FindAsync(GetIdByPseudo(pseudo));
 
             if(user == null)
                 return null;
