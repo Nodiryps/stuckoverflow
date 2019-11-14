@@ -1,22 +1,61 @@
 <div class="row">
     <div class="col-sm-12">
-        <h1>Users</h1>
+        <h1>Members</h1>
     </div>
 </div>
 <div class="row">
     <div class="col-sm-12">
-        <h3>I found the following user(s):</h3>
+        <h3>I found the following members :</h3>
     </div>
 </div>
-<div *ngIf="users.length > 0" class="row">
+<div class="row">
     <div class="col-sm-12">
-        <ul *ngFor="let user of users">
-            <li>Username: {{user.pseudo}}</li>
-            <li>Email: {{user.email}}</li>
-            <li>Fullname: {{user.firstName}} {{user.lastName}}</li>
-            <li>Birthdate: {{user.birthDate}}</li>
-            <li>Reputation: {{user.reputation}}</li>
-        </ul>
-        <h4 *ngIf="users.length == 0">Nobody...</h4>
+        <mat-form-field>
+            <input matInput (keyup)="filterChanged($event.target.value)" [value]="filter" placeholder="Filter" appSetFocus>
+        </mat-form-field>
+        <div class="mat-elevation-z2">
+            <table mat-table [dataSource]="dataSource" matSort matSortDisableClear>
+                <ng-container matColumnDef="pseudo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Pseudo </th>
+                    <td mat-cell *matCellDef="let row"> {{row.pseudo}} </td>
+                </ng-container>
+                <ng-container matColumnDef="firstName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
+                    <td mat-cell *matCellDef="let row"> {{row.FirstName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="lastName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> last Name </th>
+                    <td mat-cell *matCellDef="let row"> {{row.lastName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="birthDate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> BirthDate </th>
+                    <td mat-cell *matCellDef="let row"> {{row.birthDate | date:'dd/MM/yyyy'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="role">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
+                    <td mat-cell *matCellDef="let row"> {{row.roleAsString}} </td>
+                </ng-container>
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef> Actions </th>
+                    <td mat-cell *matCellDef="let row">
+                        <button mat-icon-button tabindex="-1">
+                            <mat-icon (click)="edit(row)">edit</mat-icon>
+                        </button>
+                        <button mat-icon-button tabindex="-1">
+                            <mat-icon (click)="delete(row)">delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                </tr>
+            </table>
+            <mat-paginator [pageSize]="5" [pageSizeOptions]="[3, 5, 10, 25, 100]"></mat-paginator>
+        </div>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-12">
+        <button mat-raised-button (click)="create()">New Member</button>
     </div>
 </div>

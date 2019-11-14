@@ -65,6 +65,7 @@ namespace prid1920_g10.Controllers
                 FirstName = data.FirstName,
                 LastName = data.LastName,
                 BirthDate = data.BirthDate,
+                Role = data.Role
             };
             _context.Users.Add(newUser);
             var res = await _context.SaveChangesAsyncWithValidation();
@@ -87,11 +88,15 @@ namespace prid1920_g10.Controllers
         {
             if (pseudo != userDTO.Pseudo)
                 return BadRequest();
+                
 
             var user = await _context.Users.FindAsync(userDTO.Id);
 
             if (user == null)
                 return NotFound();
+
+            if (userDTO.Password != null)
+                user.Password = userDTO.Password; 
 
             user.Pseudo = userDTO.Pseudo;
             user.FirstName = userDTO.FirstName;

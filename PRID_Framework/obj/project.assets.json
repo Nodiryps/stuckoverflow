@@ -3005,23 +3005,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Spy\\.nuget\\packages\\": {},
-    "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\dotnet-sdk-2.2.401-win-x64\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\zahmi\\.nuget\\packages\\": {},
+    "C:\\PRID1920\\dotnet-sdk-2.2.401-win-x64\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920-g10\\PRID_Framework\\PRID_Framework.csproj",
+      "projectUniqueName": "c:\\PRID1920\\prid1920-g10\\PRID_Framework\\PRID_Framework.csproj",
       "projectName": "PRID_Framework",
-      "projectPath": "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920-g10\\PRID_Framework\\PRID_Framework.csproj",
-      "packagesPath": "C:\\Users\\Spy\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920-g10\\PRID_Framework\\obj\\",
+      "projectPath": "c:\\PRID1920\\prid1920-g10\\PRID_Framework\\PRID_Framework.csproj",
+      "packagesPath": "C:\\Users\\zahmi\\.nuget\\packages\\",
+      "outputPath": "c:\\PRID1920\\prid1920-g10\\PRID_Framework\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\dotnet-sdk-2.2.401-win-x64\\sdk\\NuGetFallbackFolder"
+        "C:\\PRID1920\\dotnet-sdk-2.2.401-win-x64\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Spy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\zahmi\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

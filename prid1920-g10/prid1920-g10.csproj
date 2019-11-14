@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-    <RootNamespace>prid1920-g10</RootNamespace>
+    <!-- <RootNamespace>prid1920-g10</RootNamespace> -->
     <DefaultItemExcludes>.git\**;ClientApp\**;$(DefaultItemExcludes)</DefaultItemExcludes>
   </PropertyGroup>
 

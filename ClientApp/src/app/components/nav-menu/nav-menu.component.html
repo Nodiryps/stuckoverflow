@@ -1,13 +1,13 @@
 <header>
   <nav class='navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3'>
     <div class="container">
-      <a class="navbar-brand" [routerLink]='["/"]'>prid1920_g10</a>
+      <a class="navbar-brand" [routerLink]='["/"]'>prid1920_tuto</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-label="Toggle navigation"
         [attr.aria-expanded]="isExpanded" (click)="toggle()">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]='{"show": isExpanded}'>
-        <ul class="navbar-nav flex-grow">
+      <div class="navbar-collapse collapse d-sm-inline-flex" [ngClass]='{"show": isExpanded}'>
+        <ul class="navbar-nav flex-grow mr-auto">
           <li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
             <a class="nav-link text-dark" [routerLink]='["/"]'>Home</a>
           </li>
@@ -15,16 +15,28 @@
             <a class="nav-link text-dark" [routerLink]='["/counter"]'>Counter</a>
           </li>
           <li class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-dark" [routerLink]='["/fetch-data"]'>Fetch data</a>
+            <a class="nav-link text-dark" [routerLink]='["/counter-stateless"]'>Counter (Stateless)</a>
           </li>
-          <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="!currentUser">
-              <a class="nav-link text-dark" [routerLink]='["/login"]'>Login</a>
+          <li class="nav-item" [routerLinkActive]='["link-active"]'>
+            <a class="nav-link text-dark" [routerLink]='["/fetch-data"]'>Fetch data</a>
           </li>
           <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="currentUser && isAdmin">
             <a class="nav-link text-dark" [routerLink]='["/users"]'>Users</a>
           </li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="!currentUser">
+            <a class="nav-link text-dark" [routerLink]='["/login"]'>
+              <span class="material-icons">exit_to_app</span>
+              <span> Login </span>
+            </a>
+          </li>
           <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="currentUser">
-              <a class="nav-link text-dark" [routerLink]='' (click)='logout()'>Logout</a>
+            <a class="nav-link text-dark" [routerLink]='' (click)='logout()'>
+              <span class="material-icons">power_settings_new</span>
+              <span> Logout </span>
+              <span class="text-info">({{authenticationService.currentUser.pseudo}})</span>
+            </a>
           </li>
         </ul>
       </div>
