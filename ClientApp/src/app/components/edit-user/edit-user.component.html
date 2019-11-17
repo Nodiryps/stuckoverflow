@@ -6,24 +6,37 @@
             <mat-error class="field-error" *ngIf="ctlPseudo.hasError('required')">Required</mat-error>
             <mat-error class="field-error" *ngIf="ctlPseudo.hasError('minlength')">Minimum length is {{ctlPseudo.errors['minlength'].requiredLength}}</mat-error>
             <mat-error class="field-error" *ngIf="ctlPseudo.hasError('pseudoUsed')">Pseudo already in use</mat-error>
-            <mat-error class="field-error" *ngIf="ctlPseudo.hasError('forbiddenValue')">Forbiddent value 'abc'</mat-error>
+            <mat-error class="field-error" *ngIf="ctlPseudo.hasError('forbiddenValue')">Forbiddent value ''</mat-error>
         </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Email" [formControl]="ctlEmail">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="FirstName" [formControl]="ctlFirstName">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="LastName" [formControl]="ctlLastName">
+        </mat-form-field>
+
         <mat-form-field>
             <input matInput [placeholder]="'Password ' + (isNew ? '' : ' (leave blank if no change)')" [formControl]="ctlPassword" type="password" [required]="isNew" autocomplete="new-password">
             <mat-error class="field-error" *ngIf="ctlPassword.hasError('required')">Required</mat-error>
             <mat-error class="field-error" *ngIf="ctlPassword.hasError('minlength')">Minimum length is {{ctlPassword.errors['minlength'].requiredLength}}</mat-error>
         </mat-form-field>
+        
         <mat-form-field>
-            <input matInput placeholder="First Name" [formControl]="ctlFirstName">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput placeholder="Last Name" [formControl]="ctlLastName">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput placeholder="Birth Date" [formControl]="ctlBirthDate" type="date">
+            <input matInput placeholder="BirthDate" [formControl]="ctlBirthDate" type="date">
             <mat-error class="field-error" *ngIf="ctlBirthDate.hasError('tooYoung')">Must be at least 18 years old</mat-error>
             <mat-error class="field-error" *ngIf="ctlBirthDate.hasError('futureBorn')">Can't be born in the future</mat-error>
         </mat-form-field>
+
+        <!-- <mat-form-field>
+            <input matInput placeholder="Reputation" [formControl]="ctlReputation">
+        </mat-form-field> -->
+
         <mat-form-field>
             <mat-select placeholder="Role" [formControl]="ctlRole" >
                 <mat-option [value]="2">Administrator</mat-option>

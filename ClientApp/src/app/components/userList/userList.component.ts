@@ -6,26 +6,27 @@ import { UserService } from '../../services/user.service';
 import { EditUserComponent } from '../edit-user/edit-user.component';
 import { StateService } from 'src/app/services/state.service';
 import { MatTableState } from 'src/app/helpers/mattable.state';
+
 @Component({
     selector: 'app-userlist',
     templateUrl: './userlist.component.html',
     styleUrls: ['./userlist.component.css']
 })
+
 export class UserListComponent implements AfterViewInit, OnDestroy {
-    displayedColumns: string[] = ['pseudo', 'firstName','lastName', 'birthDate', 'role', 'actions'];
+    displayedColumns: string[] = ['id', 'pseudo', 'email', 'firstName', 'lastName', 'birthDate', 'reputation', 'role', 'actions'];
     dataSource: MatTableDataSource<User> = new MatTableDataSource();
     filter: string;
     state: MatTableState;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
-    constructor(
-        private userService: UserService,
-        private stateService: StateService,
-        public dialog: MatDialog,
-        public snackBar: MatSnackBar
-    ) {
-        this.state = this.stateService.memberListState;
+    
+    constructor(private userService: UserService, private stateService: StateService,
+        public dialog: MatDialog, public snackBar: MatSnackBar) 
+    {
+        this.state = this.stateService.userListState;
     }
+
     ngAfterViewInit(): void {
         // lie le datasource au sorter et au paginator
         this.dataSource.paginator = this.paginator;
@@ -41,6 +42,7 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
         // récupère les données 
         this.refresh();
     }
+
     refresh() {
         this.userService.getAll().subscribe(users => {
             // assigne les données récupérées au datasource
@@ -51,6 +53,7 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
             this.filter = this.state.filter;
         });
     }
+
     // appelée chaque fois que le filtre est modifié par l'utilisateur
     filterChanged(filterValue: string) {
         // applique le filtre au datasource (et provoque l'utilisation du filterPredicate)
@@ -62,6 +65,7 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
         if (this.dataSource.paginator)
             this.dataSource.paginator.firstPage();
     }
+
     // appelée quand on clique sur le bouton "edit" d'un membre
     edit(user: User) {
         const dlg = this.dialog.open(EditUserComponent, { data: { user, isNew: false } });
@@ -77,10 +81,11 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
             }
         });
     }
+
     // appelée quand on clique sur le bouton "delete" d'un membre
     delete(user: User) {
         const backup = this.dataSource.data;
-        this.dataSource.data = _.filter(this.dataSource.data, m => m.pseudo !== user.pseudo);
+        this.dataSource.data = _.filter(this.dataSource.data, u => u.id !== user.id);
         const snackBarRef = this.snackBar.open(`User '${user.pseudo}' will be deleted`, 'Undo', { duration: 10000 });
         snackBarRef.afterDismissed().subscribe(res => {
             if (!res.dismissedByAction)
@@ -89,6 +94,7 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
                 this.dataSource.data = backup;
         });
     }
+
     // appelée quand on clique sur le bouton "new user"
     create() {
         const user = new User({});
@@ -100,11 +106,12 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
                     if (!res) {
                         this.snackBar.open(`There was an error at the server. The user has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
                         this.refresh();
-                    }
+                    }this.refresh();
                 });
             }
         });
     }
+    
     ngOnDestroy(): void {
         this.snackBar.dismiss();
     }

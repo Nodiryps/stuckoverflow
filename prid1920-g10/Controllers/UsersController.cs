@@ -48,7 +48,7 @@ namespace prid1920_g10.Controllers
 
         [Authorized(Role.Admin)]
         [HttpPost]
-        public async Task<ActionResult<UserDTO>> AddUser(UserDTO data)
+        public async Task<ActionResult<UserDTO>> PostUser(UserDTO data)
         {
             var user = await _context.Users.FindAsync(data.Id);
 
@@ -59,6 +59,7 @@ namespace prid1920_g10.Controllers
             }
             var newUser = new User()
             {
+                Id = GetNewId(),
                 Pseudo = data.Pseudo,
                 Email = data.Email,
                 Password = data.Password,
@@ -74,7 +75,11 @@ namespace prid1920_g10.Controllers
 
             return CreatedAtAction(nameof(GetUserById), new { Id = newUser.Id }, newUser.ToDTO());
         }
-
+        private int GetNewId()
+        {
+            return (from u in _context.Users
+                    select u).Count() + 1;
+        }
         private int GetIdByPseudo(string pseudo)
         {
             return (from u in _context.Users
@@ -88,9 +93,8 @@ namespace prid1920_g10.Controllers
         {
             if (pseudo != userDTO.Pseudo)
                 return BadRequest();
-                
 
-            var user = await _context.Users.FindAsync(userDTO.Id);
+            var user = await _context.Users.FindAsync(GetIdByPseudo(pseudo));
 
             if (user == null)
                 return NotFound();
@@ -102,7 +106,9 @@ namespace prid1920_g10.Controllers
             user.FirstName = userDTO.FirstName;
             user.LastName = userDTO.LastName;
             user.BirthDate = userDTO.BirthDate;
+
             var res = await _context.SaveChangesAsyncWithValidation();
+            
             if (!res.IsEmpty)
                 return BadRequest(res);
 

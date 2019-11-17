@@ -2,18 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
+
 @Component({
     templateUrl: 'login.component.html',
     styleUrls: ['login.component.css']
 })
+
 export class LoginComponent implements OnInit {
     loginForm: FormGroup;
     loading = false;    // utilisé en HTML pour désactiver le bouton pendant la requête de login
     submitted = false;  // retient si le formulaire a été soumis ; utilisé pour n'afficher les 
-    // erreurs que dans ce cas-là (voir template)
+                        // erreurs que dans ce cas-là (voir template)
     returnUrl: string;
     ctlPseudo: FormControl;
     ctlPassword: FormControl;
+
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
@@ -25,6 +28,7 @@ export class LoginComponent implements OnInit {
             this.router.navigate(['/']);
         }
     }
+
     ngOnInit() {
         /**
          * Ici on construit le formulaire réactif. On crée un 'group' dans lequel on place deux
@@ -44,8 +48,12 @@ export class LoginComponent implements OnInit {
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     }
+
     // On définit ici un getter qui permet de simplifier les accès aux champs du formulaire dans le HTML
-    get f() { return this.loginForm.controls; }
+    get f() { 
+        return this.loginForm.controls; 
+    }
+    
     /**
      * Cette méthode est bindée sur l'événement onsubmit du formulaire. On va y faire le
      * login en faisant appel à AuthenticationService.

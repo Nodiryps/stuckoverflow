@@ -5,6 +5,7 @@ import {
   MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatTabsModule, 
   MatSelectModule, MatCardModule
 } from '@angular/material';
+
 @NgModule({
   imports: [
     MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule,
@@ -19,4 +20,5 @@ import {
     MatSelectModule, MatCardModule
   ],
 })
+
 export class SharedModule { }

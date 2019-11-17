@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵɵcontainerRefreshEnd } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Inject } from '@angular/core';
 import { UserService } from '../../services/user.service';
@@ -14,46 +14,57 @@ import { User, Role } from 'src/app/models/user';
     templateUrl: './edit-user.component.html',
     styleUrls: ['./edit-user.component.css']
 })
+
 export class EditUserComponent {
     public frm: FormGroup;
+    public ctlId: FormControl;
     public ctlPseudo: FormControl;
+    public ctlEmail: FormControl;
     public ctlFirstName: FormControl;
     public ctlLastName: FormControl;
     public ctlPassword: FormControl;
-    public ctlEmail: FormControl;
     public ctlBirthDate: FormControl;
+    public ctlReputation: FormControl;
     public ctlRole: FormControl;
     public isNew: boolean;
-    constructor(public dialogRef: MatDialogRef<EditUserComponent>,
+
+    constructor(
+        public dialogRef: MatDialogRef<EditUserComponent>,
         @Inject(MAT_DIALOG_DATA) public data: { user: User; isNew: boolean; },
         private fb: FormBuilder,
         private userService: UserService
     ) {
-        this.ctlPseudo = this.fb.control('', [
-            Validators.required,
-            Validators.minLength(3),
-            this.forbiddenValue('abc')
-        ], [this.pseudoUsed()]);
+        this.ctlId = this.fb.control('', []);
+        this.ctlPseudo = this.fb.control('', 
+            [
+                Validators.required,
+                Validators.minLength(3),
+                this.forbiddenValue('')
+            ], [this.pseudoUsed()]
+        );
+        this.ctlEmail = this.fb.control('', []);
         this.ctlPassword = this.fb.control('', data.isNew ? [Validators.required, Validators.minLength(3)] : []);
         this.ctlFirstName = this.fb.control('', []);
         this.ctlLastName = this.fb.control('', []);
-        this.ctlEmail = this.fb.control('', []);
-        // this.ctlBirthDate = this.fb.control('', []);
         this.ctlBirthDate = this.fb.control('', [this.validateBirthDate()]);
+        this.ctlReputation = this.fb.control('', []);
         this.ctlRole = this.fb.control(Role.Member, []);
         this.frm = this.fb.group({
+            id: this.ctlId,
             pseudo: this.ctlPseudo,
             password: this.ctlPassword,
             email: this.ctlEmail,
             firstName: this.ctlFirstName,
-            lasttName: this.ctlLastName,
+            lastName: this.ctlLastName,
             birthDate: this.ctlBirthDate,
+            reputation: this.ctlReputation,
             role: this.ctlRole
         });
         console.log(data);
         this.isNew = data.isNew;
         this.frm.patchValue(data.user);
     }
+
     // Validateur bidon qui vérifie que la valeur est différente
     forbiddenValue(val: string): any {
         return (ctl: FormControl) => {
@@ -63,6 +74,7 @@ export class EditUserComponent {
             return null;
         };
     }
+
     validateBirthDate(): any {
         return (ctl: FormControl) => {
             const date = new Date(ctl.value);
@@ -75,6 +87,7 @@ export class EditUserComponent {
             return null;
         };
     }
+
     // Validateur asynchrone qui vérifie si le pseudo n'est pas déjà utilisé par un autre membre
     pseudoUsed(): any {
         let timeout: NodeJS.Timer;
@@ -94,12 +107,16 @@ export class EditUserComponent {
             });
         };
     }
+
     onNoClick(): void {
         this.dialogRef.close();
     }
+
     update() {
         this.dialogRef.close(this.frm.value);
+        
     }
+
     cancel() {
         this.dialogRef.close();
     }
