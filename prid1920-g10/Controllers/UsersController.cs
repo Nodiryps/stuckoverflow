@@ -114,9 +114,23 @@ namespace prid1920_g10.Controllers
 
             return NoContent();
         }
+        
+                [AllowAnonymous]
+        [HttpGet("available/{pseudo}")]
+        public async Task<ActionResult<bool>> IsAvailable(string pseudo) {
+            var member = await _context.Users.FindAsync(GetIdByPseudo(pseudo));
+            return member == null;
+        }
+
+        [AllowAnonymous]
+        [HttpPost("signup")]
+        public async Task<ActionResult<UserDTO>> SignUp(UserDTO data) {
+            return await PostUser(data);
+        }
 
         [Authorized(Role.Admin)]
         [HttpDelete("{pseudo}")]
+        
         public async Task<IActionResult> DeleteUser(string pseudo)
         {
             var user = await _context.Users.FindAsync(GetIdByPseudo(pseudo));

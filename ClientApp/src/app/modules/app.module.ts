@@ -15,7 +15,7 @@ import { FetchDataComponent } from '../components/fetch-data/fetch-data.componen
 import { UserListComponent } from '../components/userList/userList.component';
 import { UnknownComponent } from '../components/unknown/unknown.component';
 import { RestrictedComponent } from '../components/restricted/restricted.component';
-
+import { SignUpComponent } from '../components/signup/signup.component';
 import { SharedModule } from './shared.module';
 import { EditUserComponent } from '../components/edit-user/edit-user.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -33,6 +33,7 @@ import { SetFocusDirective } from '../directives/setfocus.directive';
     UnknownComponent,
     RestrictedComponent,
     SetFocusDirective,
+    SignUpComponent,
     EditUserComponent
   ],
   entryComponents: [
