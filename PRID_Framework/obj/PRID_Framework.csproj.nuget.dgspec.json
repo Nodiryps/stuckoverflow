@@ -10,14 +10,14 @@
         "projectUniqueName": "C:\\PRID1920\\prid1920-g10\\PRID_Framework\\PRID_Framework.csproj",
         "projectName": "PRID_Framework",
         "projectPath": "C:\\PRID1920\\prid1920-g10\\PRID_Framework\\PRID_Framework.csproj",
-        "packagesPath": "C:\\Users\\zahmi\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\Othman\\.nuget\\packages\\",
         "outputPath": "C:\\PRID1920\\prid1920-g10\\PRID_Framework\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\PRID1920\\dotnet-sdk-2.2.401-win-x64\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\zahmi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Othman\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

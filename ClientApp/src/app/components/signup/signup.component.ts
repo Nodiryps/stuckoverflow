@@ -72,7 +72,9 @@ export class SignUpComponent {
     }
 
     signup() {
-        this.authService.signup(this.ctlPseudo.value, this.ctlPassword.value).subscribe(() => {
+        this.authService.signup(this.ctlPseudo.value, this.ctlPassword.value, 
+            this.ctlEmail.value, this.ctlFirstName.value, this.ctlLastName.value, 
+            this.ctlBirthDate.value).subscribe(() => {
             if (this.authService.currentUser) {
                 // Redirect the user
                 this.router.navigate(['/']);

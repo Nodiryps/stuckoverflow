@@ -36,8 +36,8 @@ export class AuthenticationService {
         return this.http.get<boolean>(`${this.baseUrl}api/users/available/${pseudo}`);
       }
     
-      public signup(pseudo: string, password: string): Observable<User> {
-        return this.http.post<User>(`${this.baseUrl}api/users/signup`, { pseudo: pseudo, password: password }).pipe(
+      public signup(pseudo: string, password: string, email: string, firstname: string, lastname: string, birthdate: string): Observable<User> {
+        return this.http.post<User>(`${this.baseUrl}api/users/signup`, { pseudo: pseudo, password: password, email: email, firstname: firstname, lastname: lastname, birthdate: birthdate }).pipe(
           flatMap(res => this.login(pseudo, password)),
         );
       }
