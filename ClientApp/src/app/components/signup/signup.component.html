@@ -11,13 +11,20 @@
         <input matInput placeholder="Email" [formControl]="ctlEmail" required >
     </mat-form-field>
     <mat-form-field>
-        <input matInput placeholder="FirstName" [formControl]="ctlFirstName" required >
+        <input matInput placeholder="FirstName" [formControl]="ctlFirstName">
     </mat-form-field>
+    <div *ngIf="frm.errors">
+        <mat-error class="float-right" *ngIf="frm.hasError('firstnameRequired')">FirstName Required</mat-error>
+    </div>
+
     <mat-form-field>
-        <input matInput placeholder="LastName" [formControl]="ctlLastName" required >
+        <input matInput placeholder="LastName" [formControl]="ctlLastName" >
     </mat-form-field>
+    <div *ngIf="frm.errors">
+        <mat-error class="float-left" *ngIf="frm.hasError('lastnameRequired')">Lastname Required</mat-error>
+    </div>
     <mat-form-field>
-        <input matInput placeholder="BirthDate" [formControl]="ctlBirthDate" required type="date">
+        <input matInput placeholder="BirthDate" [formControl]="ctlBirthDate" type="date">
     </mat-form-field>
 
 

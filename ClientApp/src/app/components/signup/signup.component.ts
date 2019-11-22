@@ -68,6 +68,12 @@ export class SignUpComponent {
 
     crossValidations(group: FormGroup): ValidationErrors {
         if (!group.value) { return null; }
+        if(group.value.firstname !== '' && group.value.lastname === ''){
+            return {lastnameRequired: true};
+        }
+        if(group.value.firstname === '' && group.value.lastname !== ''){
+            return {firstnameRequired: true};
+        }
         return group.value.password === group.value.passwordConfirm ? null : { passwordNotConfirmed: true };
     }
 
