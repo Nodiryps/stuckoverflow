@@ -2,10 +2,8 @@ import { Component, OnInit, ɵɵcontainerRefreshEnd } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Inject } from '@angular/core';
 import { UserService } from '../../services/user.service';
-import { FormGroup } from '@angular/forms';
-import { FormControl } from '@angular/forms';
-import { FormBuilder } from '@angular/forms';
-import { Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl, 
+    AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 import * as _ from 'lodash';
 import { User, Role } from 'src/app/models/user';
 
@@ -28,24 +26,33 @@ export class EditUserComponent {
     public ctlRole: FormControl;
     public isNew: boolean;
 
+    private minLengthPseudoPasswordName: number = 3;
+    private maxLengthPseudo: number = 10;
+    private maxLengthName: number = 30;
+
     constructor(
         public dialogRef: MatDialogRef<EditUserComponent>,
         @Inject(MAT_DIALOG_DATA) public data: { user: User; isNew: boolean; },
         private fb: FormBuilder,
         private userService: UserService
     ) {
-        this.ctlId = this.fb.control('', []);
+        // this.ctlId = this.fb.control('', []);
         this.ctlPseudo = this.fb.control('', 
             [
                 Validators.required,
-                Validators.minLength(3),
-                this.forbiddenValue('')
+                Validators.minLength(this.minLengthPseudoPasswordName),
+                Validators.maxLength(this.maxLengthPseudo),
+                // this.forbiddenValues(['@', ' '])
             ], [this.pseudoUsed()]
         );
-        this.ctlEmail = this.fb.control('', []);
+        this.ctlEmail = this.fb.control('', 
+            [
+                Validators.pattern(/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/)
+            ], [this.emailUsed()]
+        );
         this.ctlPassword = this.fb.control('', data.isNew ? [Validators.required, Validators.minLength(3)] : []);
-        this.ctlFirstName = this.fb.control('', []);
-        this.ctlLastName = this.fb.control('', []);
+        this.ctlFirstName = this.fb.control('', [Validators.minLength(this.minLengthPseudoPasswordName), Validators.maxLength(this.maxLengthName)]);
+        this.ctlLastName = this.fb.control('', [Validators.minLength(this.minLengthPseudoPasswordName), Validators.maxLength(this.maxLengthName)]);
         this.ctlBirthDate = this.fb.control('', [this.validateBirthDate()]);
         this.ctlReputation = this.fb.control('', []);
         this.ctlRole = this.fb.control(Role.Member, []);
@@ -54,24 +61,35 @@ export class EditUserComponent {
             pseudo: this.ctlPseudo,
             password: this.ctlPassword,
             email: this.ctlEmail,
-            firstName: this.ctlFirstName,
-            lastName: this.ctlLastName,
-            birthDate: this.ctlBirthDate,
+            firstname: this.ctlFirstName,
+            lastname: this.ctlLastName,
+            birthdate: this.ctlBirthDate,
             reputation: this.ctlReputation,
             role: this.ctlRole
-        });
+        }, { validator: this.nameValidations });
         console.log(data);
         this.isNew = data.isNew;
         this.frm.patchValue(data.user);
     }
 
-    // Validateur bidon qui vérifie que la valeur est différente
-    forbiddenValue(val: string): any {
+    nameValidations(group: FormGroup): ValidationErrors {
+        if (!group.value) { return null; }
+        if (group.value.firstname !== '' && group.value.lastname === '') {
+            return { lastnameRequired: true };
+        }
+        if (group.value.firstname === '' && group.value.lastname !== '') {
+            return { firstnameRequired: true };
+        }
+    }
+
+    forbiddenValues(arr: Array<string>): any {
         return (ctl: FormControl) => {
-            if (ctl.value === val) {
-                return { forbiddenValue: { currentValue: ctl.value, forbiddenValue: val } };
-            }
-            return null;
+            arr.forEach(element => {
+                if (ctl.value === element) {
+                    return { forbiddenValue: { currentValue: ctl.value, forbiddenValue: element } };
+                }
+                return null;
+            });
         };
     }
 
@@ -107,6 +125,25 @@ export class EditUserComponent {
             });
         };
     }
+
+    // emailUsed(): AsyncValidatorFn {
+    //     let timeout: NodeJS.Timeout;
+    //     return (ctl: FormControl) => {
+    //         clearTimeout(timeout);
+    //         const email = ctl.value;
+    //         return new Promise(resolve => {
+    //             timeout = setTimeout(() => {
+    //                 if (ctl.pristine) {
+    //                     resolve(null);
+    //                 } else {
+    //                     this.userService.getById('', email).subscribe(user => {
+    //                         resolve(user ? { emailUsed: true } : null);
+    //                     });
+    //                 }
+    //             }, 300);
+    //         });
+    //     };
+    // }
 
     onNoClick(): void {
         this.dialogRef.close();

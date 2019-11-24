@@ -16,17 +16,24 @@ export class UserService {
   }
 
   getById(pseudo: string) {
-    return this.http.get<User>(`${this.baseUrl}api/users/${pseudo}`).pipe(
-      map(u => !u ? null : new User(u)),
-      catchError(err => of(null))
-    );
+    // if(pseudo !== ''){
+      return this.http.get<User>(`${this.baseUrl}api/users/${pseudo}`).pipe(
+        map(u => !u ? null : new User(u)),
+        catchError(err => of(null))
+      );
+    // } else {
+    //   return this.http.get<User>(`${this.baseUrl}api/users/${email}`).pipe(
+    //     map(u => !u ? null : new User(u)),
+    //     catchError(err => of(null))
+    //   );
+    // }
   }
 
   public update(u: User): Observable<boolean> {
     return this.http.put<User>(`${this.baseUrl}api/users/${u.pseudo}`, u).pipe(
       map(res => true),
       catchError(err => {
-        console.error(err + ' updaaaaaaaaate');
+        console.error(err + ' update');
         return of(false);
       })
     );
@@ -36,7 +43,7 @@ export class UserService {
     return this.http.delete<boolean>(`${this.baseUrl}api/users/${u.pseudo}`).pipe(
       map(res => true),
       catchError(err => {
-        console.error(err + ' deleeeeeeeeete');
+        console.error(err + ' delete');
         return of(false);
       })
     );
@@ -46,7 +53,7 @@ export class UserService {
     return this.http.post<User>(`${this.baseUrl}api/users`, u).pipe(
       map(res => true),
       catchError(err => {
-        console.error(err + ' addddddddd');
+        console.error(err + ' add');
         return of(false);
       })
     );

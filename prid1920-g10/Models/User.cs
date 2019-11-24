@@ -13,10 +13,9 @@ namespace prid1920_g10.Models
 
     public class User : IValidatableObject
     {
-        private const int PasswordAndPseudoMinLength = 3;
-        private const int PasswordAndPseudoMaxLength = 10;
-        private const int NameMinLength = 3;
-        private const int NameMaxLength = 50;
+        private const int MinLengthPseudoPasswordName = 3;
+        private const int MaxLengthPseudo = 10;
+        private const int MaxLengthName = 30;
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -108,9 +107,9 @@ namespace prid1920_g10.Models
             if (!isLastNameValid)
                 yield return new ValidationResult("Invalid lastname (only letters)", new[] { nameof(LastName) });
             if (!IsFirstNameLengthValid())
-                yield return new ValidationResult("Invalid firstname (" + NameMinLength + "-" + NameMaxLength + " char)", new[] { nameof(FirstName) });
+                yield return new ValidationResult("Invalid firstname (" + MinLengthPseudoPasswordName + "-" + MaxLengthName + " char)", new[] { nameof(FirstName) });
             if (!IsLastNameLengthValid())
-                yield return new ValidationResult("Invalid lastname (" + NameMinLength + "-" + NameMaxLength + " char)", new[] { nameof(LastName) });
+                yield return new ValidationResult("Invalid lastname (" + MinLengthPseudoPasswordName + "-" + MaxLengthName + " char)", new[] { nameof(LastName) });
         }
 
         IEnumerable<ValidationResult> PseudoValidations(G10Context c)
@@ -123,9 +122,9 @@ namespace prid1920_g10.Models
             if (!isPseudoValid)
                 yield return new ValidationResult("Invalid pseudo: letters/numbers/underscores allowed (Should begin by a letter)", new[] { nameof(Pseudo) });
             if (!IsPseudoLengthValid())
-                yield return new ValidationResult("Invalid pseudo (" + PasswordAndPseudoMinLength + " - " + PasswordAndPseudoMaxLength + " char)", new[] { nameof(Pseudo) });
-            if (!IsPseudoLengthValid())
-                yield return new ValidationResult("Invalid password (" + PasswordAndPseudoMinLength + "-" + PasswordAndPseudoMaxLength + " char)", new[] { nameof(Password) });
+                yield return new ValidationResult("Invalid pseudo (" + MinLengthPseudoPasswordName + " - " + MaxLengthPseudo + " char)", new[] { nameof(Pseudo) });
+            if (!IsPasswordLengthValid())
+                yield return new ValidationResult("Invalid password (min " + MinLengthPseudoPasswordName + " char)", new[] { nameof(Password) });
         } 
 
         static bool IsPseudoUnique(string pseudo, G10Context c)
@@ -137,22 +136,22 @@ namespace prid1920_g10.Models
 
         bool IsPasswordLengthValid()
         {
-            return Password.Length >= PasswordAndPseudoMinLength && Password.Length <= PasswordAndPseudoMaxLength;
+            return Password.Length >= MinLengthPseudoPasswordName;
         }
 
         bool IsLastNameLengthValid()
         {
-            return LastName.Length >= NameMinLength && LastName.Length <= NameMaxLength;
+            return LastName.Length >= MinLengthPseudoPasswordName && LastName.Length <= MaxLengthName;
         }
 
         bool IsFirstNameLengthValid()
         {
-            return FirstName.Length >= NameMinLength && FirstName.Length <= NameMaxLength;
+            return FirstName.Length >= MinLengthPseudoPasswordName && FirstName.Length <= MaxLengthName;
         }
 
         bool IsPseudoLengthValid()
         {
-            return Pseudo.Length >= PasswordAndPseudoMinLength && Pseudo.Length <= PasswordAndPseudoMaxLength;
+            return Pseudo.Length >= MinLengthPseudoPasswordName && Pseudo.Length <= MaxLengthPseudo;
         }
     }
 }

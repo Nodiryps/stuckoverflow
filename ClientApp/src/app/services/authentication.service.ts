@@ -16,10 +16,10 @@ export class AuthenticationService {
     }
 
     login(pseudo: string, password: string) {
-        return this.http.post<User>(`${this.baseUrl}api/users/authenticate`, {pseudo, password})
+        return this.http.post<User>(`${this.baseUrl}api/users/authenticate`, { pseudo, password })
             .pipe(map(user => {
                 user = new User(user);
-                if(user && user.token) {
+                if (user && user.token) {
                     sessionStorage.setItem('currentUser', JSON.stringify(user));
                     this.currentUser = user;
                 }
@@ -32,13 +32,24 @@ export class AuthenticationService {
         this.currentUser = null;
     }
 
-    public isPseudoAvailable(pseudo: string): Observable<boolean> {
-        return this.http.get<boolean>(`${this.baseUrl}api/users/available/${pseudo}`);
-      }
-    
-      public signup(pseudo: string, password: string, email: string, firstname: string, lastname: string, birthdate: string): Observable<User> {
+    // public isPseudoAvailable(pseudo: string): Observable<boolean> {
+    //     return this.http.get<boolean>(`${this.baseUrl}api/users/availablePseudo/${pseudo}`);
+    // }
+
+    // public isEmailAvailable(email: string): Observable<boolean> {
+    //     return this.http.get<boolean>(`${this.baseUrl}api/users/availableEmail/${email}`);
+    // }
+
+    public isAvailable(pseudo: string, email: string): Observable<boolean> {
+        if(pseudo !== '')
+            return this.http.get<boolean>(`${this.baseUrl}api/users/available/${pseudo}`);
+        else
+            return this.http.get<boolean>(`${this.baseUrl}api/users/available/${email}`);
+    }
+
+    public signup(pseudo: string, password: string, email: string, firstname: string, lastname: string, birthdate: string): Observable<User> {
         return this.http.post<User>(`${this.baseUrl}api/users/signup`, { pseudo: pseudo, password: password, email: email, firstname: firstname, lastname: lastname, birthdate: birthdate }).pipe(
-          flatMap(res => this.login(pseudo, password)),
+            flatMap(res => this.login(pseudo, password)),
         );
-      }
+    }
 }

@@ -1,17 +1,28 @@
 <form [formGroup]="frm" novalidate>
     <h1>Sign Up</h1>
+
     <mat-form-field>
         <input matInput placeholder="Pseudo" [formControl]="ctlPseudo" required appSetFocus>
         <mat-error class="float-right" *ngIf="ctlPseudo.hasError('required')">Required</mat-error>
-        <mat-error class="float-right" *ngIf="ctlPseudo.hasError('minlength')">Minimum length is
-            {{ctlPseudo.errors['minlength'].requiredLength}}</mat-error>
+        <mat-error class="float-right" *ngIf="ctlPseudo.hasError('minlength')">Minimum length is {{ctlPseudo.errors['minlength'].requiredLength}}</mat-error>
+        <mat-error class="float-right" *ngIf="ctlPseudo.hasError('maxlength')">Maximum length is {{ctlPseudo.errors['maxlength'].requiredLength}}</mat-error>
         <mat-error class="float-right" *ngIf="ctlPseudo.hasError('pseudoUsed')">This pseudo is not available</mat-error>
+        <mat-error class="float-right" *ngIf="ctlPseudo.hasError('pattern')">(chars, numbs, _ or .)</mat-error>
+        <!-- <mat-error class="float-right" *ngIf="ctlPseudo.hasError('forbiddenValue')">Forbidden value '@'</mat-error> -->
     </mat-form-field>
+
     <mat-form-field>
-        <input matInput placeholder="Email" [formControl]="ctlEmail" required >
+        <input matInput type="email" placeholder="Email" [formControl]="ctlEmail" required >
+        <mat-error class="float-right" *ngIf="ctlEmail.hasError('pattern')">Invalid email format</mat-error>
+        <mat-error class="float-right" *ngIf="ctlEmail.hasError('emailUsed')">This email is not available</mat-error>
     </mat-form-field>
+    
+
     <mat-form-field>
         <input matInput placeholder="FirstName" [formControl]="ctlFirstName">
+        <mat-error class="float-right" *ngIf="ctlFirstName.hasError('minlength')">Minimum length is {{ctlFirstName.errors['minlength'].requiredLength}}</mat-error>
+        <mat-error class="float-right" *ngIf="ctlFirstName.hasError('maxlength')">Maximum length is {{ctlFirstName.errors['maxlength'].requiredLength}}</mat-error>
+        <mat-error class="float-right" *ngIf="ctlFirstName.hasError('pattern')">(Lettres only)</mat-error>
     </mat-form-field>
     <div *ngIf="frm.errors">
         <mat-error class="float-right" *ngIf="frm.hasError('firstnameRequired')">FirstName Required</mat-error>
@@ -19,30 +30,35 @@
 
     <mat-form-field>
         <input matInput placeholder="LastName" [formControl]="ctlLastName" >
+        <mat-error class="float-right" *ngIf="ctlLastName.hasError('minlength')">Minimum length is {{ctlLastName.errors['minlength'].requiredLength}}</mat-error>
+        <mat-error class="float-right" *ngIf="ctlLastName.hasError('maxlength')">Maximum length is {{ctlLastName.errors['maxlength'].requiredLength}}</mat-error>
+        <mat-error class="float-right" *ngIf="ctlLastName.hasError('pattern')">(Lettres only)</mat-error>
     </mat-form-field>
     <div *ngIf="frm.errors">
-        <mat-error class="float-left" *ngIf="frm.hasError('lastnameRequired')">Lastname Required</mat-error>
+        <mat-error class="field-error" *ngIf="frm.hasError('lastnameRequired')">Lastname Required</mat-error>
     </div>
+
     <mat-form-field>
         <input matInput placeholder="BirthDate" [formControl]="ctlBirthDate" type="date">
+        <mat-error class="field-error" *ngIf="ctlBirthDate.hasError('tooYoung')">Must be at least 18 years old</mat-error>
+        <mat-error class="field-error" *ngIf="ctlBirthDate.hasError('futureBorn')">Can't be born in the future</mat-error>
     </mat-form-field>
-
 
     <mat-form-field>
         <input type="password" matInput placeholder="Password" [formControl]="ctlPassword" required autocomplete="new-password">
         <mat-error class="float-right" *ngIf="ctlPassword.hasError('required')">Required</mat-error>
-        <mat-error class="float-right" *ngIf="ctlPassword.hasError('minlength')">Minimum length is
-            {{ctlPassword.errors['minlength'].requiredLength}}</mat-error>
+        <mat-error class="float-right" *ngIf="ctlPassword.hasError('minlength')">Minimum length is {{ctlPassword.errors['minlength'].requiredLength}}</mat-error>
     </mat-form-field>
+
     <mat-form-field>
         <input type="password" matInput placeholder="Confirm Password" [formControl]="ctlPasswordConfirm" required>
         <mat-error class="float-right" *ngIf="ctlPasswordConfirm.hasError('required')">Required</mat-error>
-        <mat-error class="float-right" *ngIf="ctlPasswordConfirm.hasError('minlength')">Minimum length is
-            {{ctlPasswordConfirm.errors['minlength'].requiredLength}}</mat-error>
+        <mat-error class="float-right" *ngIf="ctlPasswordConfirm.hasError('minlength')">Minimum length is {{ctlPasswordConfirm.errors['minlength'].requiredLength}}</mat-error>
     </mat-form-field>
     <div *ngIf="frm.errors && ctlPasswordConfirm.dirty && ctlPasswordConfirm.valid">
         <mat-error class="float-left" *ngIf="frm.hasError('passwordNotConfirmed')">The passwords don't match</mat-error>
     </div>
+
     <div>
         <button mat-stroked-button (click)="signup()" [disabled]="frm.invalid">Sign Up</button>
     </div>

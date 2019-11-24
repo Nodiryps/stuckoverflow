@@ -41,7 +41,8 @@ namespace prid1920_g10.Models
 
             builder.Entity<User>()
                 .Property(f => f.Id)
-                .ValueGeneratedOnAdd(); // auto-increment id
+                .ValueGeneratedOnAdd()
+                .UseMySqlIdentityColumn(); 
             builder.Entity<User>()
                 .HasIndex(u => u.Pseudo)
                 .IsUnique(); //unicity pseudo

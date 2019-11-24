@@ -6,31 +6,45 @@
             <mat-error class="field-error" *ngIf="ctlPseudo.hasError('required')">Required</mat-error>
             <mat-error class="field-error" *ngIf="ctlPseudo.hasError('minlength')">Minimum length is {{ctlPseudo.errors['minlength'].requiredLength}}</mat-error>
             <mat-error class="field-error" *ngIf="ctlPseudo.hasError('pseudoUsed')">Pseudo already in use</mat-error>
-            <mat-error class="field-error" *ngIf="ctlPseudo.hasError('forbiddenValue')">Forbiddent value ''</mat-error>
+            <!-- <mat-error class="field-error" *ngIf="ctlPseudo.hasError('forbiddenValue')">Forbiddent value '@' or ' '</mat-error> -->
         </mat-form-field>
 
         <mat-form-field>
-            <input matInput placeholder="Email" [formControl]="ctlEmail">
+            <input matInput type="email" placeholder="Email" [formControl]="ctlEmail" required >
+            <mat-error class="float-right" *ngIf="ctlEmail.hasError('pattern')">Invalid email format</mat-error>
+            <mat-error class="float-right" *ngIf="ctlEmail.hasError('emailUsed')">This email is not available</mat-error>
         </mat-form-field>
 
         <mat-form-field>
             <input matInput placeholder="FirstName" [formControl]="ctlFirstName">
+            <mat-error class="float-right" *ngIf="ctlFirstName.hasError('minlength')">Minimum length is {{ctlFirstName.errors['minlength'].requiredLength}}</mat-error>
+            <mat-error class="float-right" *ngIf="ctlFirstName.hasError('maxlength')">Maximum length is {{ctlFirstName.errors['maxlength'].requiredLength}}</mat-error>
+            <mat-error class="float-right" *ngIf="ctlFirstName.hasError('pattern')">(Lettres only)</mat-error>
         </mat-form-field>
+        <div *ngIf="frm.errors">
+            <mat-error class="float-right" *ngIf="frm.hasError('firstnameRequired')">FirstName Required</mat-error>
+        </div>
+    
+        <mat-form-field>
+            <input matInput placeholder="LastName" [formControl]="ctlLastName" >
+            <mat-error class="float-right" *ngIf="ctlLastName.hasError('minlength')">Minimum length is {{ctlLastName.errors['minlength'].requiredLength}}</mat-error>
+            <mat-error class="float-right" *ngIf="ctlLastName.hasError('maxlength')">Maximum length is {{ctlLastName.errors['maxlength'].requiredLength}}</mat-error>
+            <mat-error class="float-right" *ngIf="ctlLastName.hasError('pattern')">(Lettres only)</mat-error>
+        </mat-form-field>
+        <div *ngIf="frm.errors">
+            <mat-error class="field-error" *ngIf="frm.hasError('lastnameRequired')">Lastname Required</mat-error>
+        </div>
 
         <mat-form-field>
-            <input matInput placeholder="LastName" [formControl]="ctlLastName">
+            <input matInput placeholder="BirthDate" [formControl]="ctlBirthDate" type="date">
+            <mat-error class="field-error" *ngIf="ctlBirthDate.hasError('tooYoung')">Must be at least 18 years old</mat-error>
+            <mat-error class="field-error" *ngIf="ctlBirthDate.hasError('futureBorn')">Can't be born in the future</mat-error>
         </mat-form-field>
 
         <mat-form-field>
             <input matInput [placeholder]="'Password ' + (isNew ? '' : ' (leave blank if no change)')" [formControl]="ctlPassword" type="password" [required]="isNew" autocomplete="new-password">
             <mat-error class="field-error" *ngIf="ctlPassword.hasError('required')">Required</mat-error>
             <mat-error class="field-error" *ngIf="ctlPassword.hasError('minlength')">Minimum length is {{ctlPassword.errors['minlength'].requiredLength}}</mat-error>
-        </mat-form-field>
-        
-        <mat-form-field>
-            <input matInput placeholder="BirthDate" [formControl]="ctlBirthDate" type="date">
-            <mat-error class="field-error" *ngIf="ctlBirthDate.hasError('tooYoung')">Must be at least 18 years old</mat-error>
-            <mat-error class="field-error" *ngIf="ctlBirthDate.hasError('futureBorn')">Can't be born in the future</mat-error>
         </mat-form-field>
 
         <!-- <mat-form-field>
