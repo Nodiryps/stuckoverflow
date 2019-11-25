@@ -2,8 +2,10 @@ import { Component, OnInit, ɵɵcontainerRefreshEnd } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Inject } from '@angular/core';
 import { UserService } from '../../services/user.service';
-import { FormBuilder, FormGroup, Validators, FormControl, 
-    AsyncValidatorFn, ValidationErrors } from '@angular/forms';
+import {
+    FormBuilder, FormGroup, Validators, FormControl,
+    AsyncValidatorFn, ValidationErrors
+} from '@angular/forms';
 import * as _ from 'lodash';
 import { User, Role } from 'src/app/models/user';
 
@@ -37,7 +39,7 @@ export class EditUserComponent {
         private userService: UserService
     ) {
         // this.ctlId = this.fb.control('', []);
-        this.ctlPseudo = this.fb.control('', 
+        this.ctlPseudo = this.fb.control('',
             [
                 Validators.required,
                 Validators.minLength(this.minLengthPseudoPasswordName),
@@ -45,7 +47,7 @@ export class EditUserComponent {
                 // this.forbiddenValues(['@', ' '])
             ], [this.pseudoUsed()]
         );
-        this.ctlEmail = this.fb.control('', 
+        this.ctlEmail = this.fb.control('',
             [
                 Validators.pattern(/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/)
             ], [this.emailUsed()]
@@ -98,9 +100,9 @@ export class EditUserComponent {
             const date = new Date(ctl.value);
             const diff = Date.now() - date.getTime();
             if (diff < 0)
-                return { futureBorn: true } 
+                return { futureBorn: true }
             var age = new Date(diff).getUTCFullYear() - 1970;
-            if (age < 18) 
+            if (age < 18)
                 return { tooYoung: true };
             return null;
         };
@@ -117,7 +119,7 @@ export class EditUserComponent {
                     if (ctl.pristine) {
                         resolve(null);
                     } else {
-                        this.userService.getById(pseudo).subscribe(user => {
+                        this.userService.getById(pseudo, '').subscribe(user => {
                             resolve(user ? { pseudoUsed: true } : null);
                         });
                     }
@@ -126,24 +128,26 @@ export class EditUserComponent {
         };
     }
 
-    // emailUsed(): AsyncValidatorFn {
-    //     let timeout: NodeJS.Timeout;
-    //     return (ctl: FormControl) => {
-    //         clearTimeout(timeout);
-    //         const email = ctl.value;
-    //         return new Promise(resolve => {
-    //             timeout = setTimeout(() => {
-    //                 if (ctl.pristine) {
-    //                     resolve(null);
-    //                 } else {
-    //                     this.userService.getById('', email).subscribe(user => {
-    //                         resolve(user ? { emailUsed: true } : null);
-    //                     });
-    //                 }
-    //             }, 300);
-    //         });
-    //     };
-    // }
+    emailUsed(): AsyncValidatorFn {
+        let timeout: NodeJS.Timeout;
+        return (ctl: FormControl) => {
+            clearTimeout(timeout);
+            const oldEmail = ctl.value;
+            const email = ctl.value;
+            return new Promise(resolve => {
+                timeout = setTimeout(() => {
+                    if (ctl.pristine || ctl.value === this.data.user.email) {
+                        resolve(null);
+                    }
+                    else {
+                        this.userService.getById('', email).subscribe(user => {
+                            resolve(user ? { emailUsed: true } : null);
+                        });
+                    }
+                }, 300);
+            });
+        };
+    }
 
     onNoClick(): void {
         this.dialogRef.close();
@@ -151,7 +155,7 @@ export class EditUserComponent {
 
     update() {
         this.dialogRef.close(this.frm.value);
-        
+
     }
 
     cancel() {

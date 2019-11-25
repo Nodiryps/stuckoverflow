@@ -33,9 +33,16 @@ namespace prid1920_g10.Controllers {
         }
 
         [Authorized(Role.Admin)]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<UserDTO>> GetUserById(int id) {
-            var user = await _context.Users.FindAsync(id);
+        [HttpGet("{str}")]
+        public async Task<ActionResult<UserDTO>> GetUserById(string str) {
+            var user = new User();
+            if(str.Contains('@')){
+                user = await _context.Users.FindAsync(GetIdByPseudo(GetPseudoByEmail(str)));
+            }
+            else{
+                user = await _context.Users.FindAsync(GetIdByPseudo(str));
+            }
+
             if (user == null)
                 return NotFound();
             return user.ToDTO();
@@ -132,12 +139,13 @@ namespace prid1920_g10.Controllers {
         //     return member == null;
         // }
 
-        // [AllowAnonymous]
-        // [HttpGet("availableEmail/{email}")]
-        // public async Task<ActionResult<bool>> IsAvailableEmail(string email) {
-        //     var member = await _context.Users.FindAsync(GetIdByPseudo(GetPseudoByEmail(email)));
-        //     return  member == null;
-        // }
+        [AllowAnonymous]
+        [HttpGet("availableM/{email}")]
+        public async Task<ActionResult<bool>> IsAvailableEmail(string email) {
+            var member = new User();
+            member = await _context.Users.FindAsync(GetIdByPseudo(GetPseudoByEmail(email)));
+            return  member == null;
+        }
 
         [AllowAnonymous]
         [HttpPost("signup")]

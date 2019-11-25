@@ -15,19 +15,21 @@ export class UserService {
     );
   }
 
-  getById(pseudo: string) {
-    // if(pseudo !== ''){
+  getById(pseudo: string, email: string) {
+    if(pseudo !== ''){
       return this.http.get<User>(`${this.baseUrl}api/users/${pseudo}`).pipe(
         map(u => !u ? null : new User(u)),
         catchError(err => of(null))
       );
-    // } else {
-    //   return this.http.get<User>(`${this.baseUrl}api/users/${email}`).pipe(
-    //     map(u => !u ? null : new User(u)),
-    //     catchError(err => of(null))
-    //   );
-    // }
+    } else {
+      return this.http.get<User>(`${this.baseUrl}api/users/${email}`).pipe(
+        map(u => !u ? null : new User(u)),
+        catchError(err => of(null))
+      );
+    }
   }
+
+
 
   public update(u: User): Observable<boolean> {
     return this.http.put<User>(`${this.baseUrl}api/users/${u.pseudo}`, u).pipe(
