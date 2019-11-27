@@ -7,18 +7,19 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using prid1920_g10.Helpers;
+using prid1920_g10.Models;
 
-namespace prid1920_g10
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateWebHostBuilder(args).Build().Run();
+namespace prid1920_g10 {
+    public class Program {
+        public static void Main(string[] args) {
+            CreateWebHostBuilder(args).Build().Seed().Run();
+
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                    .UseSetting("https_port", "5000")
+                    .UseStartup<Startup>();
     }
 }
