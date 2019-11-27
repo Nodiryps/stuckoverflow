@@ -18,7 +18,8 @@ namespace prid1920_g10.Models
         public virtual int ParentId { get; set; }
         public virtual int AuthorId { get; set; }
         public virtual int AcceptedAnswerId { get; set; }
-        public virtual List<Comment> Comments {get; set;}
+        public virtual IList<Comment> Comments {get; set;} = new List<Comment>();
+        [NotMapped]
         public virtual IList<Tag> Tags {get; set;}=new List<Tag>();
         public virtual IList<Vote> Votes {get; set;}=new List<Vote>();
         public virtual User User {get; set;}
