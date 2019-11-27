@@ -13,10 +13,6 @@ namespace prid1920_g10.Models
 
     public class User : IValidatableObject
     {
-        private const int MinLengthPseudoPasswordName = 3;
-        private const int MaxLengthPseudo = 10;
-        private const int MaxLengthName = 30;
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -29,22 +25,23 @@ namespace prid1920_g10.Models
         
         [Required(ErrorMessage = "Required")]
         public string Email { get; set; }
+
+        [Required(ErrorMessage = "Required")]
         
+        public int Reputation { get; set; }
+        [NotMapped]
+        
+        private const int MinLengthPseudoPasswordName = 3;
+        private const int MaxLengthPseudo = 10;
+        private const int MaxLengthName = 30;
+        public string Token { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime? BirthDate { get; set; }
-        
-        [Required(ErrorMessage = "Required")]
-        public int Reputation { get; set; }
-        
+        public DateTime? BirthDate { get; set; }        
         public Role Role { get; set; } = Role.Member;
-        
-        [NotMapped]
-        public string Token { get; set; }
-        
-        public virtual List<Post> Posts { get; set; }
-        public virtual List<Comment> Comments { get; set; }
-        public virtual List<Tag> Tags { get; set; }
+        public virtual IList<Post> Posts { get; set; }
+        public virtual IList<Comment> Comments { get; set; }
+        public virtual IList<Tag> Tags { get; set; }
         public int? Age
         {
             get
@@ -57,7 +54,6 @@ namespace prid1920_g10.Models
                 return age;
             }
         }
-
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
