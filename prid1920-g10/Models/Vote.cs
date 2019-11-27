@@ -13,5 +13,6 @@ namespace prid1920_g10.Models {
         public virtual int AuthorId { get; set; }
         public virtual int PostId { get; set; }
         public virtual User User { get; set; }
+        public virtual Post Post { get; set; }
     }
 }

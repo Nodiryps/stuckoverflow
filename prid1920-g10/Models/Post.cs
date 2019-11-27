@@ -18,5 +18,9 @@ namespace prid1920_g10.Models
         public virtual int ParentId { get; set; }
         public virtual int AuthorId { get; set; }
         public virtual int AcceptedAnswerId { get; set; }
+        public virtual List<Comment> Comments {get; set;}
+        public virtual List<Tag> Tags {get; set;}
+        public virtual List<Vote> Votes {get; set;}
+        public virtual User User {get; set;}
     }
 }

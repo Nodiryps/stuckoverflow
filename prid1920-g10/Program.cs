@@ -19,7 +19,7 @@ namespace prid1920_g10 {
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                    .UseSetting("https_port", "5000")
+                    .UseSetting("http_port", "5000")
                     .UseStartup<Startup>();
     }
 }

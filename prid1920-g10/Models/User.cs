@@ -20,30 +20,23 @@ namespace prid1920_g10.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-
         [Required(ErrorMessage = "Required")]
         public string Pseudo { get; set; }
-
         [Required(ErrorMessage = "Required")]
         public string Password { get; set; }
-
         [Required(ErrorMessage = "Required")]
         public string Email { get; set; }
-
         public string FirstName { get; set; }
-
         public string LastName { get; set; }
-
         public DateTime? BirthDate { get; set; }
-
         [Required(ErrorMessage = "Required")]
         public int Reputation { get; set; }
-
         public Role Role { get; set; } = Role.Member;
-
         [NotMapped]
         public string Token { get; set; }
-
+        public virtual List<Post> Posts { get; set; }
+        public virtual List<Comment> Comments { get; set; }
+        public virtual List<Tag> Tags { get; set; }
         public int? Age
         {
             get
