@@ -31,9 +31,7 @@ namespace prid1920_g10.Models {
                 Body = cmt.Body,
                 Timestamp = cmt.Timestamp,
                 AuthorId = cmt.AuthorId,
-                PostId = cmt.PostId,
-                Post = cmt.Post,
-                User = cmt.User
+                PostId = cmt.PostId
             };
         }
         public static List<CommentDTO> ToDTO(this IEnumerable<Comment> cmts) {
@@ -49,7 +47,6 @@ namespace prid1920_g10.Models {
                 ParentId = post.ParentId,
                 AuthorId = post.AuthorId,
                 AcceptedAnswerId = post.AcceptedAnswerId,
-                User = post.User,
                 Answers = post.Answers,
                 Votes = post.Votes,
                 Comments = post.Comments,
@@ -58,16 +55,6 @@ namespace prid1920_g10.Models {
         }
         public static List<PostDTO> ToDTO(this IEnumerable<Post> post) {
             return post.Select(p => p.ToDTO()).ToList();
-        }
-
-        public static PostTagDTO ToDTO(this PostTag pt) {
-            return new PostTagDTO {
-                PostId = pt.PostId,
-                TagId = pt.TagId
-            };
-        }
-        public static List<PostTagDTO> ToDTO(this IEnumerable<PostTag> pt) {
-            return pt.Select(p => p.ToDTO()).ToList();
         }
 
         public static TagDTO ToDTO(this Tag tag) {

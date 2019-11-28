@@ -5,8 +5,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace prid1920_g10.Models {
-    public class Post {
+    public class Post : IValidatableObject {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
@@ -23,5 +24,10 @@ namespace prid1920_g10.Models {
         [NotMapped]
         public IEnumerable<Tag> Tags { get => PostTags.Select(p => p.Tag); }
         
+         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            
+            yield return new ValidationResult("");
+        }
     }
 }

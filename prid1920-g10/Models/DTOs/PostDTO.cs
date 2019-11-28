@@ -13,7 +13,6 @@ namespace prid1920_g10.Models
         public int? ParentId { get; set; }
         public int AuthorId { get; set; }
         public int? AcceptedAnswerId { get; set; }
-        public User User { get; set; }
         public IList<Post> Answers { get; set; } = new List<Post>();
         public IList<Vote> Votes { get; set; } = new List<Vote>();
         public IList<Comment> Comments { get; set; } = new List<Comment>();

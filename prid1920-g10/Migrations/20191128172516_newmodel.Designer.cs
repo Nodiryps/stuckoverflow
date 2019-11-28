@@ -9,7 +9,7 @@ using prid1920_g10.Models;
 namespace prid1920g10.Migrations
 {
     [DbContext(typeof(G10Context))]
-    [Migration("20191128144012_newmodel")]
+    [Migration("20191128172516_newmodel")]
     partial class newmodel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

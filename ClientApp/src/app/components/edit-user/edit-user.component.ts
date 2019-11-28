@@ -132,7 +132,6 @@ export class EditUserComponent {
         let timeout: NodeJS.Timeout;
         return (ctl: FormControl) => {
             clearTimeout(timeout);
-            const oldEmail = ctl.value;
             const email = ctl.value;
             return new Promise(resolve => {
                 timeout = setTimeout(() => {
