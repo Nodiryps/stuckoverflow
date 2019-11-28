@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace prid1920_g10.Models
 {
@@ -13,5 +14,10 @@ namespace prid1920_g10.Models
         public DateTime? BirthDate { get; set; }
         public int Reputation { get; set; }
         public Role Role { get; set; }
+        public IList<Post> Posts { get; set; } = new List<Post>();
+        public IList<Comment> Comments { get; set; } = new List<Comment>();
+        public IList<Tag> Tags { get; set; } = new List<Tag>();
+        public IList<Vote> Votes { get; set; } = new List<Vote>();
+        
     }
 }

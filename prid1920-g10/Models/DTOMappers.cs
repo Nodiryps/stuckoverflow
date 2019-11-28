@@ -15,10 +15,12 @@ namespace prid1920_g10.Models {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 BirthDate = user.BirthDate,
-                Role = user.Role
+                Role = user.Role,
+                Posts = user.Posts,
+                Comments = user.Comments,
+                Votes = user.Votes
             };
         }
-
         public static List<UserDTO> ToDTO(this IEnumerable<User> users) {
             return users.Select(m => m.ToDTO()).ToList();
         }
@@ -29,10 +31,11 @@ namespace prid1920_g10.Models {
                 Body = cmt.Body,
                 Timestamp = cmt.Timestamp,
                 AuthorId = cmt.AuthorId,
-                PostId = cmt.PostId
+                PostId = cmt.PostId,
+                Post = cmt.Post,
+                User = cmt.User
             };
         }
-
         public static List<CommentDTO> ToDTO(this IEnumerable<Comment> cmts) {
             return cmts.Select(c => c.ToDTO()).ToList();
         }
@@ -45,10 +48,14 @@ namespace prid1920_g10.Models {
                 Timestamp = post.Timestamp,
                 ParentId = post.ParentId,
                 AuthorId = post.AuthorId,
-                AcceptedAnswerId = post.AcceptedAnswerId
+                AcceptedAnswerId = post.AcceptedAnswerId,
+                User = post.User,
+                Answers = post.Answers,
+                Votes = post.Votes,
+                Comments = post.Comments,
+                PostTags = post.PostTags
             };
         }
-
         public static List<PostDTO> ToDTO(this IEnumerable<Post> post) {
             return post.Select(p => p.ToDTO()).ToList();
         }
@@ -59,7 +66,6 @@ namespace prid1920_g10.Models {
                 TagId = pt.TagId
             };
         }
-
         public static List<PostTagDTO> ToDTO(this IEnumerable<PostTag> pt) {
             return pt.Select(p => p.ToDTO()).ToList();
         }
@@ -70,7 +76,6 @@ namespace prid1920_g10.Models {
                 Name = tag.Name
             };
         }
-
         public static List<TagDTO> ToDTO(this IEnumerable<Tag> tag) {
             return tag.Select(t => t.ToDTO()).ToList();
         }
@@ -82,7 +87,6 @@ namespace prid1920_g10.Models {
                 PostId = vote.PostId
             };
         }
-        
         public static List<VoteDTO> ToDTO(this IEnumerable<Vote> vote) {
             return vote.Select(v => v.ToDTO()).ToList();
         }

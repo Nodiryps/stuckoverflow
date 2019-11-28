@@ -13,35 +13,32 @@ namespace prid1920_g10.Models
 
     public class User : IValidatableObject
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
-        [Required(ErrorMessage = "Required")]
-        public string Pseudo { get; set; }
-        
-        [Required(ErrorMessage = "Required")]
-        public string Password { get; set; }
-        
-        [Required(ErrorMessage = "Required")]
-        public string Email { get; set; }
-
-        [Required(ErrorMessage = "Required")]
-        
-        public int Reputation { get; set; }
-        [NotMapped]
-        
         private const int MinLengthPseudoPasswordName = 3;
         private const int MaxLengthPseudo = 10;
         private const int MaxLengthName = 30;
-        public string Token { get; set; }
+        
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        [Required(ErrorMessage = "Required")]
+        public string Pseudo { get; set; }
+        [Required(ErrorMessage = "Required")]
+        public string Password { get; set; }
+        [Required(ErrorMessage = "Required")]
+        public string Email { get; set; }
+        [Required(ErrorMessage = "Required")]
+        public int Reputation { get; set; }   
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime? BirthDate { get; set; }        
         public Role Role { get; set; } = Role.Member;
-        public virtual IList<Post> Posts { get; set; }
-        public virtual IList<Comment> Comments { get; set; }
-        public virtual IList<Tag> Tags { get; set; }
+        [NotMapped]
+        public string Token { get; set; }
+
+        public virtual IList<Post> Posts { get; set; } = new List<Post>();
+        public virtual IList<Comment> Comments { get; set; } = new List<Comment>();
+        public virtual IList<Vote> Votes { get; set; } = new List<Vote>();
+        
         public int? Age
         {
             get

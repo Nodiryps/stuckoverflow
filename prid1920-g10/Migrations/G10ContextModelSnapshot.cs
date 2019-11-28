@@ -30,13 +30,11 @@ namespace prid1920g10.Migrations
 
                     b.Property<DateTime>("Timestamp");
 
-                    b.Property<int?>("UserId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("PostId");
+                    b.HasIndex("AuthorId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("PostId");
 
                     b.ToTable("Comments");
                 });
@@ -46,41 +44,38 @@ namespace prid1920g10.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AcceptedAnswerId");
+                    b.Property<int?>("AcceptedAnswerId");
 
                     b.Property<int>("AuthorId");
 
                     b.Property<string>("Body");
 
-                    b.Property<int>("ParentId");
+                    b.Property<int?>("ParentId");
 
-                    b.Property<int?>("TagId");
+                    b.Property<int?>("PostId");
 
                     b.Property<DateTime>("Timestamp");
 
                     b.Property<string>("Title");
 
-                    b.Property<int?>("UserId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("TagId");
+                    b.HasIndex("AuthorId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("PostId");
 
                     b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("prid1920_g10.Models.PostTag", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("TagId");
 
                     b.Property<int>("PostId");
 
-                    b.Property<int>("TagId");
+                    b.HasKey("TagId", "PostId");
 
-                    b.HasKey("Id");
+                    b.HasIndex("PostId");
 
                     b.ToTable("PostTags");
                 });
@@ -92,11 +87,7 @@ namespace prid1920g10.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int?>("UserId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Tags");
                 });
@@ -125,75 +116,81 @@ namespace prid1920g10.Migrations
 
                     b.Property<int>("Role");
 
-                    b.Property<string>("Token");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Pseudo")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
 
             modelBuilder.Entity("prid1920_g10.Models.Vote", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
                     b.Property<int>("AuthorId");
 
                     b.Property<int>("PostId");
 
                     b.Property<int>("UpDown");
 
-                    b.Property<int?>("UserId");
-
-                    b.HasKey("Id");
+                    b.HasKey("AuthorId", "PostId");
 
                     b.HasIndex("PostId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Votes");
                 });
 
             modelBuilder.Entity("prid1920_g10.Models.Comment", b =>
                 {
+                    b.HasOne("prid1920_g10.Models.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("prid1920_g10.Models.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("prid1920_g10.Models.User", "User")
-                        .WithMany("Comments")
-                        .HasForeignKey("UserId");
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("prid1920_g10.Models.Post", b =>
                 {
-                    b.HasOne("prid1920_g10.Models.Tag")
-                        .WithMany("Posts")
-                        .HasForeignKey("TagId");
-
                     b.HasOne("prid1920_g10.Models.User", "User")
                         .WithMany("Posts")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("prid1920_g10.Models.Post")
+                        .WithMany("Answers")
+                        .HasForeignKey("PostId");
                 });
 
-            modelBuilder.Entity("prid1920_g10.Models.Tag", b =>
+            modelBuilder.Entity("prid1920_g10.Models.PostTag", b =>
                 {
-                    b.HasOne("prid1920_g10.Models.User")
-                        .WithMany("Tags")
-                        .HasForeignKey("UserId");
+                    b.HasOne("prid1920_g10.Models.Post", "Post")
+                        .WithMany("PostTags")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("prid1920_g10.Models.Tag", "Tag")
+                        .WithMany("PostTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("prid1920_g10.Models.Vote", b =>
                 {
+                    b.HasOne("prid1920_g10.Models.User", "User")
+                        .WithMany("Votes")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("prid1920_g10.Models.Post", "Post")
                         .WithMany("Votes")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("prid1920_g10.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

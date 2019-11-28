@@ -132,21 +132,6 @@ namespace prid1920_g10.Controllers {
                     select u.Pseudo).FirstOrDefault();
         }
 
-        // [AllowAnonymous]
-        // [HttpGet("availablePseudo/{pseudo}")]
-        // public async Task<ActionResult<bool>> IsAvailablePseudo(string pseudo) {
-        //     var member = await _context.Users.FindAsync(GetIdByPseudo(pseudo));
-        //     return member == null;
-        // }
-
-        [AllowAnonymous]
-        [HttpGet("availableM/{email}")]
-        public async Task<ActionResult<bool>> IsAvailableEmail(string email) {
-            var member = new User();
-            member = await _context.Users.FindAsync(GetIdByPseudo(GetPseudoByEmail(email)));
-            return  member == null;
-        }
-
         [AllowAnonymous]
         [HttpPost("signup")]
         public async Task<ActionResult<UserDTO>> SignUp(UserDTO data) {
@@ -184,7 +169,7 @@ namespace prid1920_g10.Controllers {
 
             if (user == null)
                 return null;
-            if (user.Password == password) {
+            if (user.Password == TokenHelper.GetPasswordHash(password)) {
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes("my-super-secret-key");
                 var tokenDescriptor = new SecurityTokenDescriptor {
