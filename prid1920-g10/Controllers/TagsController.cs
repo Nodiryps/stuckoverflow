@@ -17,69 +17,65 @@ using PRID_Framework;
 
 namespace prid1920_g10.Controllers {
     [Authorize]
-    [Route("api/posts")]
+    [Route("api/tags")]
     [ApiController]
-    public class PostsController : ControllerBase {
+    public class TagsController : ControllerBase {
         private readonly G10Context _context;
 
-        public PostsController(G10Context context) {
+        public TagsController(G10Context context) {
             _context = context;
         }
 
-        [AllowAnonymous]
+        [Authorized(Role.Admin)]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PostDTO>>> GetAll() {
-            return (await _context.Posts.ToListAsync()).ToDTO();
+        public async Task<ActionResult<IEnumerable<TagDTO>>> GetAll() {
+            return (await _context.Tags.ToListAsync()).ToDTO();
         }
 
         [Authorized(Role.Admin)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<PostDTO>> GetPostById(int id) {
-            var post = new Post();
-            post = await _context.Posts.FindAsync(id);
+        public async Task<ActionResult<TagDTO>> GetTagById(int id) {
+            var tag = new Tag();
+            tag = await _context.Tags.FindAsync(id);
 
-            if (post == null)
+            if (tag == null)
                 return NotFound();
-            return post.ToDTO();
+            return tag.ToDTO();
         }
 
-        [Authorized(Role.Admin, Role.Member)]
+        [Authorized(Role.Admin)]
         [HttpPost]
-        public async Task<ActionResult<UserDTO>> PostAPost(PostDTO data) {
-            var newPost = new Post() {
+        public async Task<ActionResult<UserDTO>> TagATag(TagDTO data) {
+            var newTag = new Tag() {
                 Id = GetNewId(),
-                Title = data.Title,
-                Body = data.Body,
-                Timestamp = data.Timestamp
+                Name = data.Name
             };
-            _context.Posts.Add(newPost);
+            _context.Tags.Add(newTag);
             var res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty)
                 return BadRequest(res);
 
-            return CreatedAtAction(nameof(GetPostById), new { Id = newPost.Id }, newPost.ToDTO());
+            return CreatedAtAction(nameof(GetTagById), new { Id = newTag.Id }, newTag.ToDTO());
         }
 
         private int GetNewId() {
-            return (from p in _context.Posts
+            return (from p in _context.Tags
                     select p.Id).Max() + 1;
         }
 
         [Authorized(Role.Admin)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPost(int id, PostDTO dto) {
+        public async Task<IActionResult> PutTag(int id, TagDTO dto) {
             if (id != dto.Id)
                 return BadRequest();
 
-            var post = await _context.Posts.FindAsync(id);
+            var tag = await _context.Tags.FindAsync(id);
 
-            if (post == null)
+            if (tag == null)
                 return NotFound();
 
-            post.Id = dto.Id;
-            post.Title = dto.Title;
-            post.Body = dto.Body;
-            post.Timestamp = dto.Timestamp;
+            tag.Id = dto.Id;
+            tag.Name = dto.Name;
 
             var res = await _context.SaveChangesAsyncWithValidation();
 
@@ -91,13 +87,13 @@ namespace prid1920_g10.Controllers {
 
         [Authorized(Role.Admin)]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePost(int id) {
-            var post = await _context.Users.FindAsync(id);
+        public async Task<IActionResult> DeleteTag(int id) {
+            var tag = await _context.Users.FindAsync(id);
 
-            if (post == null)
+            if (tag == null)
                 return NotFound();
 
-            _context.Users.Remove(post);
+            _context.Users.Remove(tag);
             await _context.SaveChangesAsync();
 
             return NoContent();

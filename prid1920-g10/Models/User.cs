@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace prid1920_g10.Models
 {
-    public enum Role { Admin = 2, Manager = 1, Member = 0 }
+    public enum Role { Admin = 2, Member = 1, Visitor = 0 }
 
     public class User : IValidatableObject
     {

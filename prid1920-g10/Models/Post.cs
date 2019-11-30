@@ -9,25 +9,39 @@ namespace prid1920_g10.Models {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Title { get; set; }
+        public string Title { get; set; } // obligatoire pour les questions et doit être nul pour les réponses.
+        [Required]
         public string Body { get; set; }
-        public DateTime Timestamp { get; set; }
+        public DateTime Timestamp { get => Timestamp; set => DateTime.Now.ToString("yyyyMMddHHmmssffff"); }
         public int? ParentId { get; set; }
+        // {
+        //     get {
+        //             return(from p in G10Context.Post
+        //             where p.Title == null
+        //             select p.Id)
+        //          }
+        //     set;
+        // }
         public int AuthorId { get; set; }
         public int? AcceptedAnswerId { get; set; }
 
+        [NotMapped]
+        public IEnumerable<Tag> Tags { get => PostTags.Select(p => p.Tag); }
         public virtual User User { get; set; }
         public virtual IList<Post> Answers { get; set; } = new List<Post>();
         public virtual IList<Vote> Votes { get; set; } = new List<Vote>();
         public virtual IList<Comment> Comments { get; set; } = new List<Comment>();
         public virtual IList<PostTag> PostTags { get; set; } = new List<PostTag>();
-        [NotMapped]
-        public IEnumerable<Tag> Tags { get => PostTags.Select(p => p.Tag); }
         
-         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            
+
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
+
             yield return new ValidationResult("");
+        }
+
+        private bool IsParent(Post p){
+            return p.Title == null;
         }
     }
 }

@@ -1,3 +1,5 @@
+import { Tag } from "./tag";
+
 export class Post {
     id: number;
     title: string;
@@ -6,6 +8,7 @@ export class Post {
     parentId: number;
     authorId: number;
     acceptedAnswerId: number;
+    tags: Tag;
 
     constructor(data: any) {
         if(data) {
@@ -16,6 +19,7 @@ export class Post {
             this.parentId = data.parentId;
             this.authorId = data.authorId;
             this.acceptedAnswerId = data.acceptedAnswerId;
+            this.tags = data.tags;
         }
     }
 }
