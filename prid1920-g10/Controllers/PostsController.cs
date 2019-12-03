@@ -46,11 +46,16 @@ namespace prid1920_g10.Controllers {
         [Authorized(Role.Admin, Role.Member)]
         [HttpPost]
         public async Task<ActionResult<UserDTO>> PostAPost(PostDTO data) {
+            var post = await _context.Posts.FindAsync(data.Id);
+
             var newPost = new Post() {
                 Id = GetNewId(),
                 Title = data.Title,
                 Body = data.Body,
-                Timestamp = data.Timestamp
+                Timestamp = data.Timestamp,
+                ParentId = data.ParentId,
+                AuthorId = data.AuthorId,
+                AcceptedAnswerId = data.AcceptedAnswerId
             };
             _context.Posts.Add(newPost);
             var res = await _context.SaveChangesAsyncWithValidation();

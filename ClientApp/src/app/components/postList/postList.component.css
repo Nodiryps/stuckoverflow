@@ -5,3 +5,6 @@ table {
     font-size: 14px;
     width: 100%;
 }
+th.mat-column-actions {
+    width: 110px;
+}

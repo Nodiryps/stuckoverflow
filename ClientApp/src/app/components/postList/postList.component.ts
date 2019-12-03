@@ -7,6 +7,7 @@ import { Post } from '../../models/post'
 import { PostService } from '../../services/post.service';
 import { StateService } from 'src/app/services/state.service';
 import { MatTableState } from 'src/app/helpers/mattable.state';
+import { EditPostComponent } from '../edit-post/edit-post.component';
 
 @Component({
     selector: 'app-postList',
@@ -25,7 +26,7 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */{
     constructor(private postService: PostService, private stateService: StateService,
         public dialog: MatDialog, public snackBar: MatSnackBar) 
     {
-        this.state = this.stateService.userListState;
+        this.state = this.stateService.postListState;
     }
 
     ngAfterViewInit(): void {
@@ -51,4 +52,22 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */{
         //     // this.filter = this.state.filter;
         // });
     }
+
+        // appelée quand on clique sur le bouton "Create question"
+        create() {
+            const post = new Post({});
+            const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: true } });
+            dlg.beforeClose().subscribe(res => {
+                if (res) {
+                    this.dataSource.data = [...this.dataSource.data, new Post(res)];
+                    this.postService.add(res).subscribe(res => {
+                        if (!res) {
+                            this.snackBar.open(`XXXXXXXXXXXXXXXXXXXXXXXXXXXXX`, 'Dismiss', { duration: 10000 });
+                            this.refresh();
+                        }this.refresh();
+                    });
+                }
+            });
+        }
+
 }

@@ -19,6 +19,7 @@ import { RestrictedComponent } from '../components/restricted/restricted.compone
 import { SignUpComponent } from '../components/signup/signup.component';
 import { SharedModule } from './shared.module';
 import { EditUserComponent } from '../components/edit-user/edit-user.component';
+import { EditPostComponent } from '../components/edit-post/edit-post.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SetFocusDirective } from '../directives/setfocus.directive';
 
@@ -36,10 +37,12 @@ import { SetFocusDirective } from '../directives/setfocus.directive';
     RestrictedComponent,
     SetFocusDirective,
     SignUpComponent,
-    EditUserComponent
+    EditUserComponent,
+    EditPostComponent
   ],
   entryComponents: [
-    EditUserComponent
+    EditUserComponent,
+    EditPostComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

@@ -1,0 +1,23 @@
+<form id="frm" class="form" [formGroup]="frm">
+        <h1 class="header">{{(!isNew ? 'Edit existing' : 'Add a new') + ' question'}}</h1>
+        <div class="form">
+            <mat-form-field>
+                <input matInput placeholder="Title" [formControl]="ctlTitle"  [readonly]="!isNew">
+            </mat-form-field>
+    
+            <mat-form-field>
+                <input matInput type="text" placeholder="Body" [formControl]="ctlBody"  >
+            </mat-form-field>
+
+        </div>
+        <div class="footer">
+            <button type="submit" mat-button form="frm" (click)="update()">{{!isNew ? 'Update' : 'Add'}}</button>
+            <button type="reset" mat-button (click)="cancel()">Cancel</button>
+        </div>
+    </form>
+    <!-- <pre>
+    {{frm.value | json }}
+    {{frm.invalid | json }}
+    {{frm.pristine | json }}
+    {{frm.pending | json }}
+    </pre> -->

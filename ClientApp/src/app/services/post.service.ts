@@ -20,4 +20,15 @@ export class PostService {
             map(res => res.map(p => new Post(p).tags))
         );
     }
+
+      
+  public add(p: Post): Observable<boolean> {
+    return this.http.post<Post>(`${this.baseUrl}api/posts`, p).pipe(
+      map(res => true),
+      catchError(err => {
+        console.error(err + ' add');
+        return of(false);
+      })
+    );
+  }
 }
