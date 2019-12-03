@@ -7,9 +7,11 @@ import { UserListComponent } from '../components/userList/userList.component';
 import { LoginComponent } from '../components/login/login.component';
 import { RestrictedComponent } from '../components/restricted/restricted.component';
 import { SignUpComponent } from '../components/signup/signup.component';
+import { PostDetailComponent } from '../components/postDetail/postDetail.component';
 import { UnknownComponent } from '../components/unknown/unknown.component';
 import { AuthGuard } from '../services/auth.guard';
 import { Role } from '../models/user';
+import { Post } from '../models/post';
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -21,6 +23,11 @@ const appRoutes: Routes = [
       component: UserListComponent,
       canActivate: [AuthGuard],
       data: { roles: [Role.Admin] }
+    },
+    {
+      path: 'postdetail',
+      component: PostDetailComponent,
+      data: { post: Post }
     },
     {
       path: 'login',

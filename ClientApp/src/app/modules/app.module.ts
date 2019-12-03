@@ -14,6 +14,7 @@ import { CounterComponent } from '../components/counter/counter.component';
 import { FetchDataComponent } from '../components/fetch-data/fetch-data.component';
 import { UserListComponent } from '../components/userList/userList.component';
 import { PostListComponent } from '../components/postList/postList.component';
+import { PostDetailComponent } from '../components/postDetail/postDetail.component';
 import { UnknownComponent } from '../components/unknown/unknown.component';
 import { RestrictedComponent } from '../components/restricted/restricted.component';
 import { SignUpComponent } from '../components/signup/signup.component';
@@ -33,6 +34,7 @@ import { SetFocusDirective } from '../directives/setfocus.directive';
     LoginComponent,
     UserListComponent,
     PostListComponent,
+    PostDetailComponent,
     UnknownComponent,
     RestrictedComponent,
     SetFocusDirective,

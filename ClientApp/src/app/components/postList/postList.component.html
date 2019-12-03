@@ -1,41 +1,48 @@
 <h3>Questions</h3>
 <div class="row">
-    <div class="col-sm-12">
-        <mat-form-field>
-            <input matInput (keyup)="filterChanged($event.target.value)" [value]="filter" placeholder="Filter" appSetFocus>
-        </mat-form-field>
+  <div class="col-sm-12">
+    <mat-form-field>
+      <input matInput (keyup)="filterChanged($event.target.value)" [value]="filter" placeholder="Filter" appSetFocus>
+    </mat-form-field>
+    
+    <br><br>
+    <div class="col-12">
+      <button mat-raised-button color='primary' (click)="create()">Ask question</button>
+    </div>
+    <br><br>
 
-  <div class="mat-elevation-z2">
-    <table mat-table [dataSource]="dataSource" matSort matSortDisableClear>
-      <ng-container matColumnDef="vote">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Vote </th>
-        <td mat-cell *matCellDef="let row"> {{row.vote}} </td>
-      </ng-container>
+     <div class="mat-elevation-z2">  <!-- *ngIf="title != null" -->
+      <table mat-table [dataSource]="dataSource" matSort matSortDisableClear>
+        <ng-container matColumnDef="vote">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Vote </th>
+          <td mat-cell *matCellDef="let row"> {{row.vote}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="date">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-        <td mat-cell *matCellDef="let row"> {{row.timestamp.substring(0,10)}} </td>
-      </ng-container>
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+          <td mat-cell *matCellDef="let row"> {{row.timestamp.substring(0,10)}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="title">
-        <th mat-header-cell *matHeaderCellDef> Title </th>
-        <td mat-cell *matCellDef="let row"> {{row.title}} </td>
-      </ng-container>
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef> Title </th>
+          <td mat-cell *matCellDef="let row"> {{row.title}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="body">
-        <th mat-header-cell *matHeaderCellDef> Body </th>
-        <td mat-cell *matCellDef="let row"> {{row.body.substring(0,150)}}... <a href="#">detail</a> </td>
-      </ng-container>
+        <ng-container matColumnDef="body">
+          <th mat-header-cell *matHeaderCellDef> Body </th>
+          <td mat-cell *matCellDef="let row"> {{row.body.substring(0,150)}}... 
+            <a [routerLink]='["/postdetail"]'>detail</a> 
+          </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-    <mat-paginator [pageSize]="5" [pageSizeOptions]="[3, 5, 10, 25, 100]"></mat-paginator>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator [pageSize]="5" [pageSizeOptions]="[3, 5, 10, 25, 100]"></mat-paginator>
+    </div>
   </div>
 </div>
-</div>
 <div class="row mt-3">
-    <div class="col-12">
-        <button mat-raised-button (click)="create()">Create question</button>
-    </div>
+  
 </div>
+<br><br>

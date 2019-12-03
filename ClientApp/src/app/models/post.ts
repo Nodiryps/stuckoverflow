@@ -1,4 +1,5 @@
 import { Tag } from "./tag";
+import { Vote } from "./vote";
 
 export class Post {
     id: number;
@@ -8,7 +9,8 @@ export class Post {
     parentId: number;
     authorId: number;
     acceptedAnswerId: number;
-    tags: Tag;
+    votes: string;
+    tags: string;
 
     constructor(data: any) {
         if(data) {
@@ -19,6 +21,7 @@ export class Post {
             this.parentId = data.parentId;
             this.authorId = data.authorId;
             this.acceptedAnswerId = data.acceptedAnswerId;
+            this.votes = data.votes;
             this.tags = data.tags;
         }
     }
