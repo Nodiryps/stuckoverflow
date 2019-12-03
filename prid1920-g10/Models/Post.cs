@@ -12,7 +12,7 @@ namespace prid1920_g10.Models {
         public string Title { get; set; } // obligatoire pour les questions et doit être nul pour les réponses.
         [Required]
         public string Body { get; set; }
-        public DateTime Timestamp { get => Timestamp; set => DateTime.Now.ToString("yyyyMMddHHmmssffff"); }
+        public DateTime Timestamp { get; set; } = DateTime.Now;
         public int? ParentId { get; set; }
         // {
         //     get {
