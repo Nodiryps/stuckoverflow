@@ -18,11 +18,13 @@ import { PostDetailComponent } from '../components/postDetail/postDetail.compone
 import { UnknownComponent } from '../components/unknown/unknown.component';
 import { RestrictedComponent } from '../components/restricted/restricted.component';
 import { SignUpComponent } from '../components/signup/signup.component';
+import { CreatePostComponent } from '../components/create-post/create-post.component';
 import { SharedModule } from './shared.module';
 import { EditUserComponent } from '../components/edit-user/edit-user.component';
 import { EditPostComponent } from '../components/edit-post/edit-post.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SetFocusDirective } from '../directives/setfocus.directive';
+
 
 @NgModule({
   declarations: [
@@ -39,6 +41,7 @@ import { SetFocusDirective } from '../directives/setfocus.directive';
     RestrictedComponent,
     SetFocusDirective,
     SignUpComponent,
+    CreatePostComponent,
     EditUserComponent,
     EditPostComponent
   ],

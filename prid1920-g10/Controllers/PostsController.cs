@@ -42,10 +42,16 @@ namespace prid1920_g10.Controllers {
                 return NotFound();
             return post.ToDTO();
         }
-
-        [Authorized(Role.Admin, Role.Member)]
+////////////////////////////////////////////////////////////////////////////////POST//////////////////////////////////////////////
+        [Authorized(Role.Admin)]
         [HttpPost]
-        public async Task<ActionResult<UserDTO>> PostAPost(PostDTO data) {
+        public async Task<ActionResult<PostDTO>> PostPost(PostDTO data) {
+            var post = await _context.Posts.FindAsync(data.Id);
+
+            if (post != null) {
+                var err = new ValidationErrors().Add("Post already in use", nameof(post.Title));
+                return BadRequest(err);
+            }
             var newPost = new Post() {
                 Id = GetNewId(),
                 Title = data.Title,
@@ -53,16 +59,24 @@ namespace prid1920_g10.Controllers {
                 Timestamp = data.Timestamp,
                 ParentId = data.ParentId,
                 AuthorId = data.AuthorId,
-                AcceptedAnswerId = data.AcceptedAnswerId
+                AcceptedAnswerId = data.AcceptedAnswerId,
             };
             _context.Posts.Add(newPost);
-            
             var res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty)
                 return BadRequest(res);
 
             return CreatedAtAction(nameof(GetPostById), new { Id = newPost.Id }, newPost.ToDTO());
         }
+
+        ////////////////////////////////////////////////////////////////////////////////POST//////////////////////////////////////////////
+
+        [AllowAnonymous]
+        [HttpPost("create-post")]
+        public async Task<ActionResult<PostDTO>> Create(PostDTO data) {
+            return await PostPost(data);
+        }
+        
 
         private int GetNewId() {
             return (from p in _context.Posts
@@ -96,12 +110,12 @@ namespace prid1920_g10.Controllers {
         [Authorized(Role.Admin)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(int id) {
-            var post = await _context.Users.FindAsync(id);
+            var post = await _context.Posts.FindAsync(id);
 
             if (post == null)
                 return NotFound();
 
-            _context.Users.Remove(post);
+            _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
 
             return NoContent();

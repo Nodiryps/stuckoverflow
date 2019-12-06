@@ -60,23 +60,23 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
     }
 
     // appelée quand on clique sur le bouton "Create question"
-    create() {
-        const post = new Post({});
-        const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: true } });
-        dlg.beforeClose().subscribe(res => {
-            if (res) {
-                this.dataSource.data = [...this.dataSource.data, new Post(res)];
-                this.postService.add(res).subscribe(res => {
-                    if (!res) {
-                        this.snackBar.open(`There was an error at the server. 
-                                            The question has not been created! Please try again.`,
-                            'Dismiss', { duration: 10000 });
-                        this.refresh();
-                    } this.refresh();
-                });
-            }
-        });
-    }
+    // create() {
+    //     const post = new Post({});
+    //     const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: true } });
+    //     dlg.beforeClose().subscribe(res => {
+    //         if (res) {
+    //             this.dataSource.data = [...this.dataSource.data, new Post(res)];
+    //             this.postService.add(res).subscribe(res => {
+    //                 if (!res) {
+    //                     this.snackBar.open(`There was an error at the server. 
+    //                                         The question has not been created! Please try again.`,
+    //                         'Dismiss', { duration: 10000 });
+    //                     this.refresh();
+    //                 } this.refresh();
+    //             });
+    //         }
+    //     });
+    // }
 
     filterChanged(filterValue: string) {
         this.dataSource.filter = filterValue.trim().toLowerCase();

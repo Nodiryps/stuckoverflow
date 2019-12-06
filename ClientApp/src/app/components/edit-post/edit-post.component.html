@@ -1,18 +1,19 @@
-<form id="frm" class="form" [formGroup]="frm">
+<form formGroup="frm">
     <h1 class="header">{{(!isNew ? 'Edit existing' : 'Add a new') + ' question'}}</h1>
     <div class="form">
         <mat-form-field>
-            <input matInput type="text" placeholder="Title" [formControl]="ctlTitle" [readonly]="!isNew">
+            <input matInput placeholder="Title" formControl="ctlTitle" [readonly]="!isNew" required appSetFocus>
         </mat-form-field>
 
         <mat-form-field>
-            <input matInput type="text" placeholder="Body" [formControl]="ctlBody">
+            <input matInput placeholder="Body" formControl="ctlBody">
         </mat-form-field>
 
     </div>
     <div class="footer">
-        <button type="submit" mat-button form="frm" (click)="update()">{{!isNew ? 'Update' : 'Add'}}</button>
-        <button type="reset" mat-button (click)="cancel()">Cancel</button>
+        <button type="submit" mat-button form="frm" (click)="create()">{{!isNew ? 'Update' : 'Add'}}</button>
+        <!-- <button type="reset" mat-button (click)="cancel()">Cancel</button> -->
+        <button mat-stroked-button (click)="create()">Create</button>
     </div>
 </form>
 <!-- <pre>

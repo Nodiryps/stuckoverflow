@@ -1,0 +1,27 @@
+<form [formGroup]="frm" novalidate>
+        <h1>Ask a question</h1>
+    
+        <mat-form-field>
+            <input matInput placeholder="Title" [formControl]="ctlTitle" required appSetFocus>
+            <mat-error class="float-right" *ngIf="ctlTitle.hasError('required')">Required</mat-error>
+            <mat-error class="float-right" *ngIf="ctlTitle.hasError('minlength')">Minimum length is {{ctlTitle.errors['minlength'].requiredLength}}</mat-error>
+            <mat-error class="float-right" *ngIf="ctlTitle.hasError('maxlength')">Maximum length is {{ctlTitle.errors['maxlength'].requiredLength}}</mat-error>
+            <mat-error class="float-right" *ngIf="ctlTitle.hasError('pseudoUsed')">This title is not available</mat-error>
+            <!-- <mat-error class="float-right" *ngIf="ctlPseudo.hasError('pattern')">(chars, numbs, _ or .)</mat-error> -->
+            <!-- <mat-error class="float-right" *ngIf="ctlPseudo.hasError('forbiddenValue')">Forbidden value '@'</mat-error> -->
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Body" [formControl]="ctlBody" required >
+            <mat-error class="float-right" *ngIf="ctlBody.hasError('required')">Required</mat-error>
+            <mat-error class="float-right" *ngIf="ctlBody.hasError('minlength')">Minimum length is {{ctlBody.errors['minlength'].requiredLength}}</mat-error>
+        </mat-form-field>
+    
+        <div *ngIf="frm.errors">
+        </div>
+    
+        <div>
+            <button mat-stroked-button (click)="create()" [disabled]="frm.invalid">Create it!</button>
+        </div>
+    </form>
+    

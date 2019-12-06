@@ -31,4 +31,10 @@ export class PostService {
       })
     );
   }
+
+public create(title: string, body: string): Observable<Post> {
+  return this.http.post<Post>(`${this.baseUrl}api/posts/create-post`, { title: title, body: body}).pipe();
+}
+
+
 }

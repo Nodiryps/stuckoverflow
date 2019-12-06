@@ -22,10 +22,10 @@ export class EditPostComponent {
     public ctlId: FormControl;
     public ctlTitle: FormControl;
     public ctlBody: FormControl;
-    public ctlTimeStamp: FormControl;
-    public ctlParentId: FormControl;
-    public ctlAuthorId: FormControl;
-    public ctlAcceptedAnswerId: FormControl;
+    // public ctlTimeStamp: FormControl;
+    // public ctlParentId: FormControl;
+    // public ctlAuthorId: FormControl;
+    // public ctlAcceptedAnswerId: FormControl;
     
     public isNew: boolean;
 
@@ -38,10 +38,11 @@ export class EditPostComponent {
         @Inject(MAT_DIALOG_DATA) public data: { post: Post; isNew: boolean; },
         private fb: FormBuilder,
         private postService: PostService
+        
     ) {
-        // this.ctlId = this.fb.control('', []);
-        //this.ctlFirstName = this.fb.control('', [Validators.minLength(this.minLengthPseudoPasswordName), Validators.maxLength(this.maxLengthName)]);
-        //this.ctlLastName = this.fb.control('', [Validators.minLength(this.minLengthPseudoPasswordName), Validators.maxLength(this.maxLengthName)]);
+
+        this.ctlTitle = this.fb.control('', [Validators.required]);
+        this.ctlBody = this.fb.control('', [Validators.required]);
 
 
 
@@ -49,10 +50,10 @@ export class EditPostComponent {
             id: this.ctlId,
             title: this.ctlTitle,
             body: this.ctlBody,
-            timestamp: this.ctlTimeStamp,
-            parentid: this.ctlParentId,
-            authorid: this.ctlAuthorId,
-            acceptedanswerid: this.ctlAcceptedAnswerId
+            // timestamp: this.ctlTimeStamp,
+            // parentid: this.ctlParentId,
+            // authorid: this.ctlAuthorId,
+            // acceptedanswerid: this.ctlAcceptedAnswerId
 
         });
         console.log(data);
@@ -71,5 +72,9 @@ export class EditPostComponent {
 
     cancel() {
         this.dialogRef.close();
+    }
+
+    create() {
+        this.postService.create(this.ctlTitle.value, this.ctlBody.value).subscribe();
     }
 }
