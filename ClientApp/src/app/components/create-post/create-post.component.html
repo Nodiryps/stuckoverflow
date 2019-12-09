@@ -12,7 +12,7 @@
         </mat-form-field>
 
         <mat-form-field>
-            <input matInput placeholder="Body" [formControl]="ctlBody" required >
+            <input type="text" matInput placeholder="Body" [formControl]="ctlBody" required >
             <mat-error class="float-right" *ngIf="ctlBody.hasError('required')">Required</mat-error>
             <mat-error class="float-right" *ngIf="ctlBody.hasError('minlength')">Minimum length is {{ctlBody.errors['minlength'].requiredLength}}</mat-error>
         </mat-form-field>

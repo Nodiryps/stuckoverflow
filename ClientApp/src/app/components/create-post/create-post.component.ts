@@ -59,7 +59,7 @@ export class CreatePostComponent {
         post.body = this.ctlBody.value;
         //post.timestamp = Date.now.toString();
         post.parentId = post.id;
-        post.authorId = 1; //this.authenticationService.currentUser.id;
+        post.authorId = this.authenticationService.currentUser.id;
 
         this.postService.add(post).subscribe(() => {
                 this.router.navigate(['/']);
