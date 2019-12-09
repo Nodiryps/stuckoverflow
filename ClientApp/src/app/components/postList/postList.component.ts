@@ -7,6 +7,7 @@ import { PostService } from '../../services/post.service';
 import { StateService } from 'src/app/services/state.service';
 import { MatTableState } from 'src/app/helpers/mattable.state';
 import { EditPostComponent } from '../edit-post/edit-post.component';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-postList',
@@ -23,7 +24,7 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     constructor(private postService: PostService, private stateService: StateService,
-        public dialog: MatDialog, public snackBar: MatSnackBar) {
+        public dialog: MatDialog, public snackBar: MatSnackBar, private router: Router) {
         this.state = this.stateService.postListState;
     }
 
@@ -56,24 +57,11 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
         // });
     }
 
-    // appelée quand on clique sur le bouton "Create question"
-    // create() {
-    //     const post = new Post({});
-    //     const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: true } });
-    //     dlg.beforeClose().subscribe(res => {
-    //         if (res) {
-    //             this.dataSource.data = [...this.dataSource.data, new Post(res)];
-    //             this.postService.add(res).subscribe(res => {
-    //                 if (!res) {
-    //                     this.snackBar.open(`There was an error at the server. 
-    //                                         The question has not been created! Please try again.`,
-    //                         'Dismiss', { duration: 10000 });
-    //                     this.refresh();
-    //                 } this.refresh();
-    //             });
-    //         }
-    //     });
-    // }
+    showDetail(post: Post) {
+        this.postService.setPostDetail(post);
+        this.router.navigate([`/postdetail`]);
+        
+    }
 
     filterChanged(filterValue: string) {
         this.dataSource.filter = filterValue.trim().toLowerCase();

@@ -31,7 +31,7 @@
         <ng-container matColumnDef="body">
           <th mat-header-cell *matHeaderCellDef> Body </th>
           <td mat-cell *matCellDef="let row"> {{row.body.substring(0,150)}}... 
-            <a [routerLink]='["/postdetail"]'>detail</a> 
+            <button mat-button (click)="showDetail(row)"> <strong>detail</strong> </button> 
           </td>
         </ng-container>
 

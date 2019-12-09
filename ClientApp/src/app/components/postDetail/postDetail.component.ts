@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { Post } from '../../models/post'
 import { PostService } from '../../services/post.service';
 
@@ -10,7 +9,10 @@ import { PostService } from '../../services/post.service';
 })
 
 export class PostDetailComponent {
-  
-  
-  constructor(postService: PostService) { }
+  public post: Post;
+
+  constructor(postService: PostService) {
+    this.post = postService.post;
+    console.log( this.post);
+  }
 }

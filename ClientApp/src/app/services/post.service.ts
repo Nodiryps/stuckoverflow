@@ -7,7 +7,7 @@ import { Observable, of, Subject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class PostService {
-  private postDetailSource = new Subject
+  public post: Post;
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
@@ -22,6 +22,10 @@ export class PostService {
       map(p => !p ? null : new Post(p)),
       catchError(err => of(null))
     );
+  }
+
+  setPostDetail(p: Post) {
+    this.post = p;
   }
 
   getAllTags() {

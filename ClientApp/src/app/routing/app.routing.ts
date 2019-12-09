@@ -28,8 +28,7 @@ const appRoutes: Routes = [
     },
     {
       path: 'postdetail',
-      component: PostDetailComponent,
-      data: { post: Post }
+      component: PostDetailComponent
     },
     {
       path: 'login',
