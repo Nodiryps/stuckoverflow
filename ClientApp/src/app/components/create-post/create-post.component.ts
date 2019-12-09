@@ -57,7 +57,7 @@ export class CreatePostComponent {
         const post = new Post({});
         post.title = this.ctlTitle.value;
         post.body = this.ctlBody.value;
-        post.timestamp = Date.now.toString();
+        //post.timestamp = Date.now.toString();
         post.parentId = post.id;
         post.authorId = 1; //this.authenticationService.currentUser.id;
 
