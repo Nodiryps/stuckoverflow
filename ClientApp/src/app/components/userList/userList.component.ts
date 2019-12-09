@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, OnDestroy } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, PageEvent, MatSortHeader } from '@angular/material';
+import { Component, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
 import * as _ from 'lodash';
 import { User } from '../../models/user';
 import { UserService } from '../../services/user.service';

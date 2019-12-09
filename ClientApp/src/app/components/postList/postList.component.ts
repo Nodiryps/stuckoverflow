@@ -1,9 +1,6 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, OnDestroy, NgModule } from '@angular/core';
-import {
-    MatPaginator, MatSort, MatTableDataSource,
-    MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatSnackBar,
-    PageEvent, MatSortHeader, MatTreeModule
-} from '@angular/material';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { MatPaginator, MatSort, MatTableDataSource,
+    MatDialog, MatSnackBar } from '@angular/material';
 import * as _ from 'lodash';
 import { Post } from '../../models/post'
 import { PostService } from '../../services/post.service';

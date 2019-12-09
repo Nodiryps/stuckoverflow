@@ -29,21 +29,28 @@ namespace prid1920_g10.Controllers {
         [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PostDTO>>> GetAll() {
-            return (await _context.Posts.ToListAsync()).ToDTO();
+            return (await GetQuestions().ToListAsync()).ToDTO();
         }
 
-        [Authorized(Role.Admin)]
+        private IQueryable<Post> GetQuestions() {
+            return (
+                from p in _context.Posts
+                where p.Title != null
+                select p
+            );
+        }
+
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<PostDTO>> GetPostById(int id) {
-            var post = new Post();
-            post = await _context.Posts.FindAsync(id);
+            var post = await _context.Posts.FindAsync(id);
 
             if (post == null)
                 return NotFound();
             return post.ToDTO();
         }
-////////////////////////////////////////////////////////////////////////////////POST//////////////////////////////////////////////
-        [Authorized(Role.Admin)]
+
+        [AllowAnonymous] //[Authorized(Role.Admin, Role.Member)]
         [HttpPost]
         public async Task<ActionResult<PostDTO>> PostPost(PostDTO data) {
             var post = await _context.Posts.FindAsync(data.Id);
@@ -69,21 +76,12 @@ namespace prid1920_g10.Controllers {
             return CreatedAtAction(nameof(GetPostById), new { Id = newPost.Id }, newPost.ToDTO());
         }
 
-        ////////////////////////////////////////////////////////////////////////////////POST//////////////////////////////////////////////
-
-        [AllowAnonymous]
-        [HttpPost("create-post")]
-        public async Task<ActionResult<PostDTO>> Create(PostDTO data) {
-            return await PostPost(data);
-        }
-        
-
         private int GetNewId() {
             return (from p in _context.Posts
                     select p.Id).Max() + 1;
         }
 
-        [Authorized(Role.Admin)]
+        [Authorized(Role.Admin, Role.Member)]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPost(int id, PostDTO dto) {
             if (id != dto.Id)

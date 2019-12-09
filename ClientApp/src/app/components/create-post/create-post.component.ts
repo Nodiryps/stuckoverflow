@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators, FormControl, AsyncValidatorFn, Vali
 //import { AuthenticationService } from 'src/app/services/authentication.service';
 import { resolve } from 'path';
 import { PostService } from 'src/app/services/post.service';
+import { Post } from 'src/app/models/post';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
     templateUrl: './create-post.component.html',
@@ -22,14 +24,16 @@ export class CreatePostComponent {
 
     constructor(
         public postService: PostService,  // pour pouvoir faire le login
-        public router: Router,                      // pour rediriger vers la page d'accueil en cas de login
-        private fb: FormBuilder                     // pour construire le formulaire, du côté TypeScript
+        public router: Router,           // pour rediriger vers la page d'accueil en cas de login
+        private fb: FormBuilder,        // pour construire le formulaire, du côté TypeScript
+        
+        private authenticationService: AuthenticationService
     ) {
         this.ctlTitle = this.fb.control('', 
             [
                 Validators.required, 
-                Validators.minLength(this.minLengthPseudoPasswordName), 
-                Validators.maxLength(this.maxLengthPseudo),
+                // Validators.minLength(this.minLengthPseudoPasswordName), 
+                // Validators.maxLength(this.maxLengthPseudo),
                 Validators.pattern(/^[a-z]+[a-z0-9._]/),
                 // this.forbiddenValue('@')
             ]
@@ -37,7 +41,8 @@ export class CreatePostComponent {
         this.ctlBody = this.fb.control('', 
             [
                 Validators.required, 
-                Validators.minLength(this.minLengthPseudoPasswordName)
+                Validators.pattern(/^[a-z]+[a-z0-9._]/),
+                // Validators.minLength(this.minLengthPseudoPasswordName)
             ]
         );
 
@@ -48,29 +53,16 @@ export class CreatePostComponent {
 
     }
 
-    // Validateur asynchrone qui vérifie si le pseudo n'est pas déjà utilisé par un autre membre.
-    // Grâce au setTimeout et clearTimeout, on ne déclenche le service que s'il n'y a pas eu de frappe depuis 300 ms.
-
-
-    // firstnameNotEmptyButLastnameIs(group: FormGroup) {
-    //     if (group.value.firstname !== '' && group.value.lastname === '') {
-    //         return { lastnameRequired: true };
-    //     }
-    //     return { lastnameRequired: false };
-    // }
-
-    // lastnameNotEmptyButFirstnameIs(group: FormGroup) {
-    //     if (group.value.firstname === '' && group.value.lastname !== '') {
-    //         return { firstnameRequired: true };
-    //     }
-    //     return { firstnameRequired: false };
-    // }
-
     create() {
-        this.postService.create(this.ctlTitle.value, this.ctlBody.value).subscribe(() => {
-                // Redirect the user
+        const post = new Post({});
+        post.title = this.ctlTitle.value;
+        post.body = this.ctlBody.value;
+        post.timestamp = Date.now.toString();
+        post.parentId = post.id;
+        post.authorId = 1; //this.authenticationService.currentUser.id;
+
+        this.postService.add(post).subscribe(() => {
                 this.router.navigate(['/']);
-            
         });
     }
 }

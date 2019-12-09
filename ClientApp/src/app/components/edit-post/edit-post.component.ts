@@ -8,6 +8,8 @@ import {
 } from '@angular/forms';
 import * as _ from 'lodash';
 import { Post } from 'src/app/models/post';
+import { AuthenticationService } from '../../services/authentication.service';
+
 
 @Component({
     selector: 'app-edit-post-mat',
@@ -16,8 +18,6 @@ import { Post } from 'src/app/models/post';
 })
 
 export class EditPostComponent {
-
-    //
     public frm: FormGroup;
     public ctlId: FormControl;
     public ctlTitle: FormControl;
@@ -37,7 +37,8 @@ export class EditPostComponent {
         public dialogRef: MatDialogRef<EditPostComponent>,
         @Inject(MAT_DIALOG_DATA) public data: { post: Post; isNew: boolean; },
         private fb: FormBuilder,
-        private postService: PostService
+        private postService: PostService,
+        private authenticationService: AuthenticationService
         
     ) {
 
@@ -75,6 +76,16 @@ export class EditPostComponent {
     }
 
     create() {
-        this.postService.create(this.ctlTitle.value, this.ctlBody.value).subscribe();
+        const post = new Post({});
+        post.title = this.ctlTitle.value;
+        post.body = this.ctlBody.value;
+        post.timestamp = Date.now.toString();
+        post.parentId = post.id;
+        post.authorId = this.authenticationService.currentUser.id;
+
+        this.postService.add(post).subscribe(() => {
+                // this.router.navigate(['/']);
+        });
+        // this.postService.create(this.ctlTitle.value, this.ctlBody.value).subscribe();
     }
 }
