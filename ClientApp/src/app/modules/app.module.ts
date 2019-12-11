@@ -2,8 +2,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutes } from '../routing/app.routing';
+import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
+import { SimplemdeModule } from 'ngx-simplemde';
 
 import { AppComponent } from '../components/app/app.component';
 import { JwtInterceptor } from '../interceptors/jwt.interceptor';
@@ -56,7 +58,25 @@ import { SetFocusDirective } from '../directives/setfocus.directive';
     ReactiveFormsModule,
     AppRoutes,
     BrowserAnimationsModule,
-    SharedModule
+    SharedModule,
+    MarkdownModule.forRoot({
+      loader: HttpClient, // to keep only one instance of http and to avoid interceptors issues
+      markedOptions: { // optional, only if you use [src] attribute
+        provide: MarkedOptions,
+        useValue: {
+          gfm: true,
+          tables: true,
+          breaks: false,
+          pedantic: false,
+          sanitize: true,
+          smartLists: true,
+          smartypants: false,
+        },
+      },
+    }),
+    SimplemdeModule.forRoot({
+      // autosave: { enabled: true, uniqueId: 'MyUniqueID' }
+    })
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }],
   bootstrap: [AppComponent]

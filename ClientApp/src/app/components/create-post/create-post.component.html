@@ -12,7 +12,8 @@
         </mat-form-field>
 
         <mat-form-field>
-            <input type="text" matInput placeholder="Body" [formControl]="ctlBody" required >
+            <simplemde matInput [formControl]="ctlBody"  [options]="{ toolbar: ['bold', 'italic', 'heading', '|', 'quote'] }" required></simplemde>
+            <input type="text" matInput placeholder="Body" [formControl]="ctlBody" hidden >
             <mat-error class="float-right" *ngIf="ctlBody.hasError('required')">Required</mat-error>
             <mat-error class="float-right" *ngIf="ctlBody.hasError('minlength')">Minimum length is {{ctlBody.errors['minlength'].requiredLength}}</mat-error>
         </mat-form-field>
