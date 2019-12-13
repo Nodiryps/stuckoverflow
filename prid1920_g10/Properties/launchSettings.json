@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "prid1920-g10": {
+    "prid1920_g10": {
       "commandName": "Project",
       "launchUrl": "api/users",
       "environmentVariables": {

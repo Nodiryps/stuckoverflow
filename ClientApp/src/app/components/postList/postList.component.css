@@ -8,3 +8,11 @@ table {
 th.mat-column-actions {
     width: 110px;
 }
+.btnDetails {
+    margin-bottom: 20px;
+    float: right;
+}
+.btnAskQuestion {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

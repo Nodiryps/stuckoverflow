@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Launch Chrome",
             "url": "http://localhost:5000",
-            "webRoot": "${workspaceFolder}/prid1920-g10/ClientApp"
+            "webRoot": "${workspaceFolder}/prid1920_g10/ClientApp"
         },
         {
             "name": ".NET Core Launch (web)",
@@ -17,9 +17,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/prid1920-g10/bin/Debug/netcoreapp2.2/prid1920-tuto.dll",
+            "program": "${workspaceFolder}/prid1920_g10/bin/Debug/netcoreapp2.2/prid1920-tuto.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/prid1920-g10",
+            "cwd": "${workspaceFolder}/prid1920_g10",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {

@@ -10,9 +10,10 @@ import { PostService } from '../../services/post.service';
 
 export class PostDetailComponent {
   public post: Post;
+  public score: number;
 
   constructor(postService: PostService) {
     this.post = postService.post;
-    console.log( this.post);
+    this.score = postService.score;
   }
 }

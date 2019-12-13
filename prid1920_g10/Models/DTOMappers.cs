@@ -1,26 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace prid1920_g10.Models {
     public static class DTOMappers {
 
-        public static UserDTO ToDTO(this User user) {
-            return new UserDTO {
-                Id = user.Id,
-                Pseudo = user.Pseudo,
-                // we don't put the password in the DTO for security reasons
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                BirthDate = user.BirthDate,
-                Role = user.Role,
-                Posts = user.Posts,
-                Comments = user.Comments,
-                Votes = user.Votes
-            };
-        }
+        public static UserDTO ToDTO(this User user) => new UserDTO {
+            Id = user.Id,
+            Pseudo = user.Pseudo,
+            // we don't put the password in the DTO for security reasons
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            BirthDate = user.BirthDate,
+            Role = user.Role,
+            Posts = user.Posts.ToDTO(),
+            Comments = user.Comments.ToDTO(),
+            Votes = user.Votes.ToDTO()
+        };
         public static List<UserDTO> ToDTO(this IEnumerable<User> users) {
             return users.Select(m => m.ToDTO()).ToList();
         }
@@ -39,6 +36,7 @@ namespace prid1920_g10.Models {
         }
 
         public static PostDTO ToDTO(this Post post) {
+            List<PostDTO> list = post.Answers.ToDTO().ToList();
             return new PostDTO {
                 Id = post.Id,
                 Title = post.Title,
@@ -47,10 +45,11 @@ namespace prid1920_g10.Models {
                 ParentId = post.ParentId,
                 AuthorId = post.AuthorId,
                 AcceptedAnswerId = post.AcceptedAnswerId,
-                Answers = post.Answers,
-                Votes = post.Votes,
-                Comments = post.Comments,
-                PostTags = post.PostTags
+                Answers = post.Answers.ToDTO(),
+                Votes = post.Votes.ToDTO(),
+                Comments = post.Comments.ToDTO(),
+                // PostTags = post.PostTags,
+                Tags = post.Tags.Select(tag => tag.Name).ToList()
             };
         }
         public static List<PostDTO> ToDTO(this IEnumerable<Post> post) {

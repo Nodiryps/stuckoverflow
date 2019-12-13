@@ -1,5 +1,6 @@
 import { Tag } from "./tag";
 import { Vote } from "./vote";
+import { List } from "lodash";
 
 export class Post {
     id: number;
@@ -9,8 +10,9 @@ export class Post {
     parentId: number;
     authorId: number;
     acceptedAnswerId: number;
-    votes: string;
-    tags: string;
+    answers: List<Post>;
+    votes: Vote[];
+    tags: List<Tag>;
 
     constructor(data: any) {
         if(data) {

@@ -1,6 +1,4 @@
-﻿// Unused usings removed
-
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,10 +30,17 @@ namespace prid1920_g10
             //     opt.UseInMemoryDatabase("G10"));
             // services.AddDbContext<G10Context>(opt => 
             //     opt.UseSqlServer(Configuration.GetConnectionString("G10-mssql")));
-            services.AddDbContext<G10Context>(opt => 
-                opt.UseMySql(Configuration.GetConnectionString("G10-mysql")));
+            services.AddDbContext<G10Context>(opt => {
+                opt.UseLazyLoadingProxies();
+                opt.UseMySql(Configuration.GetConnectionString("G10-mysql"));
+            });
+                
             
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+            .AddJsonOptions(opt => {
+                opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
    
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration => {

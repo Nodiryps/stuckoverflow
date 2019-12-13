@@ -32,7 +32,7 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.dataSource.filterPredicate = (data: Post, filter: string) => {
-            const str = data.votes + ' ' + data.timestamp + ' ' + data.title + ' ' + data.body;
+            const str = data.votes + ' ' + data.timestamp + ' ' + data.title + ' ' + data.tags;
             return str.toLowerCase().includes(filter);
         };
         this.state.bind(this.dataSource);
@@ -60,7 +60,6 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
     showDetail(post: Post) {
         this.postService.setPostDetail(post);
         this.router.navigate([`/postdetail`]);
-        
     }
 
     filterChanged(filterValue: string) {

@@ -14,14 +14,6 @@ namespace prid1920_g10.Models {
         public string Body { get; set; }
         public DateTime Timestamp { get; set; } = DateTime.Now;
         public int? ParentId { get; set; }
-        // {
-        //     get {
-        //             return(from p in G10Context.Post
-        //             where p.Title == null
-        //             select p.Id)
-        //          }
-        //     set;
-        // }
         public int AuthorId { get; set; }
         public int? AcceptedAnswerId { get; set; }
 
@@ -36,7 +28,6 @@ namespace prid1920_g10.Models {
 
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
-
             yield return new ValidationResult("");
         }
 

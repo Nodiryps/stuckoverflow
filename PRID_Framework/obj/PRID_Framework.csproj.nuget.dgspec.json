@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920-g10\\PRID_Framework\\PRID_Framework.csproj": {}
+    "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920_g10\\PRID_Framework\\PRID_Framework.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920-g10\\PRID_Framework\\PRID_Framework.csproj": {
+    "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920_g10\\PRID_Framework\\PRID_Framework.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920-g10\\PRID_Framework\\PRID_Framework.csproj",
+        "projectUniqueName": "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920_g10\\PRID_Framework\\PRID_Framework.csproj",
         "projectName": "PRID_Framework",
-        "projectPath": "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920-g10\\PRID_Framework\\PRID_Framework.csproj",
+        "projectPath": "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920_g10\\PRID_Framework\\PRID_Framework.csproj",
         "packagesPath": "C:\\Users\\Spy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920-g10\\PRID_Framework\\obj\\",
+        "outputPath": "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\prid1920_g10\\PRID_Framework\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Users\\Spy\\Documents\\1EPFC\\BAC3\\PRID\\PRID1920\\dotnet-sdk-2.2.401-win-x64\\sdk\\NuGetFallbackFolder"

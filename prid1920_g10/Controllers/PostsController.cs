@@ -29,7 +29,7 @@ namespace prid1920_g10.Controllers {
         [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PostDTO>>> GetAll() {
-            return (await GetQuestions().ToListAsync()).ToDTO();
+            return (await this.GetQuestions().ToListAsync()).ToDTO();
         }
 
         private IQueryable<Post> GetQuestions() {

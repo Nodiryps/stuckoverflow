@@ -16,3 +16,12 @@ C:\PRID1920\prid1920-g10\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.A
 C:\PRID1920\prid1920-g10\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.AssemblyInfo.cs
 C:\PRID1920\prid1920-g10\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.dll
 C:\PRID1920\prid1920-g10\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.pdb
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920_g10\PRID_Framework\bin\Debug\netcoreapp2.2\PRID_Framework.deps.json
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920_g10\PRID_Framework\bin\Debug\netcoreapp2.2\PRID_Framework.dll
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920_g10\PRID_Framework\bin\Debug\netcoreapp2.2\PRID_Framework.pdb
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920_g10\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.csprojAssemblyReference.cache
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920_g10\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.csproj.CoreCompileInputs.cache
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920_g10\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.AssemblyInfoInputs.cache
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920_g10\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.AssemblyInfo.cs
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920_g10\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.dll
+C:\Users\Spy\Documents\1EPFC\BAC3\PRID\PRID1920\prid1920_g10\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.pdb

@@ -14,9 +14,9 @@ namespace prid1920_g10.Models
         public DateTime? BirthDate { get; set; }
         public int Reputation { get; set; }
         public Role Role { get; set; }
-        public IList<Post> Posts { get; set; } = new List<Post>();
-        public IList<Comment> Comments { get; set; } = new List<Comment>();
-        public IList<Vote> Votes { get; set; } = new List<Vote>();
+        public IList<PostDTO> Posts { get; set; } 
+        public IList<CommentDTO> Comments { get; set; } 
+        public IList<VoteDTO> Votes { get; set; } 
         
     }
 }
