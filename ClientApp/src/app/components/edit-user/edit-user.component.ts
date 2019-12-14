@@ -119,7 +119,7 @@ export class EditUserComponent {
                     if (ctl.pristine) {
                         resolve(null);
                     } else {
-                        this.userService.getById(pseudo, '').subscribe(user => {
+                        this.userService.getByPseudoOrEmail(pseudo, '').subscribe(user => {
                             resolve(user ? { pseudoUsed: true } : null);
                         });
                     }
@@ -139,7 +139,7 @@ export class EditUserComponent {
                         resolve(null);
                     }
                     else {
-                        this.userService.getById('', email).subscribe(user => {
+                        this.userService.getByPseudoOrEmail('', email).subscribe(user => {
                             resolve(user ? { emailUsed: true } : null);
                         });
                     }

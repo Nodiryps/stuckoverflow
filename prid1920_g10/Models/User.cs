@@ -38,7 +38,6 @@ namespace prid1920_g10.Models
         public virtual IList<Post> Posts { get; set; } = new List<Post>();
         public virtual IList<Comment> Comments { get; set; } = new List<Comment>();
         public virtual IList<Vote> Votes { get; set; } = new List<Vote>();
-        
         public int? Age
         {
             get
@@ -61,16 +60,7 @@ namespace prid1920_g10.Models
             NameValidations();
             EmailValidations();
             BirthDateValidations();
-            ReputationValidations();
             yield return new ValidationResult("");
-        }
-
-        IEnumerable<ValidationResult> ReputationValidations()
-        {
-            string pattern = "^[\\d]{1,2}$";
-            bool isValid = Regex.IsMatch(Reputation.ToString(), pattern);
-            if (!isValid && (Reputation < 0 || Reputation > 5))
-                yield return new ValidationResult("Reputation < 0", new[] { nameof(Reputation) });
         }
 
         IEnumerable<ValidationResult> BirthDateValidations()

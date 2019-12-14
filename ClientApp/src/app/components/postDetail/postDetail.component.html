@@ -4,6 +4,7 @@
         <p>reputation</p>
     </div>
     <h3>{{post.title}}</h3>
+    <p>Author: {{author}}</p>
 </div>
 <br>
 
@@ -12,5 +13,20 @@
 </div>
 
 <div>
-    <p>{{post.tags}}</p>
+    <mat-chip-list>
+        <mat-chip *ngFor="let tag of post.tags">{{tag}}</mat-chip>
+    </mat-chip-list>
+    <!-- <p>{{post.tags}}</p> -->
+</div>
+
+<div>
+    <ul>
+        <li *ngFor="let answer of post.answers">{{answer}}</li>
+    </ul>
+    
+    <div>
+        <ul>
+            <li *ngFor="let cmt of post.comments">{{cmt}}</li>
+        </ul>
+    </div>
 </div>

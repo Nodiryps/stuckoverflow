@@ -15,7 +15,14 @@ export class UserService {
     );
   }
 
-  getById(pseudo: string, email: string) {
+  getById(id: number) {
+    return this.http.get<User>(`${this.baseUrl}api/users/${id}`).pipe(
+      map(u => !u ? null : new User(u)),
+      catchError(err => of(null))
+    );
+  }
+
+  getByPseudoOrEmail(pseudo: string, email: string) {
     if(pseudo !== ''){
       return this.http.get<User>(`${this.baseUrl}api/users/${pseudo}`).pipe(
         map(u => !u ? null : new User(u)),

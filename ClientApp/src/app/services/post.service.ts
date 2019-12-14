@@ -28,12 +28,10 @@ export class PostService {
   // }
 
   setScore() {
-    console.log("VOTE: avant", this.post.votes.length);
+    this.score = 0;
     this.post.votes.forEach(v => {
-      console.log("VOTE: " + v);
       this.score += v.upDown;
     });
-    console.log("SCORE: " + this.score);
   }
 
   setPostDetail(p: Post) {

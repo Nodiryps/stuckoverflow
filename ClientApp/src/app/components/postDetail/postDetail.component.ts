@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Post } from '../../models/post'
+import { User } from '../../models/user'
 import { PostService } from '../../services/post.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-postDetail',
@@ -11,9 +13,12 @@ import { PostService } from '../../services/post.service';
 export class PostDetailComponent {
   public post: Post;
   public score: number;
+  public author: string;
 
-  constructor(postService: PostService) {
+  constructor(postService: PostService, userService: UserService) {
     this.post = postService.post;
     this.score = postService.score;
+    const userAuth: User = userService.getById(this.post.authorId).subscribe(u => new User(u));
+    this.author = userAuth.pseudo;
   }
 }
