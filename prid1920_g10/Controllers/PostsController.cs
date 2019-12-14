@@ -40,6 +40,25 @@ namespace prid1920_g10.Controllers {
             );
         }
 
+
+        [AllowAnonymous]
+        [HttpGet("answers/{id}")]
+        public async Task<ActionResult<IEnumerable<PostDTO>>> GetPostsById(int id) {
+            var answers = GetAnswers(id);
+
+            if (answers == null)
+                return NotFound();
+            return (await this.GetAnswers(id).ToListAsync()).ToDTO();
+        }
+
+        private IQueryable<Post> GetAnswers(int i) {
+            return (
+                from p in _context.Posts
+                where p.ParentId == i
+                select p
+            );
+        }
+
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<PostDTO>> GetPostById(int id) {

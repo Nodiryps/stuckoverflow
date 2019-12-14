@@ -39,9 +39,9 @@ export class PostService {
     this.setScore();
   }
 
-  getAllTags() {
-    return this.http.get<Tag[]>(`${this.baseUrl}api/posts`).pipe(
-      map(res => res.map(p => new Post(p).tags))
+  getAllAnswers() {
+    return this.http.get<Post[]>(`${this.baseUrl}api/posts/answers/${this.post.id}`).pipe(
+      map(res => res.map(p => new Post(p)))
     );
   }
 
