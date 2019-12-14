@@ -16,7 +16,7 @@ export class UserService {
   }
 
   getById(id: number) {
-    return this.http.get<User>(`${this.baseUrl}api/users/${id}`).pipe(
+    return this.http.get<User>(`${this.baseUrl}api/users/id/${id}`).pipe(
       map(u => !u ? null : new User(u)),
       catchError(err => of(null))
     );

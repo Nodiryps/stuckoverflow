@@ -68,7 +68,7 @@ import { SetFocusDirective } from '../directives/setfocus.directive';
           tables: true,
           breaks: false,
           pedantic: false,
-          sanitize: true,
+          sanitize: false,
           smartLists: true,
           smartypants: false,
         },

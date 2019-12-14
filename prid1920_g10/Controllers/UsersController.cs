@@ -34,14 +34,24 @@ namespace prid1920_g10.Controllers {
 
         [Authorized(Role.Admin)]
         [HttpGet("{str}")]
-        public async Task<ActionResult<UserDTO>> GetUserById(string str) {
+        public async Task<ActionResult<UserDTO>> GetUserByPseudoOrEmail(string str) {
             var user = new User();
-            if(str.Contains('@')){
+            if(str.Contains('@')) {
                 user = await _context.Users.FindAsync(GetIdByPseudo(GetPseudoByEmail(str)));
             }
-            else{
+            else {
                 user = await _context.Users.FindAsync(GetIdByPseudo(str));
             }
+
+            if (user == null)
+                return NotFound();
+            return user.ToDTO();
+        }
+
+        [AllowAnonymous]
+        [HttpGet("id/{id}")]
+        public async Task<ActionResult<UserDTO>> GetUserById(int id) {
+            var user = await _context.Users.FindAsync(id);
 
             if (user == null)
                 return NotFound();
@@ -57,6 +67,7 @@ namespace prid1920_g10.Controllers {
                 var err = new ValidationErrors().Add("Pseudo already in use", nameof(user.Pseudo));
                 return BadRequest(err);
             }
+            
             var newUser = new User() {
                 Id = GetNewId(),
                 Pseudo = data.Pseudo,
@@ -68,10 +79,10 @@ namespace prid1920_g10.Controllers {
                 Role = data.Role
             };
             _context.Users.Add(newUser);
+
             var res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty)
                 return BadRequest(res);
-
             return CreatedAtAction(nameof(GetUserById), new { Id = newUser.Id }, newUser.ToDTO());
         }
 
