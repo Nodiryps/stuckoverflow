@@ -5,11 +5,20 @@ table {
     font-size: 14px;
     width: 100%;
 }
-th.mat-column-actions {
+th.mat-column-date {
     width: 110px;
 }
+th.mat-column-title {
+    width: 150px;
+}
+th.mat-column-action, th.mat-column-date {
+    text-align: center;
+}
+td {
+    padding: 20px;
+}
+
 .btnDetails {
-    margin-bottom: 20px;
     float: right;
 }
 .btnAskQuestion {

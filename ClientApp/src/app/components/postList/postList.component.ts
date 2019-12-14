@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 })
 
 export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
-    displayedColumns: string[] = ['vote', 'date', 'title', 'body'];
+    displayedColumns: string[] = ['vote', 'date', 'title', 'body', 'action'];
     dataSource: MatTableDataSource<Post> = new MatTableDataSource();
     filter: string;
     state: MatTableState;
@@ -32,7 +32,7 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.dataSource.filterPredicate = (data: Post, filter: string) => {
-            const str = data.votes + ' ' + data.timestamp + ' ' + data.title + ' ' + data.tags;
+            const str = data.votes + ' ' + data.timestamp;
             return str.toLowerCase().includes(filter);
         };
         this.state.bind(this.dataSource);
@@ -41,20 +41,10 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
 
     refresh() {
         this.postService.getAllPosts().subscribe(p => {
-            // var tmp: Post[];
-            // p.forEach(element => {
-            //     if(element.title != null)
-            //         tmp.push(element);
-            // });
             this.dataSource.data = p;
             this.state.restoreState(this.dataSource);
             this.filter = this.state.filter;
         });
-        // this.postService.getAllTags().subscribe(p => {
-        //     this.dataSource.data.push(p);
-        //     this.state.restoreState(this.dataSource);
-        //     // this.filter = this.state.filter;
-        // });
     }
 
     showDetail(post: Post) {

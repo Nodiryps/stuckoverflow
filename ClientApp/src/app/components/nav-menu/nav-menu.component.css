@@ -3,7 +3,11 @@ a.navbar-brand {
   text-align: center;
   word-break: break-all;
 }
-
+img {
+  height: 30px;
+  margin-top: auto;
+  margin-bottom: 16px;
+}
 html {
   font-size: 14px;
 }
