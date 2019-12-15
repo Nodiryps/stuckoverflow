@@ -15,17 +15,16 @@ export class PostDetailComponent {
   public post: Post;
   public score: number;
   public author: string;
-  answers: MatTableDataSource<Post> = new MatTableDataSource();
+  public answers: Post[];
 
   constructor(postService: PostService, userService: UserService) {
     this.post = postService.post;
     this.score = postService.score;
     this.author = String(userService.getById(this.post.authorId).subscribe(u => new User(u).pseudo));
+    postService.getAllAnswers().subscribe(a => this.answers = a);
     // this.author = userAuth.pseudo;
     console.log("auth: " + this.post.authorId.toString());
+    console.log("answers: " + this.answers);
 
-    postService.getAllAnswers().subscribe(posts => {
-      this.answers.data = posts;
-  });
   }
 }

@@ -48,7 +48,7 @@ namespace prid1920_g10.Controllers {
 
             if (answers == null)
                 return NotFound();
-            return (await this.GetAnswers(id).ToListAsync()).ToDTO();
+            return (await answers.ToListAsync()).ToDTO();
         }
 
         private IQueryable<Post> GetAnswers(int i) {
