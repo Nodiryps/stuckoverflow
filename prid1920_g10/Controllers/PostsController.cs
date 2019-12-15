@@ -59,6 +59,24 @@ namespace prid1920_g10.Controllers {
             );
         }
 
+        private IQueryable<Comment> GetComments(int i) {
+            return (
+                from c in _context.Comments
+                where c.PostId == i
+                select c
+            );
+        }
+
+        [AllowAnonymous]
+        [HttpGet("comments/{id}")]
+        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetCommentsById(int id) {
+            var comments = GetComments(id);
+
+            if (comments == null)
+                return NotFound();
+            return (await comments.ToListAsync()).ToDTO();
+        }
+
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<PostDTO>> GetPostById(int id) {

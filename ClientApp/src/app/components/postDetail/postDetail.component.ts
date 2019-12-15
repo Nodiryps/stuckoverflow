@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { Post } from '../../models/post'
-import { User } from '../../models/user'
+import { Post } from '../../models/post';
+import { User } from '../../models/user';
+import { Comment } from '../../models/comment';
 import { PostService } from '../../services/post.service';
 import { UserService } from 'src/app/services/user.service';
 import { MatTableDataSource } from '@angular/material';
@@ -16,12 +17,14 @@ export class PostDetailComponent {
   public score: number;
   public author: string;
   public answers: Post[];
+  public comments: Comment[];
 
   constructor(postService: PostService, userService: UserService) {
     this.post = postService.post;
     this.score = postService.score;
     userService.getById(this.post.authorId).subscribe(u => this.author = new User(u).pseudo);
     postService.getAllAnswers().subscribe(a => this.answers = a);
+    postService.getAllComments().subscribe(c => this.comments = c);
     console.log("auth: " + this.post.authorId.toString());
     console.log("answers: " + this.answers);
   }

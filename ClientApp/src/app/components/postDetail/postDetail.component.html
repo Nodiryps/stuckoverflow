@@ -18,15 +18,25 @@
     </mat-chip-list>
     <!-- <p>{{post.tags}}</p> -->
 </div>
+<div>
+    <ul>
+            <li *ngFor="let comment of comments">{{comment.body}}</li>
+    </ul>
+</div>
+
+<br>
+<br>
 
 <div>
     <ul>
         <li *ngFor="let answer of answers">{{answer.body}}</li>
+        <li *ngFor="let answer of answers">{{answer.body}}</li>
+        <br>
+        <br>
+        <li *ngFor="let comment of comments">{{comment.body}}</li>
     </ul>
     
     <div>
-        <ul>
-            <li *ngFor="let cmt of post.comments">{{cmt}}</li>
-        </ul>
+        
     </div>
 </div>

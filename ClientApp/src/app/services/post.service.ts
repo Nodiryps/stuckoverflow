@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Post } from '../models/post';
 import { Tag } from '../models/tag';
+import { Comment } from '../models/comment';
 import { map, flatMap, catchError } from 'rxjs/operators';
 import { Observable, of, Subject } from 'rxjs';
 
@@ -11,6 +12,7 @@ export class PostService {
   public score: number = 0;
   public tags: Tag[];
   public answers: Post[];
+  public comments: Comment[];
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {  }
 
@@ -42,6 +44,12 @@ export class PostService {
   getAllAnswers() {
     return this.http.get<Post[]>(`${this.baseUrl}api/posts/answers/${this.post.id}`).pipe(
       map(res => res.map(p => new Post(p)))
+    );
+  }
+
+  getAllComments() {
+    return this.http.get<Comment[]>(`${this.baseUrl}api/posts/comments/${this.post.id}`).pipe(
+      map(res => res.map(c => new Comment(c)))
     );
   }
 
