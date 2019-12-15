@@ -20,11 +20,9 @@ export class PostDetailComponent {
   constructor(postService: PostService, userService: UserService) {
     this.post = postService.post;
     this.score = postService.score;
-    this.author = String(userService.getById(this.post.authorId).subscribe(u => new User(u).pseudo));
+    userService.getById(this.post.authorId).subscribe(u => this.author = new User(u).pseudo);
     postService.getAllAnswers().subscribe(a => this.answers = a);
-    // this.author = userAuth.pseudo;
     console.log("auth: " + this.post.authorId.toString());
     console.log("answers: " + this.answers);
-
   }
 }
