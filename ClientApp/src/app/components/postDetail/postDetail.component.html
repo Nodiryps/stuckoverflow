@@ -6,9 +6,8 @@
     <h3>{{post.title}}</h3>
     <p>Author: {{author}}</p>
 </div>
-<br>
 
-<div >
+<div>
     <p markdown>{{post.body}}</p>
 </div>
 
@@ -16,27 +15,20 @@
     <mat-chip-list>
         <mat-chip *ngFor="let tag of post.tags">{{tag}}</mat-chip>
     </mat-chip-list>
-    <!-- <p>{{post.tags}}</p> -->
-</div>
-<div>
-    <ul>
-            <li *ngFor="let comment of comments">{{comment.body}}</li>
-    </ul>
 </div>
 
-<br>
-<br>
-
-<div>
-    <ul>
-        <li *ngFor="let answer of answers">{{answer.body}}</li>
-        <li *ngFor="let answer of answers">{{answer.body}}</li>
-        <br>
-        <br>
-        <li *ngFor="let comment of comments">{{comment.body}}</li>
+<div class="cmts">
+    <ul *ngFor="let comment of comments">
+            <li *ngIf="comment.postId == post.id" markdown>{{comment.body}}</li>
     </ul>
-    
-    <div>
-        
-    </div>
+    <p *ngIf="comments?.length == 0">No comments...</p>
+</div>
+
+<div class="answers">
+    <ul *ngFor="let answer of answers">
+        <li class="answer" markdown>{{answer.body}}</li>
+        <ul class="cmts" *ngFor="let comment of comments">
+                <li *ngIf="comment.postId == answer.id" markdown>{{comment.body}}</li>
+        </ul>
+    </ul>
 </div>

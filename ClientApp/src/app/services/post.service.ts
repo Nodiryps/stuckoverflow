@@ -41,14 +41,20 @@ export class PostService {
     this.setScore();
   }
 
+  getAllTags() {
+    return this.http.get<Tag[]>(`${this.baseUrl}api/posts/tags/${this.post.id}`).pipe(
+      map(res => res.map(t => new Tag(t)))
+    );
+  }
+
   getAllAnswers() {
     return this.http.get<Post[]>(`${this.baseUrl}api/posts/answers/${this.post.id}`).pipe(
       map(res => res.map(p => new Post(p)))
     );
   }
 
-  getAllComments() {
-    return this.http.get<Comment[]>(`${this.baseUrl}api/posts/comments/${this.post.id}`).pipe(
+  getAllComments(id: number) {
+    return this.http.get<Comment[]>(`${this.baseUrl}api/posts/comments/${id}`).pipe(
       map(res => res.map(c => new Comment(c)))
     );
   }

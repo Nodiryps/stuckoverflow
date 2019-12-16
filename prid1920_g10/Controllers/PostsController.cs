@@ -40,6 +40,36 @@ namespace prid1920_g10.Controllers {
             );
         }
 
+        // [AllowAnonymous]
+        // [HttpGet("tags/{id}")]
+        // public async Task<ActionResult<IEnumerable<TagDTO>>> GetTagsById(int id) {
+        //     var tags = GetTags(id);
+
+        //     if (tags == null)
+        //         return NotFound();
+        //     return (await tags.ToListAsync()).ToDTO();
+        // }
+
+        // private IQueryable<Tag> GetTags(int postid) {
+        //     var tagIds = GetTagIdsFromPostTags(postid);
+        //     IQueryable<Tag> query = new IQueryable<Tag>();
+        //     // from t in tagIds
+        //     // where t.TagId == 
+        //     foreach (var tagid in tagIds)
+        //     {
+                
+        //     }
+        //         from t in _context.Tags
+        //         where t.Id == tagId
+        //         select t
+            
+        // }
+
+        // private IQueryable<int> GetTagIdsFromPostTags(int i) {
+        //     return (from pt in _context.PostTags
+        //             where pt.PostId == i
+        //             select pt.TagId);
+        // }
 
         [AllowAnonymous]
         [HttpGet("answers/{id}")]
@@ -59,14 +89,6 @@ namespace prid1920_g10.Controllers {
             );
         }
 
-        private IQueryable<Comment> GetComments(int i) {
-            return (
-                from c in _context.Comments
-                where c.PostId == i
-                select c
-            );
-        }
-
         [AllowAnonymous]
         [HttpGet("comments/{id}")]
         public async Task<ActionResult<IEnumerable<CommentDTO>>> GetCommentsById(int id) {
@@ -75,6 +97,14 @@ namespace prid1920_g10.Controllers {
             if (comments == null)
                 return NotFound();
             return (await comments.ToListAsync()).ToDTO();
+        }
+
+        private IQueryable<Comment> GetComments(int i) {
+            return (
+                from c in _context.Comments
+                where c.PostId == i
+                select c
+            );
         }
 
         [AllowAnonymous]
