@@ -18,7 +18,7 @@ export class PostDetailComponent {
   public post: Post;
   public score: number;
   public author: string;
-  public tags: Tag[];
+  //public tags: Tag[];
   public answers: Post[] = [];
 
   constructor(public postService: PostService, userService: UserService, public router: Router) {
@@ -26,14 +26,19 @@ export class PostDetailComponent {
       .then(() => { this.score = postService.score; }, () => console.log('fail: score'))
       .then(() => { userService.getById(this.post.authorId).subscribe(u => this.author = new User(u).pseudo); },
         () => console.log('fail: author'))
+      //.then(() => { this.tags = this.post.tags })
       .then(() => {
         postService.getAllAnswers().subscribe(a => {
           this.answers = a;
           this.answers.forEach(element => {
             postService.getAllComments(element.id).subscribe(c => element.comments = c);
+            userService.getById(element.authorId).subscribe(u => element.author = new User(u).pseudo)
           });
         });
       }, () => console.log('fail: answers'))
+
+
+
 
     // .then(() => { postService.getAllTags().subscribe(t => this.tags = t) }, 
     //       () => console.log('fail: tags'))

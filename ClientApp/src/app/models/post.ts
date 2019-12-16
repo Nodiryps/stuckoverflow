@@ -15,6 +15,7 @@ export class Post {
     votes: Vote[];
     tags: List<Tag>;
     comments: Comment[];
+    author : string = 'UNKOWN';
 
     constructor(data: any) {
         if(data) {
