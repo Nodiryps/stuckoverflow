@@ -18,8 +18,8 @@
 </div>
 
 <div class="cmts">
-    <ul *ngFor="let comment of comments">
-            <li *ngIf="comment.postId == post.id" markdown>{{comment.body}}</li>
+    <ul>
+        <li *ngFor="let comment of post.comments" markdown>{{comment.body}}</li>
     </ul>
     <p *ngIf="comments?.length == 0">No comments...</p>
 </div>
@@ -27,8 +27,8 @@
 <div class="answers">
     <ul *ngFor="let answer of answers">
         <li class="answer" markdown>{{answer.body}}</li>
-        <ul class="cmts" *ngFor="let comment of comments">
-                <li *ngIf="comment.postId == answer.id" markdown>{{comment.body}}</li>
+        <ul class="cmts">
+            <li *ngFor="let comment of answer.comments" markdown>{{comment.body}}</li>
         </ul>
     </ul>
 </div>

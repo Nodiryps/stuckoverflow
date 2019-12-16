@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { Post } from '../../models/post';
 import { User } from '../../models/user';
-import { Comment } from '../../models/comment';
 import { Tag } from '../../models/tag';
 import { PostService } from '../../services/post.service';
 import { UserService } from 'src/app/services/user.service';
-import { Observable } from 'rxjs';
+import { reject } from 'q';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-postDetail',
@@ -19,44 +20,36 @@ export class PostDetailComponent {
   public author: string;
   public tags: Tag[];
   public answers: Post[] = [];
-  public comments: Comment[];
 
-  constructor(public postService: PostService, userService: UserService) {
+  constructor(public postService: PostService, userService: UserService, public router: Router) {
     this.getQuestion(postService)
       .then(() => { this.score = postService.score; }, () => console.log('fail: score'))
       .then(() => { userService.getById(this.post.authorId).subscribe(u => this.author = new User(u).pseudo); },
-            () => console.log('fail: author'))
-      .then(() => { postService.getAllAnswers().subscribe(a => this.answers = a); }, 
-            () => console.log('fail: answers'))
-      .then(() => { this.getAllCmtsById(); },
-            () => console.log('fail: comments'))
-      // .then(() => { postService.getAllTags().subscribe(t => this.tags = t) }, 
-      //       () => console.log('fail: tags'))
-    
-    console.log("COMMENTS: " + this.comments);
-  }
+        () => console.log('fail: author'))
+      .then(() => {
+        postService.getAllAnswers().subscribe(a => {
+          this.answers = a;
+          this.answers.forEach(element => {
+            postService.getAllComments(element.id).subscribe(c => element.comments = c);
+          });
+        });
+      }, () => console.log('fail: answers'))
 
-  getAllCmtsById() {
-    let arr: Post[] =  [];
-    arr.push(this.post);
-
-    this.answers.forEach(a => {
-      arr.push(a);
-    });
-
-    arr.forEach(p => {
-      this.postService.getAllComments(p.id).subscribe(c => this.comments = c);
-    });
+    // .then(() => { postService.getAllTags().subscribe(t => this.tags = t) }, 
+    //       () => console.log('fail: tags'))
   }
 
   getQuestion(serv: PostService) {
     let timeout: NodeJS.Timeout;
     clearTimeout(timeout);
-    return new Promise( resolve => {
+    return new Promise(resolve => {
       timeout = setTimeout(() => {
         this.post = serv.post;
-        resolve(this.post != null);
-      }, 300);
+        if(this.post != null)
+          resolve('ok');
+        else
+          reject(this.router.navigate(['/']));
+      } , 300);
     })
   }
 }
