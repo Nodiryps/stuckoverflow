@@ -1,6 +1,8 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource,
-    MatDialog, MatSnackBar } from '@angular/material';
+import {
+    MatPaginator, MatSort, MatTableDataSource,
+    MatDialog, MatSnackBar
+} from '@angular/material';
 import * as _ from 'lodash';
 import { Post } from '../../models/post'
 import { PostService } from '../../services/post.service';
@@ -26,6 +28,7 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
     constructor(private postService: PostService, private stateService: StateService,
         public dialog: MatDialog, public snackBar: MatSnackBar, private router: Router) {
         this.state = this.stateService.postListState;
+
     }
 
     ngAfterViewInit(): void {
@@ -44,6 +47,7 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
             this.dataSource.data = p;
             this.state.restoreState(this.dataSource);
             this.filter = this.state.filter;
+
         });
     }
 

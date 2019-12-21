@@ -14,10 +14,11 @@ export class Post {
     answers: List<Post>;
     votes: Vote[];
     tags: List<Tag>;
-    comments: Comment[];
+    comments: Comment[]; 
+    score: number = 0;
 
     constructor(data: any) {
-        if(data) {
+        if (data) {
             this.id = data.id;
             this.title = data.title;
             this.body = data.body;
@@ -28,6 +29,16 @@ export class Post {
             this.votes = data.votes;
             this.tags = data.tags;
             this.comments = data.comments;
+            this.score = this.getScore();
         }
+    }
+
+
+    getScore() {
+        let res = 0;
+        this.votes.forEach(element => {
+            res += element.upDown;
+        });
+        return res;
     }
 }

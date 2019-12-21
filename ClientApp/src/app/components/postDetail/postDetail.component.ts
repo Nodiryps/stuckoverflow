@@ -23,8 +23,12 @@ export class PostDetailComponent {
 
   constructor(public postService: PostService, userService: UserService, public router: Router) {
     this.getQuestion(postService)
-      .then(() => { this.score = postService.score; }, () => console.log('fail: score'))
-      .then(() => { userService.getById(this.post.authorId).subscribe(u => this.author = new User(u).pseudo); },
+      .then(() => { 
+        this.score = postService.score; 
+      }, () => console.log('fail: score'))
+      .then(() => { 
+        userService.getById(this.post.authorId).subscribe(u => this.author = new User(u).pseudo); 
+      },
         () => console.log('fail: author'))
       .then(() => {
         postService.getAllAnswers().subscribe(a => {
