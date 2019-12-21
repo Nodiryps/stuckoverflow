@@ -14,7 +14,8 @@ export class Post {
     answers: List<Post>;
     votes: Vote[];
     tags: List<Tag>;
-    comments: Comment[]; 
+    comments: Comment[];
+    author : string = 'UNKOWN';
     score: number = 0;
 
     constructor(data: any) {

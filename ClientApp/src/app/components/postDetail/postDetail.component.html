@@ -27,6 +27,7 @@
 <div class="answers">
     <ul *ngFor="let answer of answers">
         <li class="answer" markdown>{{answer.body}}</li>
+        <p>Author: {{answer.author}}</p>
         <ul class="cmts">
             <li *ngFor="let comment of answer.comments" markdown>{{comment.body}}</li>
         </ul>
