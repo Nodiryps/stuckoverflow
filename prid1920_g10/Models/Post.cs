@@ -18,7 +18,10 @@ namespace prid1920_g10.Models {
         public int? AcceptedAnswerId { get; set; }
 
         [NotMapped]
-        public IEnumerable<Tag> Tags { get => PostTags.Select(p => p.Tag); }
+        public IEnumerable<Tag> Tags { 
+            get => PostTags.Select(p => p.Tag); 
+            // set => PostTags.Select(p => p.Tag.Name); 
+        }
         public virtual User User { get; set; }
         public virtual IList<Post> Answers { get; set; } = new List<Post>();
         public virtual IList<Vote> Votes { get; set; } = new List<Vote>();

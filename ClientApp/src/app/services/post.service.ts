@@ -34,12 +34,11 @@ export class PostService {
     );
   }
 
-  // getPost(post: Post) {
-  //   return this.http.get<Post>(`${this.baseUrl}api/posts/${post.id}`).pipe(
-  //     map(p => !p ? null : new Post(p)),
-  //     catchError(err => of(null))
-  //   );
-  // }
+  getAllComments(id: number) {
+    return this.http.get<Comment[]>(`${this.baseUrl}api/posts/comments/${id}`).pipe(
+      map(res => res.map(c => new Comment(c)))
+    );
+  }
 
   setScore() {
     this.score = 0;

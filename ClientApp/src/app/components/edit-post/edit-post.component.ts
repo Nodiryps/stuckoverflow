@@ -5,10 +5,6 @@ import { PostService } from '../../services/post.service';
 import {FormBuilder, FormGroup, Validators, FormControl,AsyncValidatorFn, ValidationErrors} from '@angular/forms';
 import * as _ from 'lodash';
 import { Post } from 'src/app/models/post';
-<<<<<<< HEAD
-import { AuthenticationService } from '../../services/authentication.service';
-=======
->>>>>>> 157a877127ad7a6b6911707f4b01db1f0743e6f5
 import { Router } from '@angular/router';
 import { MatTableState } from 'src/app/helpers/mattable.state';
 
@@ -51,11 +47,7 @@ export class EditPostComponent {
             id: this.ctlId,
             title: this.ctlTitle,
             body: this.ctlBody,
-<<<<<<< HEAD
         });
-=======
-        }, {});
->>>>>>> 157a877127ad7a6b6911707f4b01db1f0743e6f5
         console.log(data);
         this.isNew = data.isNew;
         this.frm.patchValue(data.post);

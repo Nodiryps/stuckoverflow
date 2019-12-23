@@ -1,10 +1,5 @@
 form {
-<<<<<<< HEAD
-   width: 30%;
-   display: grid;
-=======
     width: 30%;
     display: grid;
     grid-row-gap: 10px;
->>>>>>> 157a877127ad7a6b6911707f4b01db1f0743e6f5
 }
