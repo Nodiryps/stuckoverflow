@@ -36,10 +36,9 @@ namespace prid1920_g10.Controllers {
         [HttpGet("{str}")]
         public async Task<ActionResult<UserDTO>> GetUserByPseudoOrEmail(string str) {
             var user = new User();
-            if(str.Contains('@')) {
+            if (str.Contains('@')) {
                 user = await _context.Users.FindAsync(GetIdByPseudo(GetPseudoByEmail(str)));
-            }
-            else {
+            } else {
                 user = await _context.Users.FindAsync(GetIdByPseudo(str));
             }
 
@@ -67,12 +66,12 @@ namespace prid1920_g10.Controllers {
                 var err = new ValidationErrors().Add("Pseudo already in use", nameof(user.Pseudo));
                 return BadRequest(err);
             }
-            
+
             var newUser = new User() {
                 Id = GetNewId(),
                 Pseudo = data.Pseudo,
                 Email = data.Email,
-                Password = data.Password,
+                Password = TokenHelper.GetPasswordHash(data.Password),
                 FirstName = data.FirstName,
                 LastName = data.LastName,
                 BirthDate = data.BirthDate,
@@ -128,13 +127,11 @@ namespace prid1920_g10.Controllers {
         [HttpGet("available/{str}")]
         public async Task<ActionResult<bool>> IsAvailable(string str) {
             var member = new User();
-            if(str.Contains('@'))
-            {
+            if (str.Contains('@')) {
                 member = await _context.Users.FindAsync(GetIdByPseudo(GetPseudoByEmail(str)));
-            }
-            else
+            } else
                 member = await _context.Users.FindAsync(GetIdByPseudo(str));
-            return  member == null;
+            return member == null;
         }
 
         private string GetPseudoByEmail(string email) {
@@ -157,10 +154,19 @@ namespace prid1920_g10.Controllers {
             if (user == null)
                 return NotFound();
 
+            foreach (var p in this.GetUsersPosts(user))
+                _context.Posts.Remove(p);
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        private IQueryable<Post> GetUsersPosts(User user) {
+            return (
+                from p in _context.Posts
+                where p.AuthorId == user.Id
+                select p);
         }
 
         [AllowAnonymous]
