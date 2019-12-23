@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import { Post } from 'src/app/models/post';
 import { Router } from '@angular/router';
 import { MatTableState } from 'src/app/helpers/mattable.state';
+//import { post } from 'selenium-webdriver/http';
 
 
 @Component({
@@ -51,6 +52,11 @@ export class EditPostComponent {
         console.log(data);
         this.isNew = data.isNew;
         this.frm.patchValue(data.post);
+    }
+
+    noTitle() : boolean{
+        if(this.data.post.title == null)
+        return true;
     }
 
     onNoClick(): void {

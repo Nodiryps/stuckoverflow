@@ -71,4 +71,14 @@ export class PostService {
       })
     );
   }
+
+  public delete(p: Post): Observable<boolean> {
+    return this.http.delete<boolean>(`${this.baseUrl}api/posts/${p.id}`).pipe(
+      map(res => true),
+      catchError(err => {
+        console.error(err + ' delete');
+        return of(false);
+      })
+    );
+  }
 }

@@ -153,7 +153,7 @@ namespace prid1920_g10.Controllers {
             return NoContent();
         }
 
-        [Authorized(Role.Admin)]
+        [Authorized(Role.Admin, Role.Member)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(int id) {
             var post = await _context.Posts.FindAsync(id);

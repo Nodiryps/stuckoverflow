@@ -82,6 +82,24 @@ export class PostDetailComponent {
     });
   }
 
+  delete(post: Post) {
+    const backup = this.dataSource.data;
+    this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
+    const snackBarRef = this.snackBar.open(`Post '${post.title}' will be deleted`, 'Undo', { duration: 10000 });
+    snackBarRef.afterDismissed().subscribe(res => {
+
+      
+
+        if (!res.dismissedByAction){
+          this.postService.delete(post).subscribe();
+          this.router.navigate(['/']);
+          this.refresh();
+        }
+        else
+            this.dataSource.data = backup;
+    });
+}
+
 
   refresh() {
     this.postService.getAllQuestions().subscribe(posts => {

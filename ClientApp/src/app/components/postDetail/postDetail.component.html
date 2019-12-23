@@ -2,24 +2,13 @@
     <div class="reputation">
         <p class="score"><b>{{score}}</b></p>
         <p>reputation</p>
-<<<<<<< HEAD
         <button mat-icon-button tabindex="-1">
             <mat-icon (click)="edit(post)">edit</mat-icon>
         </button>
 
         <button mat-icon-button tabindex="-1">
-            <mat-icon (click)="delete()">delete</mat-icon>
+            <mat-icon (click)="delete(post)">delete</mat-icon>
         </button>
-=======
-            
-    <button mat-icon-button tabindex="-1">
-        <mat-icon (click)="edit(post)">edit</mat-icon>
-    </button>
-
-    <button mat-icon-button tabindex="-1">
-        <mat-icon (click)="delete()">delete</mat-icon>
-    </button>
->>>>>>> 157a877127ad7a6b6911707f4b01db1f0743e6f5
     </div>
     <h3>{{post.title}}</h3>
     <p>Author: {{author}}</p>
@@ -28,11 +17,7 @@
 
 <div>
     <p markdown>{{post.body}}</p>
-<<<<<<< HEAD
     
-=======
-
->>>>>>> 157a877127ad7a6b6911707f4b01db1f0743e6f5
 </div>
 
 <div>
@@ -50,7 +35,14 @@
 
 <div class="answers">
     <ul *ngFor="let answer of answers">
+        
         <li class="answer" markdown>{{answer.body}}</li>
+        <button mat-icon-button tabindex="-1">
+                <mat-icon (click)="edit(answer)">edit</mat-icon>
+        </button>
+        <button mat-icon-button tabindex="-1">
+                <mat-icon (click)="delete(answer)">delete</mat-icon>
+        </button>
         <p>Author: {{answer.author}}</p>
         <ul class="cmts">
             <li *ngFor="let comment of answer.comments" markdown>{{comment.body}}</li>
