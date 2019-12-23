@@ -29,3 +29,9 @@
 .answers {
     padding-top: 70px;
 }
+
+form {
+    width: 100%;
+    display: grid;
+    grid-row-gap: 10px;
+}

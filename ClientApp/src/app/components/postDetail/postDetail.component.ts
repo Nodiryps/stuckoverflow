@@ -12,6 +12,8 @@ import { MatTableState } from 'src/app/helpers/mattable.state';
 
 import { Component, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar } from '@angular/material';
+import { Validators, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 
 @Component({
@@ -21,6 +23,8 @@ import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar } fro
 })
 
 export class PostDetailComponent {
+  public frm: FormGroup;
+  public ctlReply: FormControl;
   public post: Post;
   public score: number;
   public author: string;
@@ -28,7 +32,16 @@ export class PostDetailComponent {
   dataSource: MatTableDataSource<Post> = new MatTableDataSource();
   state: MatTableState;
 
-  constructor(public postService: PostService, userService: UserService, public router: Router, public dialog: MatDialog, public snackBar: MatSnackBar) {
+  constructor(
+    public postService: PostService,
+    public userService: UserService,
+    public router: Router,
+    public dialog: MatDialog,
+    public snackBar: MatSnackBar,
+    private fb: FormBuilder,
+    private authenticationService: AuthenticationService
+
+  ) {
     this.getQuestion()
       .then(() => {
         this.score = postService.score;
@@ -47,6 +60,16 @@ export class PostDetailComponent {
           });
         });
       }, () => console.log('fail: answers'));
+
+    this.ctlReply = this.fb.control('',
+      [
+        Validators.required,
+      ]
+    );
+
+    this.frm = this.fb.group({
+      body: this.ctlReply,
+    });
   }
 
 
@@ -88,18 +111,45 @@ export class PostDetailComponent {
     const snackBarRef = this.snackBar.open(`Post '${post.title}' will be deleted`, 'Undo', { duration: 10000 });
     snackBarRef.afterDismissed().subscribe(res => {
 
-      
 
-        if (!res.dismissedByAction){
-          this.postService.delete(post).subscribe();
-          this.router.navigate(['/']);
-          this.refresh();
-        }
-        else
-            this.dataSource.data = backup;
+
+      if (!res.dismissedByAction) {
+        this.postService.delete(post).subscribe();
+        this.router.navigate(['/']);
+        this.refresh();
+      }
+      else
+        this.dataSource.data = backup;
     });
-}
+  }
 
+  reply() {
+    const post = new Post({});
+
+    post.body = this.ctlReply.value;
+    post.authorId = this.authenticationService.currentUser.id;
+    post.parentId = this.post.id;
+
+    this.postService.add(post).subscribe(() => {
+      this.refreshPost();
+    });
+  }
+
+  showDetail(post: Post) {
+    this.postService.setPostDetail(post);
+    this.router.navigate([`/postdetail`]);
+  }
+
+  refreshPost() {
+    this.postService.getAllAnswers().subscribe(a => {
+      this.answers = a;
+      this.answers.forEach(element => {
+        this.postService.getAllComments(element.id).subscribe(c => element.comments = c);
+        this.userService.getById(element.authorId).subscribe(u => element.author = new User(u).pseudo)
+      });
+    });
+    this.ctlReply.setValue('');
+  }
 
   refresh() {
     this.postService.getAllQuestions().subscribe(posts => {

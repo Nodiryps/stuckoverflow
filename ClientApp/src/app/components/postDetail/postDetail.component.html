@@ -17,7 +17,7 @@
 
 <div>
     <p markdown>{{post.body}}</p>
-    
+
 </div>
 
 <div>
@@ -35,17 +35,49 @@
 
 <div class="answers">
     <ul *ngFor="let answer of answers">
-        
+
         <li class="answer" markdown>{{answer.body}}</li>
         <button mat-icon-button tabindex="-1">
-                <mat-icon (click)="edit(answer)">edit</mat-icon>
+            <mat-icon (click)="edit(answer)">edit</mat-icon>
         </button>
         <button mat-icon-button tabindex="-1">
-                <mat-icon (click)="delete(answer)">delete</mat-icon>
+            <mat-icon (click)="delete(answer)">delete</mat-icon>
         </button>
         <p>Author: {{answer.author}}</p>
         <ul class="cmts">
             <li *ngFor="let comment of answer.comments" markdown>{{comment.body}}</li>
+            <li>
+
+            </li>
         </ul>
+        <!-- <form [formGroup]="frmComment" novalidate>
+            <mat-form-field>
+                <label for="simple">
+                    <h4>Comment</h4>
+                </label>
+                <simplemde name="simple" matInput [formControl]="ctlComment"
+                    [options]="{ toolbar: ['bold', 'italic', 'heading', '|', 'quote'] }" required></simplemde>
+                <input type="text" matInput [formControl]="ctlComment" hidden>
+            </mat-form-field>
+            <div>
+                <button mat-stroked-button (click)="reply()" [disabled]="frm.invalid">Create it!</button>
+            </div>
+        </form> -->
     </ul>
 </div>
+
+<form [formGroup]="frm" novalidate>
+    <h1>Answer this question: </h1>
+    <mat-form-field>
+        <label for="simple">
+            <h4>Reply</h4>
+        </label>
+        <simplemde name="simple" matInput [formControl]="ctlReply"
+            [options]="{ toolbar: ['bold', 'italic', 'heading', '|', 'quote'] }" required></simplemde>
+        <input type="text" matInput [formControl]="ctlReply" hidden>
+        <!-- <mat-error class="float-right" *ngIf="ctlReply.hasError('required')">Required</mat-error> -->
+    </mat-form-field>
+    <div>
+        <button mat-stroked-button (click)="reply()" [disabled]="frm.invalid">Create it!</button>
+    </div>
+</form>
