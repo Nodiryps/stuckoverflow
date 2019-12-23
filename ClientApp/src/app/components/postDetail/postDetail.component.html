@@ -2,13 +2,22 @@
     <div class="reputation">
         <p class="score"><b>{{score}}</b></p>
         <p>reputation</p>
+        <button mat-icon-button tabindex="-1">
+            <mat-icon (click)="edit(post)">edit</mat-icon>
+        </button>
+
+        <button mat-icon-button tabindex="-1">
+            <mat-icon (click)="delete()">delete</mat-icon>
+        </button>
     </div>
     <h3>{{post.title}}</h3>
     <p>Author: {{author}}</p>
+
 </div>
 
 <div>
     <p markdown>{{post.body}}</p>
+    
 </div>
 
 <div>

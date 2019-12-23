@@ -1,31 +1,41 @@
-<form [formGroup]="frm" novalidate>
-    <h1>Ask a question</h1>
+<form [formGroup]="frmGp" novalidate>
+    <h1>Ask your question</h1>
 
     <mat-form-field>
         <input matInput placeholder="Title" [formControl]="ctlTitle" required appSetFocus>
         <mat-error class="float-right" *ngIf="ctlTitle.hasError('required')">Required</mat-error>
-        <mat-error class="float-right" *ngIf="ctlTitle.hasError('minlength')">Minimum length is
+        <!-- <mat-error class="float-right" *ngIf="ctlTitle.hasError('minlength')">Minimum length is
             {{ctlTitle.errors['minlength'].requiredLength}}</mat-error>
         <mat-error class="float-right" *ngIf="ctlTitle.hasError('maxlength')">Maximum length is
             {{ctlTitle.errors['maxlength'].requiredLength}}</mat-error>
-        <mat-error class="float-right" *ngIf="ctlTitle.hasError('pseudoUsed')">This title is not available</mat-error>
+        <mat-error class="float-right" *ngIf="ctlTitle.hasError('pseudoUsed')">This title is not available</mat-error> -->
         <!-- <mat-error class="float-right" *ngIf="ctlPseudo.hasError('pattern')">(chars, numbs, _ or .)</mat-error> -->
         <!-- <mat-error class="float-right" *ngIf="ctlPseudo.hasError('forbiddenValue')">Forbidden value '@'</mat-error> -->
     </mat-form-field>
 
     <mat-form-field>
-        <simplemde matInput [formControl]="ctlBody" [options]="{ toolbar: ['bold', 'italic', 'heading', '|', 'quote'] }"
+        <label for="simple"><h4>Body</h4></label>
+        <simplemde name="simple" matInput [formControl]="ctlBody" [options]="{ toolbar: ['bold', 'italic', 'heading', '|', 'quote'] }"
             required></simplemde>
         <input type="text" matInput [formControl]="ctlBody" hidden>
         <mat-error class="float-right" *ngIf="ctlBody.hasError('required')">Required</mat-error>
-        <mat-error class="float-right" *ngIf="ctlBody.hasError('minlength')">Minimum length is
-            {{ctlBody.errors['minlength'].requiredLength}}</mat-error>
+        <!-- <mat-error class="float-right" *ngIf="ctlBody.hasError('minlength')">Minimum length is
+            {{ctlBody.errors['minlength'].requiredLength}}</mat-error> -->
     </mat-form-field>
 
-    <div *ngIf="frm.errors">
-    </div>
+    <mat-form-field>
+        <mat-select [formControl]="ctlTagSelect" multiple placeholder="Select Tag(s)">
+            <mat-select-trigger>
+                {{ctlTagSelect.value ? ctlTagSelect.value[0] : ''}}
+                <span *ngIf="ctlTagSelect.value?.length > 1">
+                    (+{{ctlTagSelect.value.length - 1}} {{ctlTagSelect.value?.length === 2 ? 'other' : 'others'}})
+                </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let tag of tags" [value]="tag.name" >{{tag.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
 
     <div>
-        <button mat-stroked-button (click)="create()" [disabled]="frm.invalid">Create it!</button>
+        <button mat-stroked-button (click)="create()" [disabled]="frmGp.invalid">Create it!</button>
     </div>
 </form>

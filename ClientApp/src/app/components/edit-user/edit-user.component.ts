@@ -52,9 +52,18 @@ export class EditUserComponent {
                 Validators.pattern(/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/)
             ], [this.emailUsed()]
         );
-        this.ctlPassword = this.fb.control('', data.isNew ? [Validators.required, Validators.minLength(3)] : []);
-        this.ctlFirstName = this.fb.control('', [Validators.minLength(this.minLengthPseudoPasswordName), Validators.maxLength(this.maxLengthName)]);
-        this.ctlLastName = this.fb.control('', [Validators.minLength(this.minLengthPseudoPasswordName), Validators.maxLength(this.maxLengthName)]);
+        this.ctlPassword = this.fb.control('', data.isNew ? [
+            Validators.required,
+            Validators.minLength(this.minLengthPseudoPasswordName)
+        ] : []);
+        this.ctlFirstName = this.fb.control('', [
+            Validators.minLength(this.minLengthPseudoPasswordName),
+            Validators.maxLength(this.maxLengthName)
+        ]);
+        this.ctlLastName = this.fb.control('', [
+            Validators.minLength(this.minLengthPseudoPasswordName),
+            Validators.maxLength(this.maxLengthName)
+        ]);
         this.ctlBirthDate = this.fb.control('', [this.validateBirthDate()]);
         this.ctlReputation = this.fb.control('', []);
         this.ctlRole = this.fb.control(Role.Member, []);
@@ -63,9 +72,9 @@ export class EditUserComponent {
             pseudo: this.ctlPseudo,
             password: this.ctlPassword,
             email: this.ctlEmail,
-            firstname: this.ctlFirstName,
-            lastname: this.ctlLastName,
-            birthdate: this.ctlBirthDate,
+            firstName: this.ctlFirstName,
+            lastName: this.ctlLastName,
+            birthDate: this.ctlBirthDate,
             reputation: this.ctlReputation,
             role: this.ctlRole
         }, { validator: this.nameValidations });

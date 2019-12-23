@@ -3,7 +3,8 @@ import {
   MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule,
   MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule,
   MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatTabsModule, 
-  MatSelectModule, MatCardModule, MatListModule, MatChipsModule, MatProgressSpinnerModule
+  MatSelectModule, MatCardModule, MatListModule, MatChipsModule, MatProgressSpinnerModule, 
+  MatOptionModule,
 } from '@angular/material';
 
 @NgModule({
@@ -11,13 +12,15 @@ import {
     MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule,
     MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule,
     MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatTabsModule,
-    MatSelectModule, MatCardModule, MatListModule, MatChipsModule, MatProgressSpinnerModule
+    MatSelectModule, MatCardModule, MatListModule, MatChipsModule, MatProgressSpinnerModule, 
+    MatOptionModule,
   ],
   exports: [
     MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule,
     MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule,
     MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatTabsModule,
-    MatSelectModule, MatCardModule, MatListModule, MatChipsModule, MatProgressSpinnerModule
+    MatSelectModule, MatCardModule, MatListModule, MatChipsModule, MatProgressSpinnerModule, 
+    MatOptionModule,
   ],
 })
 

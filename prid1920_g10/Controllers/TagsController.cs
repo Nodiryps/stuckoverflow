@@ -26,7 +26,8 @@ namespace prid1920_g10.Controllers {
             _context = context;
         }
 
-        [Authorized(Role.Admin)]
+        // [Authorized(Role.Admin)]
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TagDTO>>> GetAll() {
             return (await _context.Tags.ToListAsync()).ToDTO();
@@ -43,9 +44,36 @@ namespace prid1920_g10.Controllers {
             return tag.ToDTO();
         }
 
+        
+        // [AllowAnonymous]
+        // [HttpGet("tags/{id}")]
+        // public async Task<ActionResult<IEnumerable<TagDTO>>> GetTagsById(int id) {
+        //     var tags = GetTags(id);
+
+        //     if (tags == null)
+        //         return NotFound();
+        //     return (await tags.ToListAsync()).ToDTO();
+        // }
+
+        // private IQueryable<Tag> GetTags(int postid) {
+        //     var tagIds = GetTagIdsFromPostTags(postid);
+        //     IQueryable<Tag> query = new IQueryable<Tag>();
+
+        //     return (from tag in _context.Tags
+        //             join t in tagIds on tag.Id equals t.Id
+        //             where t.Id == tag.Id
+        //             select tag);
+        // }
+
+        // private IQueryable<int> GetTagIdsFromPostTags(int postid) {
+        //     return (from pt in _context.PostTags
+        //             where pt.PostId == postid
+        //             select pt.TagId);
+        // }
+
         [Authorized(Role.Admin)]
         [HttpPost]
-        public async Task<ActionResult<UserDTO>> TagATag(TagDTO data) {
+        public async Task<ActionResult<UserDTO>> PostTag(TagDTO data) {
             var newTag = new Tag() {
                 Id = GetNewId(),
                 Name = data.Name

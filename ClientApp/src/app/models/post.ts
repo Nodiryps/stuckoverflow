@@ -2,6 +2,8 @@ import { Tag } from "./tag";
 import { Vote } from "./vote";
 import { Comment } from "./comment";
 import { List } from "lodash";
+import { empty } from "rxjs";
+import { OverlayPositionBuilder } from "@angular/cdk/overlay";
 
 export class Post {
     id: number;
@@ -12,10 +14,10 @@ export class Post {
     authorId: number;
     acceptedAnswerId: number;
     answers: List<Post>;
-    votes: Vote[];
-    tags: List<Tag>;
+    votes: Vote[] = [];
+    tags: Tag[] = [];
     comments: Comment[];
-    author : string = 'UNKOWN';
+    author : string = 'UNKNOWN';
     score: number = 0;
 
     constructor(data: any) {
@@ -30,16 +32,30 @@ export class Post {
             this.votes = data.votes;
             this.tags = data.tags;
             this.comments = data.comments;
-            this.score = this.getScore();
+            // this.score = this.getScore();
         }
     }
 
 
-    getScore() {
-        let res = 0;
-        this.votes.forEach(element => {
-            res += element.upDown;
-        });
+    getScore(): number {
+        let res: number = 0;
+        // if(this.votes == null) {
+        //     res = 1;
+        //     this.votes = [];
+        //     this.votes.push(this.defaultVote());
+        // }
+        if(this.votes != null)
+            this.votes.forEach(element => {
+                res += element.upDown;
+            });
         return res;
     }
+
+    // defaultVote(): Vote {
+    //     const vote = new Vote({});
+    //     vote.upDown = 1;
+    //     vote.authorId = this.authorId;
+    //     vote.postId = this.id;
+    //     return vote;
+    // }
 }

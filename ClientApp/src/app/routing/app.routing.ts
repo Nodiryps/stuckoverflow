@@ -8,6 +8,7 @@ import { LoginComponent } from '../components/login/login.component';
 import { RestrictedComponent } from '../components/restricted/restricted.component';
 import { SignUpComponent } from '../components/signup/signup.component';
 import { CreatePostComponent } from '../components/create-post/create-post.component';
+import { EditPostComponent } from '../components/edit-post/edit-post.component';
 import { PostDetailComponent } from '../components/postDetail/postDetail.component';
 import { UnknownComponent } from '../components/unknown/unknown.component';
 import { AuthGuard } from '../services/auth.guard';
@@ -20,6 +21,7 @@ const appRoutes: Routes = [
     { path: 'fetch-data', component: FetchDataComponent },
     { path: 'signup', component: SignUpComponent },
     { path: 'create-post', component: CreatePostComponent },
+    { path: 'edit-post', component: EditPostComponent },
     {
       path: 'users',
       component: UserListComponent,

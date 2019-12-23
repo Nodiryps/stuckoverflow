@@ -14,11 +14,29 @@ export class PostService {
   public answers: Post[];
   public comments: Comment[];
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {  }
+  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
-  getAllPosts() {
+  getAllQuestions() {
     return this.http.get<Post[]>(`${this.baseUrl}api/posts`).pipe(
       map(res => res.map(p => new Post(p)))
+    );
+  }
+
+  getAllTags() {
+    return this.http.get<Tag[]>(`${this.baseUrl}api/tags`).pipe(
+      map(res => res.map(t => new Tag(t)))
+    );
+  }
+
+  getAllAnswers() {
+    return this.http.get<Post[]>(`${this.baseUrl}api/posts/answers/${this.post.id}`).pipe(
+      map(res => res.map(p => new Post(p)))
+    );
+  }
+
+  getAllComments(id: number) {
+    return this.http.get<Comment[]>(`${this.baseUrl}api/posts/comments/${id}`).pipe(
+      map(res => res.map(c => new Comment(c)))
     );
   }
 
@@ -41,29 +59,21 @@ export class PostService {
     this.setScore();
   }
 
-  getAllTags() {
-    return this.http.get<Tag[]>(`${this.baseUrl}api/posts/tags/${this.post.id}`).pipe(
-      map(res => res.map(t => new Tag(t)))
-    );
-  }
-
-  getAllAnswers() {
-    return this.http.get<Post[]>(`${this.baseUrl}api/posts/answers/${this.post.id}`).pipe(
-      map(res => res.map(p => new Post(p)))
-    );
-  }
-
-  getAllComments(id: number) {
-    return this.http.get<Comment[]>(`${this.baseUrl}api/posts/comments/${id}`).pipe(
-      map(res => res.map(c => new Comment(c)))
-    );
-  }
-
   public add(p: Post): Observable<boolean> {
     return this.http.post<Post>(`${this.baseUrl}api/posts`, p).pipe(
       map(res => true),
       catchError(err => {
         console.error(err);
+        return of(false);
+      })
+    );
+  }
+
+  public update(u: Post): Observable<boolean> {
+    return this.http.put<Post>(`${this.baseUrl}api/posts/${u.id}`, u).pipe(
+      map(res => true),
+      catchError(err => {
+        console.error(err + ' update');
         return of(false);
       })
     );

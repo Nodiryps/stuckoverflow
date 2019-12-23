@@ -41,32 +41,6 @@ namespace prid1920_g10.Controllers {
         }
 
         [AllowAnonymous]
-        [HttpGet("tags/{id}")]
-        public async Task<ActionResult<IEnumerable<TagDTO>>> GetTagsById(int id) {
-            var tags = GetTags(id);
-
-            if (tags == null)
-                return NotFound();
-            return (await tags.ToListAsync()).ToDTO();
-        }
-
-        private IQueryable<Tag> GetTags(int postid) {
-            var tagIds = GetTagIdsFromPostTags(postid);
-            IQueryable<Tag> query = new IQueryable<Tag>();
-
-            return (from tag in _context.Tags
-                    join t in tagIds on tag.Id equals t.Id
-                    where t.Id == tag.Id
-                    select tag);
-        }
-
-        private IQueryable<int> GetTagIdsFromPostTags(int postid) {
-            return (from pt in _context.PostTags
-                    where pt.PostId == postid
-                    select pt.TagId);
-        }
-
-        [AllowAnonymous]
         [HttpGet("answers/{id}")]
         public async Task<ActionResult<IEnumerable<PostDTO>>> GetPostsById(int id) {
             var answers = GetAnswers(id);
@@ -121,14 +95,19 @@ namespace prid1920_g10.Controllers {
                 var err = new ValidationErrors().Add("Post already in use", nameof(post.Title));
                 return BadRequest(err);
             }
+            
+            if(data.Title == null)
+                var parentId = GetParentId();
+
             var newPost = new Post() {
                 Id = GetNewId(),
                 Title = data.Title,
                 Body = data.Body,
                 Timestamp = data.Timestamp,
-                ParentId = data.ParentId,
+                ParentId = parentId,
                 AuthorId = data.AuthorId,
                 AcceptedAnswerId = data.AcceptedAnswerId,
+                Tags = data.Tags,
             };
             _context.Posts.Add(newPost);
             var res = await _context.SaveChangesAsyncWithValidation();
@@ -136,6 +115,13 @@ namespace prid1920_g10.Controllers {
                 return BadRequest(res);
 
             return CreatedAtAction(nameof(GetPostById), new { Id = newPost.Id }, newPost.ToDTO());
+        }
+
+        private IQueryable<Post> GetParentId() {
+            this.GetQuestions()
+                .OrderByDescending(p => p.Id)
+                .FirstOrDefault();
+
         }
 
         private int GetNewId() {
@@ -157,7 +143,7 @@ namespace prid1920_g10.Controllers {
             post.Id = dto.Id;
             post.Title = dto.Title;
             post.Body = dto.Body;
-            post.Timestamp = dto.Timestamp;
+            // post.Timestamp = dto.Timestamp;
 
             var res = await _context.SaveChangesAsyncWithValidation();
 
