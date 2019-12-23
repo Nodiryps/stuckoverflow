@@ -27,11 +27,19 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     constructor(private postService: PostService,
+<<<<<<< HEAD
         private stateService: StateService,
         public dialog: MatDialog,
         public snackBar: MatSnackBar,
         private authenticationService: AuthenticationService,
         private router: Router) {
+=======
+         private stateService: StateService,
+        public dialog: MatDialog,
+         public snackBar: MatSnackBar,
+         private authenticationService: AuthenticationService,
+          private router: Router) {
+>>>>>>> 157a877127ad7a6b6911707f4b01db1f0743e6f5
         this.state = this.stateService.postListState;
     }
 
@@ -77,10 +85,17 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
                 this.postService.add(res).subscribe(res => {
                     if (!res) {
                         this.snackBar.open(`There was an error at the server. 
+<<<<<<< HEAD
                                                     The user has not been created! Please try again.`,
                             'Dismiss', { duration: 10000 });
                         this.refresh();
                     } this.refresh();
+=======
+                                            The user has not been created! Please try again.`, 
+                                            'Dismiss', { duration: 10000 });
+                        this.refresh();
+                    }this.refresh();
+>>>>>>> 157a877127ad7a6b6911707f4b01db1f0743e6f5
                 });
             }
         });

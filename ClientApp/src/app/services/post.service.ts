@@ -34,12 +34,6 @@ export class PostService {
     );
   }
 
-  getAllComments(id: number) {
-    return this.http.get<Comment[]>(`${this.baseUrl}api/posts/comments/${id}`).pipe(
-      map(res => res.map(c => new Comment(c)))
-    );
-  }
-
   // getPost(post: Post) {
   //   return this.http.get<Post>(`${this.baseUrl}api/posts/${post.id}`).pipe(
   //     map(p => !p ? null : new Post(p)),

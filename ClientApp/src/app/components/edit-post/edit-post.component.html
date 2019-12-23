@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <form id="frm" [formGroup]="frm" novalidate>
     <h1>{{(!isNew ? 'Edit existing' : 'Add a new') + ' question'}}</h1>
     <div>
@@ -22,16 +23,42 @@
             <mat-error class="float-right" *ngIf="ctlBody.hasError('minlength')">Minimum length is
                 {{ctlBody.errors['minlength'].requiredLength}}</mat-error>
         </mat-form-field>
+=======
+<form id="frm" class="form" [formGroup]="frm" novalidate>
+    <h1 class="header">{{(!isNew ? 'Edit existing' : 'Add a new') + ' question'}}</h1>
+    <div class="form">
+    <mat-form-field>
+        <input matInput placeholder="Title" [formControl]="ctlTitle" required appSetFocus>
+        <mat-error class="float-right" *ngIf="ctlTitle.hasError('required')">Required</mat-error>
+        <mat-error class="float-right" *ngIf="ctlTitle.hasError('minlength')">Minimum length is
+            {{ctlTitle.errors['minlength'].requiredLength}}</mat-error>
+        <mat-error class="float-right" *ngIf="ctlTitle.hasError('maxlength')">Maximum length is
+            {{ctlTitle.errors['maxlength'].requiredLength}}</mat-error>
+        <mat-error class="float-right" *ngIf="ctlTitle.hasError('pseudoUsed')">This title is not available</mat-error>
+        <!-- <mat-error class="float-right" *ngIf="ctlPseudo.hasError('pattern')">(chars, numbs, _ or .)</mat-error> -->
+        <!-- <mat-error class="float-right" *ngIf="ctlPseudo.hasError('forbiddenValue')">Forbidden value '@'</mat-error> -->
+    </mat-form-field>
+
+    <mat-form-field>
+        <simplemde matInput [formControl]="ctlBody" [options]="{ toolbar: ['bold', 'italic', 'heading', '|', 'quote'] }"
+            required></simplemde>
+        <input type="text" matInput [formControl]="ctlBody" hidden>
+        <mat-error class="float-right" *ngIf="ctlBody.hasError('required')">Required</mat-error>
+        <mat-error class="float-right" *ngIf="ctlBody.hasError('minlength')">Minimum length is
+            {{ctlBody.errors['minlength'].requiredLength}}</mat-error>
+    </mat-form-field>
+
+    <div *ngIf="frm.errors">
+>>>>>>> 157a877127ad7a6b6911707f4b01db1f0743e6f5
     </div>
+</div>
     <div class="footer">
+<<<<<<< HEAD
         <button type="submit" mat-button form="frm" [disabled]="frm.pristine || frm.invalid || frm.pending"
             (click)="update()">{{!isNew ? 'Update' : 'Add'}}</button>
+=======
+        <button type="submit" mat-button form="frm" [disabled]="frm.pristine || frm.invalid || frm.pending" (click)="update()">{{!isNew ? 'Update' : 'Add'}}</button>
+>>>>>>> 157a877127ad7a6b6911707f4b01db1f0743e6f5
         <button type="reset" mat-button (click)="cancel()">Cancel</button>
     </div>
 </form>
-<!-- <pre>
-{{frm.value | json }}
-{{frm.invalid | json }}
-{{frm.pristine | json }}
-{{frm.pending | json }}
-</pre> -->

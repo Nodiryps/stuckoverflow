@@ -5,7 +5,10 @@ import { PostService } from '../../services/post.service';
 import {FormBuilder, FormGroup, Validators, FormControl,AsyncValidatorFn, ValidationErrors} from '@angular/forms';
 import * as _ from 'lodash';
 import { Post } from 'src/app/models/post';
+<<<<<<< HEAD
 import { AuthenticationService } from '../../services/authentication.service';
+=======
+>>>>>>> 157a877127ad7a6b6911707f4b01db1f0743e6f5
 import { Router } from '@angular/router';
 import { MatTableState } from 'src/app/helpers/mattable.state';
 
@@ -21,11 +24,6 @@ export class EditPostComponent {
     public ctlId: FormControl;
     public ctlTitle: FormControl;
     public ctlBody: FormControl;
-    // public ctlTimeStamp: FormControl;
-    // public ctlParentId: FormControl;
-    // public ctlAuthorId: FormControl;
-    // public ctlAcceptedAnswerId: FormControl;
-    
     public isNew: boolean;
     dataSource: MatTableDataSource<Post> = new MatTableDataSource();
     state: MatTableState;
@@ -34,21 +32,30 @@ export class EditPostComponent {
         public dialogRef: MatDialogRef<EditPostComponent>,
         @Inject(MAT_DIALOG_DATA) public data: { post: Post; isNew: boolean; },
         private fb: FormBuilder,
-        private postService: PostService,
-        private authenticationService: AuthenticationService
-        
+        public postService: PostService,
+        public router: Router,
     ) {
+        this.ctlTitle = this.fb.control('', 
+            [
+                Validators.required, 
+            ]
+        );
 
-        this.ctlTitle = this.fb.control('', [Validators.required]);
-        this.ctlBody = this.fb.control('', [Validators.required]);
-
-
+        this.ctlBody = this.fb.control('', 
+            [
+                Validators.required, 
+            ]
+        );
 
         this.frm = this.fb.group({
             id: this.ctlId,
             title: this.ctlTitle,
             body: this.ctlBody,
+<<<<<<< HEAD
         });
+=======
+        }, {});
+>>>>>>> 157a877127ad7a6b6911707f4b01db1f0743e6f5
         console.log(data);
         this.isNew = data.isNew;
         this.frm.patchValue(data.post);

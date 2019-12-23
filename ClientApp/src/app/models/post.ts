@@ -32,7 +32,11 @@ export class Post {
             this.votes = data.votes;
             this.tags = data.tags;
             this.comments = data.comments;
+<<<<<<< HEAD
             // this.score = this.getScore();
+=======
+            //this.score = this.getScore();
+>>>>>>> 157a877127ad7a6b6911707f4b01db1f0743e6f5
         }
     }
 

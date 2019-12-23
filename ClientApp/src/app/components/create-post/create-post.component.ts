@@ -79,7 +79,15 @@ export class CreatePostComponent {
         console.log("postTags: " + post.tags);
 
         this.postService.add(post).subscribe(() => {
-            this.router.navigate(['/']);
+
+            //this.showDetail(post);
+                this.router.navigate(['./postDetail/1']);
         });
+    }
+
+    
+    showDetail(post: Post) {
+        this.postService.setPostDetail(post);
+        this.router.navigate([`/postdetail`]);
     }
 }
