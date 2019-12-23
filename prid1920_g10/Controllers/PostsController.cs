@@ -40,25 +40,25 @@ namespace prid1920_g10.Controllers {
             );
         }
 
-        [AllowAnonymous]
-        [HttpGet("tags/{id}")]
-        public async Task<ActionResult<IEnumerable<TagDTO>>> GetTagsById(int id) {
-            var tags = GetTags(id);
+        // [AllowAnonymous]
+        // [HttpGet("tags/{id}")]
+        // public async Task<ActionResult<IEnumerable<TagDTO>>> GetTagsById(int id) {
+        //     var tags = GetTags(id);
 
-            if (tags == null)
-                return NotFound();
-            return (await tags.ToListAsync()).ToDTO();
-        }
+        //     if (tags == null)
+        //         return NotFound();
+        //     return (await tags.ToListAsync()).ToDTO();
+        // }
 
-        private IQueryable<Tag> GetTags(int postid) {
-            var tagIds = GetTagIdsFromPostTags(postid);
-            IQueryable<Tag> query = new IQueryable<Tag>();
+        // private IQueryable<Tag> GetTags(int postid) {
+        //     var tagIds = GetTagIdsFromPostTags(postid);
+        //     IQueryable<Tag> query = new IQueryable<Tag>();
 
-            return (from tag in _context.Tags
-                    join t in tagIds on tag.Id equals t.Id
-                    where t.Id == tag.Id
-                    select tag);
-        }
+        //     return (from tag in _context.Tags
+        //             join t in tagIds on tag.Id equals t.Id
+        //             where t.Id == tag.Id
+        //             select tag);
+        // }
 
         private IQueryable<int> GetTagIdsFromPostTags(int postid) {
             return (from pt in _context.PostTags
@@ -157,7 +157,7 @@ namespace prid1920_g10.Controllers {
             post.Id = dto.Id;
             post.Title = dto.Title;
             post.Body = dto.Body;
-            post.Timestamp = dto.Timestamp;
+            //post.Timestamp = dto.Timestamp;
 
             var res = await _context.SaveChangesAsyncWithValidation();
 

@@ -63,9 +63,9 @@ export class EditUserComponent {
             pseudo: this.ctlPseudo,
             password: this.ctlPassword,
             email: this.ctlEmail,
-            firstname: this.ctlFirstName,
-            lastname: this.ctlLastName,
-            birthdate: this.ctlBirthDate,
+            firstName: this.ctlFirstName,
+            lastName: this.ctlLastName,
+            birthDate: this.ctlBirthDate,
             reputation: this.ctlReputation,
             role: this.ctlRole
         }, { validator: this.nameValidations });

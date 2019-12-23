@@ -1,14 +1,12 @@
 import { Component, OnInit, ɵɵcontainerRefreshEnd } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatTableDataSource, MatSnackBar } from '@angular/material';
 import { Inject } from '@angular/core';
 import { PostService } from '../../services/post.service';
-import {
-    FormBuilder, FormGroup, Validators, FormControl,
-    AsyncValidatorFn, ValidationErrors
-} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators, FormControl,AsyncValidatorFn, ValidationErrors} from '@angular/forms';
 import * as _ from 'lodash';
 import { Post } from 'src/app/models/post';
-import { AuthenticationService } from '../../services/authentication.service';
+import { Router } from '@angular/router';
+import { MatTableState } from 'src/app/helpers/mattable.state';
 
 
 @Component({
@@ -22,41 +20,34 @@ export class EditPostComponent {
     public ctlId: FormControl;
     public ctlTitle: FormControl;
     public ctlBody: FormControl;
-    // public ctlTimeStamp: FormControl;
-    // public ctlParentId: FormControl;
-    // public ctlAuthorId: FormControl;
-    // public ctlAcceptedAnswerId: FormControl;
-    
     public isNew: boolean;
-
-    // private minLengthPseudoPasswordName: number = 3;
-    // private maxLengthPseudo: number = 10;
-    // private maxLengthName: number = 30;
+    dataSource: MatTableDataSource<Post> = new MatTableDataSource();
+    state: MatTableState;
 
     constructor(
         public dialogRef: MatDialogRef<EditPostComponent>,
         @Inject(MAT_DIALOG_DATA) public data: { post: Post; isNew: boolean; },
         private fb: FormBuilder,
-        private postService: PostService,
-        private authenticationService: AuthenticationService
-        
+        public postService: PostService,
+        public router: Router,
     ) {
+        this.ctlTitle = this.fb.control('', 
+            [
+                Validators.required, 
+            ]
+        );
 
-        this.ctlTitle = this.fb.control('', [Validators.required]);
-        this.ctlBody = this.fb.control('', [Validators.required]);
-
-
+        this.ctlBody = this.fb.control('', 
+            [
+                Validators.required, 
+            ]
+        );
 
         this.frm = this.fb.group({
             id: this.ctlId,
             title: this.ctlTitle,
             body: this.ctlBody,
-            // timestamp: this.ctlTimeStamp,
-            // parentid: this.ctlParentId,
-            // authorid: this.ctlAuthorId,
-            // acceptedanswerid: this.ctlAcceptedAnswerId
-
-        });
+        }, {});
         console.log(data);
         this.isNew = data.isNew;
         this.frm.patchValue(data.post);
@@ -68,24 +59,9 @@ export class EditPostComponent {
 
     update() {
         this.dialogRef.close(this.frm.value);
-
     }
 
     cancel() {
         this.dialogRef.close();
-    }
-
-    create() {
-        const post = new Post({});
-        post.title = this.ctlTitle.value;
-        post.body = this.ctlBody.value;
-        //post.timestamp = Date.now.toString();
-        post.parentId = post.id;
-        post.authorId = this.authenticationService.currentUser.id;
-
-        this.postService.add(post).subscribe(() => {
-                // this.router.navigate(['/']);
-        });
-        // this.postService.create(this.ctlTitle.value, this.ctlBody.value).subscribe();
     }
 }

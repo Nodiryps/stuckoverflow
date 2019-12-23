@@ -22,6 +22,12 @@ export class PostService {
     );
   }
 
+  getAllQuestions() {
+    return this.http.get<Post[]>(`${this.baseUrl}api/posts`).pipe(
+      map(res => res.map(p => new Post(p)))
+    );
+  }
+
   // getPost(post: Post) {
   //   return this.http.get<Post>(`${this.baseUrl}api/posts/${post.id}`).pipe(
   //     map(p => !p ? null : new Post(p)),
@@ -64,6 +70,16 @@ export class PostService {
       map(res => true),
       catchError(err => {
         console.error(err);
+        return of(false);
+      })
+    );
+  }
+
+  public update(u: Post): Observable<boolean> {
+    return this.http.put<Post>(`${this.baseUrl}api/posts/${u.id}`, u).pipe(
+      map(res => true),
+      catchError(err => {
+        console.error(err + ' update');
         return of(false);
       })
     );

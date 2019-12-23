@@ -55,7 +55,14 @@ export class CreatePostComponent {
         post.authorId = this.authenticationService.currentUser.id;
 
         this.postService.add(post).subscribe(() => {
-                this.router.navigate(['/']);
+            //this.showDetail(post);
+                this.router.navigate(['./postDetail/1']);
         });
+    }
+
+    
+    showDetail(post: Post) {
+        this.postService.setPostDetail(post);
+        this.router.navigate([`/postdetail`]);
     }
 }

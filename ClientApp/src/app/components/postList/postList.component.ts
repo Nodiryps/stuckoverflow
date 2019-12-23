@@ -10,6 +10,7 @@ import { StateService } from 'src/app/services/state.service';
 import { MatTableState } from 'src/app/helpers/mattable.state';
 import { EditPostComponent } from '../edit-post/edit-post.component';
 import { Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
     selector: 'app-postList',
@@ -25,8 +26,12 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
-    constructor(private postService: PostService, private stateService: StateService,
-        public dialog: MatDialog, public snackBar: MatSnackBar, private router: Router) {
+    constructor(private postService: PostService,
+         private stateService: StateService,
+        public dialog: MatDialog,
+         public snackBar: MatSnackBar,
+         private authenticationService: AuthenticationService,
+          private router: Router) {
         this.state = this.stateService.postListState;
 
     }
@@ -61,5 +66,28 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
         this.state.filter = this.dataSource.filter;
         if (this.dataSource.paginator)
             this.dataSource.paginator.firstPage();
+    }
+
+    create() {
+        const post = new Post({});
+        //post.authorId = this.authenticationService.currentUser.id;
+        const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: true } });
+        dlg.beforeClose().subscribe(res => {
+            if (res) {
+                this.dataSource.data = [...this.dataSource.data, new Post(res)];
+                this.postService.add(res).subscribe(res => {
+                    if (!res) {
+                        this.snackBar.open(`There was an error at the server. 
+                                            The user has not been created! Please try again.`, 
+                                            'Dismiss', { duration: 10000 });
+                        this.refresh();
+                    }this.refresh();
+                });
+            }
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.snackBar.dismiss();
     }
 }

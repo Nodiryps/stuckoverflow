@@ -15,7 +15,7 @@ export class Post {
     votes: Vote[];
     tags: List<Tag>;
     comments: Comment[];
-    author : string = 'UNKOWN';
+    author : string = 'UNKNOWN';
     score: number = 0;
 
     constructor(data: any) {
@@ -30,7 +30,7 @@ export class Post {
             this.votes = data.votes;
             this.tags = data.tags;
             this.comments = data.comments;
-            this.score = this.getScore();
+            //this.score = this.getScore();
         }
     }
 
