@@ -6,6 +6,8 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { reject } from 'q';
 import { Post } from 'src/app/models/post';
 import { Tag } from 'src/app/models/tag';
+import { PostTag } from 'src/app/models/postTag';
+import { equal } from 'assert';
 
 @Component({
     templateUrl: './create-post.component.html',
@@ -18,6 +20,7 @@ export class CreatePostComponent {
     public ctlBody: FormControl;
     public ctlTagSelect: FormControl;
     public tags: Tag[] = [];
+    public postTags: PostTag[] = [];
     public selectedTags: Tag[] = [];
 
     constructor(
@@ -30,7 +33,7 @@ export class CreatePostComponent {
         this.postService.getAllTags().subscribe(t => this.tags = t);
 
         this.ctlTagSelect = this.fb.control('', []);
-        
+
         this.ctlTitle = this.fb.control('',
             [
                 Validators.required,
@@ -73,19 +76,41 @@ export class CreatePostComponent {
         post.body = this.ctlBody.value;
         post.authorId = this.authenticationService.currentUser.id;
         post.tags = [];
+        post.postTags = [];
         this.ctlTagSelect.value.forEach(t => {
-            post.tags.push(t);
-        });        
-        console.log("postTags: " + post.tags);
+            this.tags.forEach(elm => {
+                console.log("elems: " + elm.name);
+                console.log("ttt: " + t);
+                if (elm.name === t) {
+                    post.tags.push(elm);
+                    let pt = new PostTag({});
+                    pt.postId = post.id;
+                    pt.tagId = elm.id;
+                    post.postTags.push(pt);
+                    console.log("foreach: " + pt);
+                }
+            });
+            // console.log(typeof t);
+            // let tag = new Tag({});
+            // tag.name = t;
+
+            // post.tags.push(tag);
+            // let pt = new PostTag({});
+            // pt.postId = post.id;
+            // pt.tagId = tag.id;
+            // console.log(tag.id);
+            // post.postTags.push(pt);
+        });
+        console.log("postTags: " + post.tags.toString);
 
         this.postService.add(post).subscribe(() => {
 
             //this.showDetail(post);
-                this.router.navigate(['./postDetail/1']);
+            this.router.navigate(['./postDetail/1']);
         });
     }
 
-    
+
     showDetail(post: Post) {
         this.postService.setPostDetail(post);
         this.router.navigate([`/postdetail`]);

@@ -4,6 +4,7 @@ import { Comment } from "./comment";
 import { List } from "lodash";
 import { empty } from "rxjs";
 import { OverlayPositionBuilder } from "@angular/cdk/overlay";
+import { PostTag } from "./postTag";
 
 export class Post {
     id: number;
@@ -16,6 +17,7 @@ export class Post {
     answers: List<Post>;
     votes: Vote[] = [];
     tags: Tag[] = [];
+    postTags: PostTag[] = [];
     comments: Comment[];
     author : string = 'UNKNOWN';
     score: number = 0;
@@ -31,6 +33,7 @@ export class Post {
             this.acceptedAnswerId = data.acceptedAnswerId;
             this.votes = data.votes;
             this.tags = data.tags;
+            this.postTags = data.postTags;
             this.comments = data.comments;
             //this.score = this.getScore();
         }

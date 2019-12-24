@@ -107,8 +107,20 @@ namespace prid1920_g10.Controllers {
                 ParentId = data.ParentId,
                 AuthorId = data.AuthorId,
                 AcceptedAnswerId = data.AcceptedAnswerId,
-                // Tags = data.Tags,
+                Tags = data.Tags,
+                PostTags = data.PostTags,
+
+                
             };
+
+                    Tag[] temp = new Tag[6];
+
+
+                        //_context.PostTags.Add()
+
+    
+            
+
             _context.Posts.Add(newPost);
             var res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty)

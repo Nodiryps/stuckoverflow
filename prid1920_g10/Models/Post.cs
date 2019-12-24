@@ -20,7 +20,7 @@ namespace prid1920_g10.Models {
         [NotMapped]
         public IEnumerable<Tag> Tags { 
             get => PostTags.Select(p => p.Tag); 
-            // set => PostTags.Select(p => p.Tag.Name); 
+            set => PostTags.Select(p => p.Tag); 
         }
         public virtual User User { get; set; }
         public virtual IList<Post> Answers { get; set; } = new List<Post>();
