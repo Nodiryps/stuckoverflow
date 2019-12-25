@@ -19,7 +19,7 @@ export class Post {
     tags: Tag[] = [];
     postTags: PostTag[] = [];
     comments: Comment[];
-    author : string = 'UNKNOWN';
+    author: string = 'UNKNOWN';
     score: number = 0;
 
     constructor(data: any) {
@@ -35,30 +35,17 @@ export class Post {
             this.tags = data.tags;
             this.postTags = data.postTags;
             this.comments = data.comments;
-            //this.score = this.getScore();
+            this.score = this.getScore();
         }
     }
 
 
     getScore(): number {
         let res: number = 0;
-        // if(this.votes == null) {
-        //     res = 1;
-        //     this.votes = [];
-        //     this.votes.push(this.defaultVote());
-        // }
-        if(this.votes != null)
+        if (this.votes != null)
             this.votes.forEach(element => {
                 res += element.upDown;
             });
         return res;
     }
-
-    // defaultVote(): Vote {
-    //     const vote = new Vote({});
-    //     vote.upDown = 1;
-    //     vote.authorId = this.authorId;
-    //     vote.postId = this.id;
-    //     return vote;
-    // }
 }

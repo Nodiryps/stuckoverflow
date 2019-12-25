@@ -90,23 +90,12 @@ export class CreatePostComponent {
                     console.log("foreach: " + pt);
                 }
             });
-            // console.log(typeof t);
-            // let tag = new Tag({});
-            // tag.name = t;
-
-            // post.tags.push(tag);
-            // let pt = new PostTag({});
-            // pt.postId = post.id;
-            // pt.tagId = tag.id;
-            // console.log(tag.id);
-            // post.postTags.push(pt);
         });
         console.log("postTags: " + post.tags.toString);
 
         this.postService.add(post).subscribe(() => {
-
             //this.showDetail(post);
-            this.router.navigate(['./postDetail/1']);
+            this.router.navigate(['./postdetail']);
         });
     }
 

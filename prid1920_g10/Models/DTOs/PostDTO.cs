@@ -16,7 +16,7 @@ namespace prid1920_g10.Models
         public IList<PostDTO> Answers { get; set; } 
         public IList<VoteDTO> Votes { get; set; }
         public IList<CommentDTO> Comments { get; set; } 
-        public IList<PostTag> PostTags { get; set; } 
-        public IEnumerable<Tag> Tags { get; set; }
+        // public IList<PostTag> PostTags { get; set; } 
+        public IEnumerable<TagDTO> Tags { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace prid1920_g10.Controllers {
             return (await _context.Tags.ToListAsync()).ToDTO();
         }
 
-        [Authorized(Role.Admin)]
+        [Authorized(Role.Admin, Role.Member)]
         [HttpGet("{id}")]
         public async Task<ActionResult<TagDTO>> GetTagById(int id) {
             var tag = new Tag();

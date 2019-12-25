@@ -49,7 +49,7 @@ namespace prid1920_g10.Models {
                 Votes = post.Votes.ToDTO(),
                 Comments = post.Comments.ToDTO(),
                 // PostTags = post.PostTags,
-                Tags = post.Tags.Select(tag => tag).ToList(),
+                Tags = post.Tags.Select(tag => tag).ToList().ToDTO(),
             };
         }
         public static List<PostDTO> ToDTO(this IEnumerable<Post> post) {

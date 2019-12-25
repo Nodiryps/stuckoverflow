@@ -19,8 +19,9 @@ namespace prid1920_g10.Models {
 
         [NotMapped]
         public IEnumerable<Tag> Tags { 
-            get => PostTags.Select(p => p.Tag); 
-            set => PostTags.Select(p => p.Tag); 
+            get => PostTags.Select(pt => pt.Tag); 
+            // set => PostTags.Where(pt => pt.PostId == Id); 
+            // set => PostTags.Select(pt => pt.Tag); 
         }
         public virtual User User { get; set; }
         public virtual IList<Post> Answers { get; set; } = new List<Post>();

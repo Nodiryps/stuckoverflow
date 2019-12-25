@@ -58,23 +58,7 @@ namespace prid1920_g10.Controllers {
             );
         }
 
-        [AllowAnonymous]
-        [HttpGet("comments/{id}")]
-        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetCommentsById(int id) {
-            var comments = GetComments(id);
-
-            if (comments == null)
-                return NotFound();
-            return (await comments.ToListAsync()).ToDTO();
-        }
-
-        private IQueryable<Comment> GetComments(int i) {
-            return (
-                from c in _context.Comments
-                where c.PostId == i
-                select c
-            );
-        }
+        
 
         [AllowAnonymous]
         [HttpGet("{id}")]
@@ -96,32 +80,32 @@ namespace prid1920_g10.Controllers {
                 return BadRequest(err);
             }
             
-            // if(data.Title == null)
-            //     var parentId = GetParentId();
-
             var newPost = new Post() {
-                Id = GetNewId(),
+                // Id = GetNewId(),
                 Title = data.Title,
                 Body = data.Body,
                 Timestamp = data.Timestamp,
                 ParentId = data.ParentId,
                 AuthorId = data.AuthorId,
-                AcceptedAnswerId = data.AcceptedAnswerId,
-                Tags = data.Tags,
-                PostTags = data.PostTags,
-
-                
+                AcceptedAnswerId = data.AcceptedAnswerId,          
             };
+             _context.Posts.Add(newPost);
+            await _context.SaveChangesAsyncWithValidation();
 
-                    Tag[] temp = new Tag[6];
+            foreach(var t in data.Tags){
+                var tag = await _context.Tags.SingleOrDefaultAsync(tg => tg.Name == t.Name);
+                var pt = await _context.Posts.SingleOrDefaultAsync(p => p.Id == newPost.Id);
 
+                var newPostTag = new PostTag(){
+                    Post = pt,
+                    Tag = tag,
+                    PostId = pt.Id,
+                    TagId = tag.Id
+                };
 
-                        //_context.PostTags.Add()
-
-    
-            
-
-            _context.Posts.Add(newPost);
+                _context.PostTags.Add(newPostTag);
+            }
+           
             var res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty)
                 return BadRequest(res);
