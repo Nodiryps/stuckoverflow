@@ -68,7 +68,6 @@ namespace prid1920_g10.Controllers {
             }
 
             var newUser = new User() {
-                Id = GetNewId(),
                 Pseudo = data.Pseudo,
                 Email = data.Email,
                 Password = TokenHelper.GetPasswordHash(data.Password),
@@ -83,11 +82,6 @@ namespace prid1920_g10.Controllers {
             if (!res.IsEmpty)
                 return BadRequest(res);
             return CreatedAtAction(nameof(GetUserById), new { Id = newUser.Id }, newUser.ToDTO());
-        }
-
-        private int GetNewId() {
-            return (from u in _context.Users
-                    select u.Id).Max() + 1;
         }
 
         private int GetIdByPseudo(string pseudo) {
@@ -148,17 +142,63 @@ namespace prid1920_g10.Controllers {
 
         [Authorized(Role.Admin)]
         [HttpDelete("{pseudo}")]
-        public async Task<IActionResult> DeleteUser(string pseudo) {
+        public async Task<IActionResult> Delete(string pseudo) {
             var user = await _context.Users.FindAsync(GetIdByPseudo(pseudo));
 
             if (user == null)
                 return NotFound();
 
-            foreach (var p in this.GetUsersPosts(user))
-                _context.Posts.Remove(p);
+            await this.DeleteUsersPosts(user);
+            await this.DeleteUsersComments(user);
+            await this.DeleteUsersVotes(user);
+            await this.DeleteUser(user);
+
+            return NoContent();
+        }
+
+        private async Task<IActionResult> DeleteUser(User user) {
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
+            return NoContent();
+        }
 
+        private async Task<IActionResult> DeleteUsersVotes(User user) {
+            foreach(var v in this.GetUsersVotes(user))
+                _context.Votes.Remove(v);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        private IQueryable<Vote> GetUsersVotes(User user) {
+            return (
+                from v in _context.Votes
+                where v.AuthorId == user.Id
+                select v);
+        }
+
+        private async Task<IActionResult> DeleteUsersComments(User user) {
+            foreach(var c in this.GetUsersComments(user))
+                _context.Comments.Remove(c);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        private IQueryable<Comment> GetUsersComments(User user) {
+            return (
+                from c in _context.Comments
+                where c.AuthorId == user.Id
+                select c);
+        }
+
+        private async Task<IActionResult> DeleteUsersPosts(User user) {
+            var list = this.GetUsersPosts(user);
+
+            await this.DeletePostsVotes(list);
+            await this.DeletePostsPostTags(list);
+            await this.DeletePostsComments(list);
+            await this.DeletePosts(list);
+
+            await _context.SaveChangesAsync();
             return NoContent();
         }
 
@@ -167,6 +207,62 @@ namespace prid1920_g10.Controllers {
                 from p in _context.Posts
                 where p.AuthorId == user.Id
                 select p);
+        }
+
+        private async Task<IActionResult> DeletePostsVotes(IQueryable<Post> list) {
+            foreach (var p in list) 
+                foreach(var v in GetPostsVotes(p))
+                    _context.Remove(v);
+            
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        private IQueryable<Vote> GetPostsVotes(Post post) {
+            return (
+                from v in _context.Votes
+                where v.PostId == post.Id
+                select v);
+        }
+
+        private async Task<IActionResult> DeletePostsPostTags(IQueryable<Post> list) {
+            foreach (var p in list) 
+                foreach (var pt in GetPostsPostTags(p)) 
+                    _context.Remove(pt);
+            
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        private IQueryable<PostTag> GetPostsPostTags(Post post) {
+            return (
+                from v in _context.PostTags
+                where v.PostId == post.Id
+                select v);
+        }
+
+        private async Task<IActionResult> DeletePostsComments(IQueryable<Post> list) {
+            foreach (var p in list) 
+                foreach (var c in GetPostsComments(p)) 
+                    _context.Remove(c);
+            
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        private IQueryable<Comment> GetPostsComments(Post post) {
+            return (
+                from v in _context.Comments
+                where v.PostId == post.Id
+                select v);
+        }
+
+        private async Task<IActionResult> DeletePosts(IQueryable<Post> list) {
+            foreach (var p in list) {
+                _context.Posts.Remove(p);
+            }
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
         [AllowAnonymous]

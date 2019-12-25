@@ -73,15 +73,14 @@ namespace prid1920_g10.Controllers {
         [AllowAnonymous] //[Authorized(Role.Admin, Role.Member)]
         [HttpPost]
         public async Task<ActionResult<PostDTO>> PostPost(PostDTO data) {
-            var post = await _context.Posts.FindAsync(data.Id);
+            var postDto = await _context.Posts.FindAsync(data.Id);
 
-            if (post != null) {
-                var err = new ValidationErrors().Add("Post already in use", nameof(post.Title));
+            if (postDto != null) {
+                var err = new ValidationErrors().Add("Post already in use", nameof(postDto.Title));
                 return BadRequest(err);
             }
             
             var newPost = new Post() {
-                // Id = GetNewId(),
                 Title = data.Title,
                 Body = data.Body,
                 Timestamp = data.Timestamp,
@@ -89,17 +88,18 @@ namespace prid1920_g10.Controllers {
                 AuthorId = data.AuthorId,
                 AcceptedAnswerId = data.AcceptedAnswerId,          
             };
+
              _context.Posts.Add(newPost);
             await _context.SaveChangesAsyncWithValidation();
 
             foreach(var t in data.Tags){
                 var tag = await _context.Tags.SingleOrDefaultAsync(tg => tg.Name == t.Name);
-                var pt = await _context.Posts.SingleOrDefaultAsync(p => p.Id == newPost.Id);
+                var post = await _context.Posts.SingleOrDefaultAsync(p => p.Id == newPost.Id);
 
                 var newPostTag = new PostTag(){
-                    Post = pt,
+                    Post = post,
                     Tag = tag,
-                    PostId = pt.Id,
+                    PostId = post.Id,
                     TagId = tag.Id
                 };
 
@@ -107,6 +107,7 @@ namespace prid1920_g10.Controllers {
             }
            
             var res = await _context.SaveChangesAsyncWithValidation();
+
             if (!res.IsEmpty)
                 return BadRequest(res);
 
