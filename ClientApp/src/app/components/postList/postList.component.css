@@ -21,6 +21,9 @@ td {
 .btnDetails {
     float: right;
 }
+.btnDelete {
+    float: right;
+}
 .btnAskQuestion {
     margin-top: 20px;
     margin-bottom: 20px;

@@ -196,6 +196,7 @@ namespace prid1920_g10.Controllers {
             await this.DeletePostsVotes(list);
             await this.DeletePostsPostTags(list);
             await this.DeletePostsComments(list);
+            await this.DeletePostsAnswers(list);
             await this.DeletePosts(list);
 
             await _context.SaveChangesAsync();
@@ -206,6 +207,22 @@ namespace prid1920_g10.Controllers {
             return (
                 from p in _context.Posts
                 where p.AuthorId == user.Id
+                select p);
+        }
+
+        private async Task<IActionResult> DeletePostsAnswers(IQueryable<Post> list) {
+            foreach (var p in list) 
+                foreach(var v in GetPostsAnswers(p))
+                    _context.Remove(v);
+            
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        private IQueryable<Post> GetPostsAnswers(Post post) {
+            return (
+                from p in _context.Posts
+                where p.ParentId == post.Id
                 select p);
         }
 

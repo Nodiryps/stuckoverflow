@@ -42,6 +42,10 @@
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef> Actions </th>
           <td mat-cell *matCellDef="let row">
+            <button class="btnDelete" mat-button color="primary" (click)="delete(row)">
+              <mat-icon>delete</mat-icon>
+            </button>
+            
             <button class="btnDetails" mat-button color="primary" (click)="showDetail(row)">
               <b>Details</b>
               <mat-icon>play_arrow</mat-icon>

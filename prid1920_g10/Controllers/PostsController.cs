@@ -58,7 +58,7 @@ namespace prid1920_g10.Controllers {
             );
         }
 
-        
+
 
         [AllowAnonymous]
         [HttpGet("{id}")]
@@ -79,24 +79,24 @@ namespace prid1920_g10.Controllers {
                 var err = new ValidationErrors().Add("Post already in use", nameof(postDto.Title));
                 return BadRequest(err);
             }
-            
+
             var newPost = new Post() {
                 Title = data.Title,
                 Body = data.Body,
                 Timestamp = data.Timestamp,
                 ParentId = data.ParentId,
                 AuthorId = data.AuthorId,
-                AcceptedAnswerId = data.AcceptedAnswerId,          
+                AcceptedAnswerId = data.AcceptedAnswerId,
             };
 
-             _context.Posts.Add(newPost);
+            _context.Posts.Add(newPost);
             await _context.SaveChangesAsyncWithValidation();
 
-            foreach(var t in data.Tags){
+            foreach (var t in data.Tags) {
                 var tag = await _context.Tags.SingleOrDefaultAsync(tg => tg.Name == t.Name);
                 var post = await _context.Posts.SingleOrDefaultAsync(p => p.Id == newPost.Id);
 
-                var newPostTag = new PostTag(){
+                var newPostTag = new PostTag() {
                     Post = post,
                     Tag = tag,
                     PostId = post.Id,
@@ -105,7 +105,7 @@ namespace prid1920_g10.Controllers {
 
                 _context.PostTags.Add(newPostTag);
             }
-           
+
             var res = await _context.SaveChangesAsyncWithValidation();
 
             if (!res.IsEmpty)
@@ -152,16 +152,84 @@ namespace prid1920_g10.Controllers {
 
         [Authorized(Role.Admin, Role.Member)]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePost(int id) {
+        public async Task<IActionResult> Delete(int id) {
             var post = await _context.Posts.FindAsync(id);
 
             if (post == null)
                 return NotFound();
 
-            _context.Posts.Remove(post);
-            await _context.SaveChangesAsync();
+            await this.DeletePostsVotes(post);
+            await this.DeletePostsPostTags(post);
+            await this.DeletePostsComments(post);
+            await this.DeletePostsAnswers(post);
+            await this.DeletePost(post);
 
             return NoContent();
+        }
+
+        private async Task<IActionResult> DeletePost(Post post) {
+            _context.Posts.Remove(post);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        private async Task<IActionResult> DeletePostsAnswers(Post p) {
+            foreach (var v in GetPostsAnswers(p))
+                _context.Remove(v);
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        private IQueryable<Post> GetPostsAnswers(Post post) {
+            return (
+                from p in _context.Posts
+                where p.ParentId == post.Id
+                select p);
+        }
+
+        private async Task<IActionResult> DeletePostsComments(Post post) {
+            foreach (var c in this.GetPostsComments(post))
+                _context.Comments.Remove(c);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        private IQueryable<Comment> GetPostsComments(Post post) {
+            return (
+                from c in _context.Comments
+                where c.PostId == post.Id
+                select c);
+        }
+
+        private async Task<IActionResult> DeletePostsVotes(Post post) {
+            foreach (var v in GetPostsVotes(post))
+                _context.Remove(v);
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        private IQueryable<Vote> GetPostsVotes(Post post) {
+            return (
+                from v in _context.Votes
+                where v.PostId == post.Id
+                select v);
+        }
+
+        private async Task<IActionResult> DeletePostsPostTags(Post post) {
+            foreach (var pt in GetPostsPostTags(post))
+                _context.Remove(pt);
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        private IQueryable<PostTag> GetPostsPostTags(Post post) {
+            return (
+                from v in _context.PostTags
+                where v.PostId == post.Id
+                select v);
         }
     }
 }

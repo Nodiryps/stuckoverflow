@@ -60,6 +60,21 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
         this.router.navigate([`/postdetail`]);
     }
 
+    delete(post: Post) {
+        const backup = this.dataSource.data;
+        this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
+        const snackBarRef = this.snackBar.open(`Post '${post.title}' will be deleted`, 'Undo', { duration: 10000 });
+        snackBarRef.afterDismissed().subscribe(res => {
+          if (!res.dismissedByAction) {
+            this.postService.delete(post).subscribe();
+            this.router.navigate(['/']);
+            this.refresh();
+          }
+          else
+            this.dataSource.data = backup;
+        });
+      }
+
     filterChanged(filterValue: string) {
         this.dataSource.filter = filterValue.trim().toLowerCase();
         this.state.filter = this.dataSource.filter;
