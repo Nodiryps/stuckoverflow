@@ -60,14 +60,15 @@ namespace prid1920_g10.Controllers {
         [Authorized(Role.Admin)]
         [HttpPost]
         public async Task<ActionResult<UserDTO>> PostUser(UserDTO data) {
-            //var user = await _context.Users.FindAsync(data.Id);
+            var user = await _context.Users.FindAsync(data.Id);
 
-            // if (user != null) {
-            //     var err = new ValidationErrors().Add("Pseudo already in use", nameof(user.Pseudo));
-            //     return BadRequest(err);
-            // }
+            if (user != null) {
+                var err = new ValidationErrors().Add("Pseudo already in use", nameof(user.Pseudo));
+                return BadRequest(err);
+            }
 
             var newUser = new User() {
+                Id = GetNewId(),
                 Pseudo = data.Pseudo,
                 Email = data.Email,
                 Password = TokenHelper.GetPasswordHash(data.Password),
@@ -82,6 +83,11 @@ namespace prid1920_g10.Controllers {
             if (!res.IsEmpty)
                 return BadRequest(res);
             return CreatedAtAction(nameof(GetUserById), new { Id = newUser.Id }, newUser.ToDTO());
+        }
+
+        private int GetNewId() {
+            return (from u in _context.Users
+                    select u.Id).Max() + 1;
         }
 
         private int GetIdByPseudo(string pseudo) {
