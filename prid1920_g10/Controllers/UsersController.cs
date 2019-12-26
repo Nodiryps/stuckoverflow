@@ -60,12 +60,12 @@ namespace prid1920_g10.Controllers {
         [Authorized(Role.Admin)]
         [HttpPost]
         public async Task<ActionResult<UserDTO>> PostUser(UserDTO data) {
-            var user = await _context.Users.FindAsync(data.Id);
+            //var user = await _context.Users.FindAsync(data.Id);
 
-            if (user != null) {
-                var err = new ValidationErrors().Add("Pseudo already in use", nameof(user.Pseudo));
-                return BadRequest(err);
-            }
+            // if (user != null) {
+            //     var err = new ValidationErrors().Add("Pseudo already in use", nameof(user.Pseudo));
+            //     return BadRequest(err);
+            // }
 
             var newUser = new User() {
                 Pseudo = data.Pseudo,
@@ -163,7 +163,7 @@ namespace prid1920_g10.Controllers {
         }
 
         private async Task<IActionResult> DeleteUsersVotes(User user) {
-            foreach(var v in this.GetUsersVotes(user))
+            foreach (var v in this.GetUsersVotes(user))
                 _context.Votes.Remove(v);
             await _context.SaveChangesAsync();
             return NoContent();
@@ -177,7 +177,7 @@ namespace prid1920_g10.Controllers {
         }
 
         private async Task<IActionResult> DeleteUsersComments(User user) {
-            foreach(var c in this.GetUsersComments(user))
+            foreach (var c in this.GetUsersComments(user))
                 _context.Comments.Remove(c);
             await _context.SaveChangesAsync();
             return NoContent();
@@ -211,10 +211,10 @@ namespace prid1920_g10.Controllers {
         }
 
         private async Task<IActionResult> DeletePostsAnswers(IQueryable<Post> list) {
-            foreach (var p in list) 
-                foreach(var v in GetPostsAnswers(p))
+            foreach (var p in list)
+                foreach (var v in GetPostsAnswers(p))
                     _context.Remove(v);
-            
+
             await _context.SaveChangesAsync();
             return NoContent();
         }
@@ -227,10 +227,10 @@ namespace prid1920_g10.Controllers {
         }
 
         private async Task<IActionResult> DeletePostsVotes(IQueryable<Post> list) {
-            foreach (var p in list) 
-                foreach(var v in GetPostsVotes(p))
+            foreach (var p in list)
+                foreach (var v in GetPostsVotes(p))
                     _context.Remove(v);
-            
+
             await _context.SaveChangesAsync();
             return NoContent();
         }
@@ -243,10 +243,10 @@ namespace prid1920_g10.Controllers {
         }
 
         private async Task<IActionResult> DeletePostsPostTags(IQueryable<Post> list) {
-            foreach (var p in list) 
-                foreach (var pt in GetPostsPostTags(p)) 
+            foreach (var p in list)
+                foreach (var pt in GetPostsPostTags(p))
                     _context.Remove(pt);
-            
+
             await _context.SaveChangesAsync();
             return NoContent();
         }
@@ -259,10 +259,10 @@ namespace prid1920_g10.Controllers {
         }
 
         private async Task<IActionResult> DeletePostsComments(IQueryable<Post> list) {
-            foreach (var p in list) 
-                foreach (var c in GetPostsComments(p)) 
+            foreach (var p in list)
+                foreach (var c in GetPostsComments(p))
                     _context.Remove(c);
-            
+
             await _context.SaveChangesAsync();
             return NoContent();
         }

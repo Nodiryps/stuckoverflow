@@ -1,29 +1,29 @@
 import { Component, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar } from '@angular/material';
 import * as _ from 'lodash';
-import { User } from '../../models/user';
-import { UserService } from '../../services/user.service';
-import { EditUserComponent } from '../edit-user/edit-user.component';
+import { Tag } from '../../models/tag';
+import { TagService } from '../../services/tag.service';
+import { EditTagComponent } from '../edit-tag/edit-tag.component';
 import { StateService } from 'src/app/services/state.service';
 import { MatTableState } from 'src/app/helpers/mattable.state';
 
 @Component({
-    selector: 'app-userlist',
-    templateUrl: './userlist.component.html',
-    styleUrls: ['./userlist.component.css']
+    selector: 'app-taglist',
+    templateUrl: './taglist.component.html',
+    styleUrls: ['./taglist.component.css']
 })
 
-export class UserListComponent implements AfterViewInit, OnDestroy {
-    displayedColumns: string[] = ['id', 'pseudo', 'email', 'firstName', 'lastName', 'birthDate', 'reputation', 'role', 'actions'];
-    dataSource: MatTableDataSource<User> = new MatTableDataSource();
+export class TagListComponent implements AfterViewInit, OnDestroy {
+    displayedColumns: string[] = ['id', 'name'];
+    dataSource: MatTableDataSource<Tag> = new MatTableDataSource();
     filter: string;
     state: MatTableState;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
-    constructor(private userService: UserService, private stateService: StateService,
+    constructor(private tagService: TagService, private stateService: StateService,
         public dialog: MatDialog, public snackBar: MatSnackBar) {
-        this.state = this.stateService.userListState;
+        this.state = this.stateService.tagListState;
     }
 
     ngAfterViewInit(): void {
@@ -31,8 +31,8 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         // définit le predicat qui doit être utilisé pour filtrer les membres
-        this.dataSource.filterPredicate = (data: User, filter: string) => {
-            const str = data.id + ' ' + data.pseudo + ' ' + data.email + ' ' + data.firstName + ' ' + data.lastName + ' ' + data.birthDate + ' ' + data.reputation + ' ' + data.roleAsString;
+        this.dataSource.filterPredicate = (data: Tag, filter: string) => {
+            const str = data.id + ' ' + data.name;
             return str.toLowerCase().includes(filter);
         };
         // établit les liens entre le data source et l'état de telle sorte que chaque fois que 
@@ -43,9 +43,9 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
     }
 
     refresh() {
-        this.userService.getAll().subscribe(users => {
+        this.tagService.getAll().subscribe(tags => {
             // assigne les données récupérées au datasource
-            this.dataSource.data = users;
+            this.dataSource.data = tags;
             // restaure l'état du datasource (tri et pagination) à partir du state
             this.state.restoreState(this.dataSource);
             // restaure l'état du filtre à partir du state
@@ -66,12 +66,12 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
     }
 
     // appelée quand on clique sur le bouton "edit" d'un membre
-    edit(user: User) {
-        const dlg = this.dialog.open(EditUserComponent, { data: { user, isNew: false } });
+    edit(tag: Tag) {
+        const dlg = this.dialog.open(EditTagComponent, { data: { tag, isNew: false } });
         dlg.beforeClose().subscribe(res => {
             if (res) {
-                _.assign(user, res);
-                this.userService.update(res).subscribe(res => {
+                _.assign(tag, res);
+                this.tagService.update(res).subscribe(res => {
                     if (!res) {
                         this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
                         this.refresh();
@@ -82,29 +82,29 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
     }
 
     // appelée quand on clique sur le bouton "delete" d'un membre
-    delete(user: User) {
+    delete(tag: Tag) {
         const backup = this.dataSource.data;
-        this.dataSource.data = _.filter(this.dataSource.data, u => u.id !== user.id);
-        const snackBarRef = this.snackBar.open(`User '${user.pseudo}' will be deleted`, 'Undo', { duration: 10000 });
+        this.dataSource.data = _.filter(this.dataSource.data, u => u.id !== tag.id);
+        const snackBarRef = this.snackBar.open(`Tag '${tag.name}' will be deleted`, 'Undo', { duration: 10000 });
         snackBarRef.afterDismissed().subscribe(res => {
             if (!res.dismissedByAction)
-                this.userService.delete(user).subscribe();
+                this.tagService.delete(tag).subscribe();
             else
                 this.dataSource.data = backup;
         });
     }
 
-    // appelée quand on clique sur le bouton "new user"
+    // appelée quand on clique sur le bouton "new tag"
     create() {
-        const user = new User({});
-        const dlg = this.dialog.open(EditUserComponent, { data: { user, isNew: true } });
+        const tag = new Tag({});
+        const dlg = this.dialog.open(EditTagComponent, { data: { tag, isNew: true } });
         dlg.beforeClose().subscribe(res => {
             if (res) {
-                this.dataSource.data = [...this.dataSource.data, new User(res)];
-                this.userService.add(res).subscribe(res => {
+                this.dataSource.data = [...this.dataSource.data, new Tag(res)];
+                this.tagService.add(res).subscribe(res => {
                     if (!res) {
                         this.snackBar.open(`There was an error at the server. 
-                                            The user has not been created! Please try again.`,
+                                            The tag has not been created! Please try again.`,
                             'Dismiss', { duration: 10000 });
                         this.refresh();
                     } this.refresh();

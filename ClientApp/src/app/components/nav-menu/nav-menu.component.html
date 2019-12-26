@@ -2,10 +2,11 @@
   <nav class='navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3'>
     <div class="container">
 
-      <a class="navbar-brand" [routerLink]='["/"]'><img src="../../../assets/img/logoEntierStuckOverflow.png" alt="brand"></a>
+      <a class="navbar-brand" [routerLink]='["/"]'><img src="../../../assets/img/logoEntierStuckOverflow.png"
+          alt="brand"></a>
 
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" 
-              aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
+        aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -31,6 +32,9 @@
           <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="currentUser && isAdmin">
             <a class="nav-link text-dark" [routerLink]='["/users"]'>Users</a>
           </li>
+          <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="isAdmin">
+            <a class="nav-link text-dark" [routerLink]='["/tags"]'>Tags</a>
+          </li>
         </ul>
 
         <ul class="navbar-nav">
@@ -43,11 +47,11 @@
 
           <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="!currentUser">
             <a class="nav-link text-dark" [routerLink]='["/signup"]'>
-              
+
               <span> Sign Up </span>
             </a>
           </li>
-          
+
           <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="currentUser">
             <a class="nav-link text-dark" [routerLink]='' (click)='logout()'>
               <span class="material-icons">power_settings_new</span>

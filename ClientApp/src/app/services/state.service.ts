@@ -4,5 +4,6 @@ import { MatTableState } from "../helpers/mattable.state";
 @Injectable({ providedIn: 'root' })
 export class StateService {
     public userListState = new MatTableState('id', 'asc', 5); // 5 => items per page
-    public postListState = new MatTableState('id', 'asc', 5); 
+    public postListState = new MatTableState('id', 'asc', 5);
+    public tagListState = new MatTableState('id', 'asc', 10);
 }

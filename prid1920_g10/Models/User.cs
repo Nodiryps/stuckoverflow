@@ -7,16 +7,14 @@ using System.Text.RegularExpressions;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace prid1920_g10.Models
-{
+namespace prid1920_g10.Models {
     public enum Role { Admin = 2, Member = 1, Visitor = 0 }
 
-    public class User : IValidatableObject
-    {
+    public class User : IValidatableObject {
         private const int MinLengthPseudoPasswordName = 3;
         private const int MaxLengthPseudo = 10;
         private const int MaxLengthName = 30;
-        
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -27,10 +25,10 @@ namespace prid1920_g10.Models
         [Required(ErrorMessage = "Required")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Required")]
-        public int Reputation { get; set; }   
+        public int Reputation { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime? BirthDate { get; set; }        
+        public DateTime? BirthDate { get; set; }
         public Role Role { get; set; } = Role.Member;
         [NotMapped]
         public string Token { get; set; }
@@ -38,10 +36,8 @@ namespace prid1920_g10.Models
         public virtual IList<Post> Posts { get; set; } = new List<Post>();
         public virtual IList<Comment> Comments { get; set; } = new List<Comment>();
         public virtual IList<Vote> Votes { get; set; } = new List<Vote>();
-        public int? Age
-        {
-            get
-            {
+        public int? Age {
+            get {
                 if (!BirthDate.HasValue)
                     return null;
                 var today = DateTime.Today;
@@ -51,8 +47,7 @@ namespace prid1920_g10.Models
             }
         }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
             var currContext = validationContext.GetService(typeof(DbContext)) as G10Context;
             Debug.Assert(currContext != null);
 
@@ -63,16 +58,14 @@ namespace prid1920_g10.Models
             yield return new ValidationResult("");
         }
 
-        IEnumerable<ValidationResult> BirthDateValidations()
-        {
+        IEnumerable<ValidationResult> BirthDateValidations() {
             if (BirthDate.HasValue && BirthDate.Value.Date > DateTime.Today)
                 yield return new ValidationResult("Can't be born in the future in this reality", new[] { nameof(BirthDate) });
             if (Age.HasValue && Age < 18)
                 yield return new ValidationResult("Must be 18 years old", new[] { nameof(BirthDate) });
         }
 
-        IEnumerable<ValidationResult> EmailValidations()
-        {
+        IEnumerable<ValidationResult> EmailValidations() {
             string emailPattern = "^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$";
             bool isEmailValid = Regex.IsMatch(Email, emailPattern);
 
@@ -80,8 +73,7 @@ namespace prid1920_g10.Models
                 yield return new ValidationResult("Invalid email", new[] { nameof(Email) });
         }
 
-        IEnumerable<ValidationResult> NameValidations()
-        {
+        IEnumerable<ValidationResult> NameValidations() {
             string namePattern = "^[A-Za-z]+$";
             bool isFirstNameValid = Regex.IsMatch(FirstName, namePattern);
             bool isLastNameValid = Regex.IsMatch(LastName, namePattern);
@@ -96,8 +88,7 @@ namespace prid1920_g10.Models
                 yield return new ValidationResult("Invalid lastname (" + MinLengthPseudoPasswordName + "-" + MaxLengthName + " char)", new[] { nameof(LastName) });
         }
 
-        IEnumerable<ValidationResult> PseudoValidations(G10Context c)
-        {
+        IEnumerable<ValidationResult> PseudoValidations(G10Context c) {
             string pseudoPattern = "^[\\W\\d_]+$";
             bool isPseudoValid = Regex.IsMatch(Pseudo, pseudoPattern);
 
@@ -109,32 +100,27 @@ namespace prid1920_g10.Models
                 yield return new ValidationResult("Invalid pseudo (" + MinLengthPseudoPasswordName + " - " + MaxLengthPseudo + " char)", new[] { nameof(Pseudo) });
             if (!IsPasswordLengthValid())
                 yield return new ValidationResult("Invalid password (min " + MinLengthPseudoPasswordName + " char)", new[] { nameof(Password) });
-        } 
+        }
 
-        static bool IsPseudoUnique(string pseudo, G10Context c)
-        {
+        static bool IsPseudoUnique(string pseudo, G10Context c) {
             return (from u in c.Users
                     where u.Pseudo == pseudo
                     select u).FirstOrDefault() == null;
         }
 
-        bool IsPasswordLengthValid()
-        {
+        bool IsPasswordLengthValid() {
             return Password.Length >= MinLengthPseudoPasswordName;
         }
 
-        bool IsLastNameLengthValid()
-        {
+        bool IsLastNameLengthValid() {
             return LastName.Length >= MinLengthPseudoPasswordName && LastName.Length <= MaxLengthName;
         }
 
-        bool IsFirstNameLengthValid()
-        {
+        bool IsFirstNameLengthValid() {
             return FirstName.Length >= MinLengthPseudoPasswordName && FirstName.Length <= MaxLengthName;
         }
 
-        bool IsPseudoLengthValid()
-        {
+        bool IsPseudoLengthValid() {
             return Pseudo.Length >= MinLengthPseudoPasswordName && Pseudo.Length <= MaxLengthPseudo;
         }
     }

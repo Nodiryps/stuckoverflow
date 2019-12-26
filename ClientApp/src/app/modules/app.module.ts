@@ -15,6 +15,7 @@ import { LoginComponent } from '../components/login/login.component';
 import { CounterComponent } from '../components/counter/counter.component';
 import { FetchDataComponent } from '../components/fetch-data/fetch-data.component';
 import { UserListComponent } from '../components/userList/userList.component';
+import { TagListComponent } from '../components/tagList/tagList.component';
 import { PostListComponent } from '../components/postList/postList.component';
 import { PostDetailComponent } from '../components/postDetail/postDetail.component';
 import { UnknownComponent } from '../components/unknown/unknown.component';
@@ -23,6 +24,7 @@ import { SignUpComponent } from '../components/signup/signup.component';
 import { CreatePostComponent } from '../components/create-post/create-post.component';
 import { SharedModule } from './shared.module';
 import { EditUserComponent } from '../components/edit-user/edit-user.component';
+import { EditTagComponent } from '../components/edit-tag/edit-tag.component';
 import { EditPostComponent } from '../components/edit-post/edit-post.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SetFocusDirective } from '../directives/setfocus.directive';
@@ -37,6 +39,7 @@ import { SetFocusDirective } from '../directives/setfocus.directive';
     FetchDataComponent,
     LoginComponent,
     UserListComponent,
+    TagListComponent,
     PostListComponent,
     PostDetailComponent,
     UnknownComponent,
@@ -45,10 +48,12 @@ import { SetFocusDirective } from '../directives/setfocus.directive';
     SignUpComponent,
     CreatePostComponent,
     EditUserComponent,
+    EditTagComponent,
     EditPostComponent
   ],
   entryComponents: [
     EditUserComponent,
+    EditTagComponent,
     EditPostComponent
   ],
   imports: [
