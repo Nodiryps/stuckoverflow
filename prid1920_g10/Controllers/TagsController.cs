@@ -44,32 +44,30 @@ namespace prid1920_g10.Controllers {
             return tag.ToDTO();
         }
 
+        [AllowAnonymous]
+        [HttpGet("tags/{id}")]
+        public async Task<ActionResult<IEnumerable<TagDTO>>> GetTagsByPostId(int id) {
+            var tags = GetTags(id);
 
-        // [AllowAnonymous]
-        // [HttpGet("tags/{id}")]
-        // public async Task<ActionResult<IEnumerable<TagDTO>>> GetTagsById(int id) {
-        //     var tags = GetTags(id);
+            if (tags == null)
+                return NotFound();
+            return (await tags.ToListAsync()).ToDTO();
+        }
 
-        //     if (tags == null)
-        //         return NotFound();
-        //     return (await tags.ToListAsync()).ToDTO();
-        // }
+        private IQueryable<Tag> GetTags(int postid) {
+            var tagIds = GetTagIdsFromPostTags(postid);
 
-        // private IQueryable<Tag> GetTags(int postid) {
-        //     var tagIds = GetTagIdsFromPostTags(postid);
-        //     IQueryable<Tag> query = new IQueryable<Tag>();
+            return (from tag in _context.Tags
+                    join id in tagIds on tag.Id equals id
+                    where id == tag.Id
+                    select tag);
+        }
 
-        //     return (from tag in _context.Tags
-        //             join t in tagIds on tag.Id equals t.Id
-        //             where t.Id == tag.Id
-        //             select tag);
-        // }
-
-        // private IQueryable<int> GetTagIdsFromPostTags(int postid) {
-        //     return (from pt in _context.PostTags
-        //             where pt.PostId == postid
-        //             select pt.TagId);
-        // }
+        private IQueryable<int> GetTagIdsFromPostTags(int postid) {
+            return (from pt in _context.PostTags
+                    where pt.PostId == postid
+                    select pt.TagId);
+        }
 
         [Authorized(Role.Admin)]
         [HttpPost]

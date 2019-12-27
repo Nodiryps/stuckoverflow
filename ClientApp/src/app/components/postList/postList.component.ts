@@ -27,11 +27,11 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     constructor(private postService: PostService,
-         private stateService: StateService,
+        private stateService: StateService,
         public dialog: MatDialog,
-         public snackBar: MatSnackBar,
-         private authenticationService: AuthenticationService,
-          private router: Router) {
+        public snackBar: MatSnackBar,
+        private authenticationService: AuthenticationService,
+        private router: Router) {
         this.state = this.stateService.postListState;
     }
 
@@ -39,8 +39,8 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.dataSource.filterPredicate = (data: Post, filter: string) => {
-            const str = data.votes + ' ' + data.timestamp + ' ' + 
-                        data.title + ' ' + data.body + ' ' + data.tags;
+            const str = data.votes + ' ' + data.timestamp + ' ' +
+                data.title + ' ' + data.body + ' ' + data.tags;
             return str.toLowerCase().includes(filter);
         };
         this.state.bind(this.dataSource);
@@ -66,15 +66,15 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
         this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
         const snackBarRef = this.snackBar.open(`Post '${post.title}' will be deleted`, 'Undo', { duration: 10000 });
         snackBarRef.afterDismissed().subscribe(res => {
-          if (!res.dismissedByAction) {
-            this.postService.delete(post).subscribe();
-            this.router.navigate(['/']);
-            this.refresh();
-          }
-          else
-            this.dataSource.data = backup;
+            if (!res.dismissedByAction) {
+                this.postService.delete(post).subscribe();
+                this.router.navigate(['/']);
+                this.refresh();
+            }
+            else
+                this.dataSource.data = backup;
         });
-      }
+    }
 
     filterChanged(filterValue: string) {
         this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -92,10 +92,10 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
                 this.postService.add(res).subscribe(res => {
                     if (!res) {
                         this.snackBar.open(`There was an error at the server. 
-                                            The post has not been created! Please try again.`, 
-                                            'Dismiss', { duration: 10000 });
+                                            The post has not been created! Please try again.`,
+                            'Dismiss', { duration: 10000 });
                         this.refresh();
-                    }this.refresh();
+                    } this.refresh();
                 });
             }
         });

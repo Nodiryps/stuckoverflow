@@ -12,6 +12,11 @@ namespace prid1920_g10.Models {
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
+        public int NbOcc { 
+            get => (from pt in this.PostTags
+                    where pt.TagId == this.Id
+                    select pt.TagId).Count(); 
+        }
 
         public virtual IList<PostTag> PostTags { get; set; } = new List<PostTag>();
     }

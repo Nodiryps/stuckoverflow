@@ -59,7 +59,8 @@ namespace prid1920_g10.Models {
         public static TagDTO ToDTO(this Tag tag) {
             return new TagDTO {
                 Id = tag.Id,
-                Name = tag.Name
+                Name = tag.Name,
+                NbOcc = tag.NbOcc
             };
         }
         public static List<TagDTO> ToDTO(this IEnumerable<Tag> tag) {
