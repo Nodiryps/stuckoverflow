@@ -32,7 +32,7 @@
             <p class="body" markdown>{{row.body.substring(0,150)}} ...</p>
 
             <mat-chip-list>
-              <mat-chip *ngFor="let tag of tags">{{tag}}</mat-chip>
+              <mat-chip *ngFor="let tag of row.tags">{{tag.name}}</mat-chip>
             </mat-chip-list>
 
 

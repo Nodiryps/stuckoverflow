@@ -9,13 +9,16 @@ th.mat-column-date {
     width: 110px;
 }
 th.mat-column-title {
-    width: 150px;
+    width: 110px;
+}
+th.mat-column-body {
+    width: 500px;
 }
 th.mat-column-action, th.mat-column-date {
     text-align: center;
 }
 td {
-    padding: 20px;
+    padding: 100px;
 }
 
 .btnDetails {

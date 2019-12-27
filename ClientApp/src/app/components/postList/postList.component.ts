@@ -39,7 +39,8 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.dataSource.filterPredicate = (data: Post, filter: string) => {
-            const str = data.votes + ' ' + data.timestamp;
+            const str = data.votes + ' ' + data.timestamp + ' ' + 
+                        data.title + ' ' + data.body + ' ' + data.tags;
             return str.toLowerCase().includes(filter);
         };
         this.state.bind(this.dataSource);
