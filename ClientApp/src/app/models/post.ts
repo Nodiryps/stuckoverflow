@@ -14,7 +14,7 @@ export class Post {
     parentId: number;
     authorId: number;
     acceptedAnswerId: number;
-    answers: List<Post>;
+    answers: Post[] = [];
     votes: Vote[] = [];
     tags: Tag[] = [];
     postTags: PostTag[] = [];
@@ -36,6 +36,7 @@ export class Post {
             this.postTags = data.postTags;
             this.comments = data.comments;
             this.score = this.getScore();
+            this.answers = data.answers;
         }
     }
 

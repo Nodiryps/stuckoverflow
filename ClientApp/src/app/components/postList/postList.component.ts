@@ -11,6 +11,8 @@ import { MatTableState } from 'src/app/helpers/mattable.state';
 import { EditPostComponent } from '../edit-post/edit-post.component';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { reject } from 'q';
+import { element } from 'protractor';
 
 @Component({
     selector: 'app-postList',
@@ -27,6 +29,7 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
     @ViewChild(MatSort, { static: false }) sort: MatSort;
     toggleBtnOptions: string[] = ['Newest', 'Votes', 'Unanswered', 'Tag']
     selectedValue: string = this.toggleBtnOptions[0];
+    unanswered: Post[] = []; //Posts du dataSource sans réponses
 
     constructor(
         private postService: PostService,
@@ -49,6 +52,9 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
         };
         this.state.bind(this.dataSource);
         this.refresh();
+
+        this.showUnanswered();
+
     }
 
     refresh() {
@@ -57,7 +63,20 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
             this.state.restoreState(this.dataSource);
             this.filter = this.state.filter;
 
+            this.dataSource.data.forEach(element => {
+                this.postService.getAllQuestionsUnanswered(element.id).subscribe(a => {
+                    element.answers = a;
+                    if (element.answers.length === 0) {
+                        this.unanswered.push(element);
+                    }
+                });
+            });
+            console.log(this.unanswered);
         });
+    }
+
+    showUnanswered() {
+        this.dataSource.data = this.unanswered;
     }
 
     // selectionChanged(item) {

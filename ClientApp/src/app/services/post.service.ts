@@ -31,6 +31,12 @@ export class PostService {
     );
   }
 
+  getAllQuestionsUnanswered(id: number) {
+    return this.http.get<Post[]>(`${this.baseUrl}api/posts/answers/${id}`).pipe(
+      map(res => res.map(p => new Post(p)))
+    );
+  }
+
   getAllComments(id: number) {
     return this.http.get<Comment[]>(`${this.baseUrl}api/comments/bypostid/${id}`).pipe(
       map(res => res.map(c => new Comment(c)))
