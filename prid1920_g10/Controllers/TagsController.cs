@@ -114,12 +114,12 @@ namespace prid1920_g10.Controllers {
         [Authorized(Role.Admin)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTag(int id) {
-            var tag = await _context.Users.FindAsync(id);
+            var tag = await _context.Tags.FindAsync(id);
 
             if (tag == null)
                 return NotFound();
 
-            _context.Users.Remove(tag);
+            _context.Tags.Remove(tag);
             await _context.SaveChangesAsync();
 
             return NoContent();

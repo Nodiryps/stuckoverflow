@@ -14,7 +14,7 @@ import { MatTableState } from 'src/app/helpers/mattable.state';
 })
 
 export class TagListComponent implements AfterViewInit, OnDestroy {
-    displayedColumns: string[] = ['id', 'name', 'nbOcc'];
+    displayedColumns: string[] = ['id', 'name', 'nbOcc', 'actions'];
     dataSource: MatTableDataSource<Tag> = new MatTableDataSource();
     filter: string;
     state: MatTableState;

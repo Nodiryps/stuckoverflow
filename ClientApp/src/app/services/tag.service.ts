@@ -23,7 +23,7 @@ export class TagService {
     }
 
     public update(u: Tag): Observable<boolean> {
-        return this.http.put<Tag>(`${this.baseUrl}api/tags/${u.name}`, u).pipe(
+        return this.http.put<Tag>(`${this.baseUrl}api/tags/${u.id}`, u).pipe(
             map(res => true),
             catchError(err => {
                 console.error(err + ' update');
@@ -33,7 +33,7 @@ export class TagService {
     }
 
     public delete(u: Tag): Observable<boolean> {
-        return this.http.delete<boolean>(`${this.baseUrl}api/tags/${u.name}`).pipe(
+        return this.http.delete<boolean>(`${this.baseUrl}api/tags/${u.id}`).pipe(
             map(res => true),
             catchError(err => {
                 console.error(err + ' delete');
