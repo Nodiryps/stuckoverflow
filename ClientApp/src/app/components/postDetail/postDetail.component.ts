@@ -42,6 +42,7 @@ export class PostDetailComponent {
     private authenticationService: AuthenticationService
 
   ) {
+    this.post = new Post({});
     this.getQuestion()
       .then(() => {
         this.score = postService.score;

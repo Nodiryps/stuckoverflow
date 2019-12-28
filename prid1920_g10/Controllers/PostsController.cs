@@ -46,7 +46,7 @@ namespace prid1920_g10.Controllers {
             //             await this.GetQuestions().OrderBy(p => p.Tags.Count() <= 0).ToListAsync()
             //         ).ToDTO();
             // else
-                return (await this.GetQuestions().ToListAsync()).ToDTO();
+            return (await this.GetQuestions().ToListAsync()).ToDTO();
         }
 
         private IQueryable<Post> GetQuestions() {
@@ -109,18 +109,20 @@ namespace prid1920_g10.Controllers {
             _context.Posts.Add(newPost);
             await _context.SaveChangesAsyncWithValidation();
 
-            foreach (var t in data.Tags) {
-                var tag = await _context.Tags.SingleOrDefaultAsync(tg => tg.Name == t.Name);
-                var post = await _context.Posts.SingleOrDefaultAsync(p => p.Id == newPost.Id);
+            if (data.Tags != null) {
+                foreach (var t in data.Tags) {
+                    var tag = await _context.Tags.SingleOrDefaultAsync(tg => tg.Name == t.Name);
+                    var post = await _context.Posts.SingleOrDefaultAsync(p => p.Id == newPost.Id);
 
-                var newPostTag = new PostTag() {
-                    Post = post,
-                    Tag = tag,
-                    PostId = post.Id,
-                    TagId = tag.Id
-                };
+                    var newPostTag = new PostTag() {
+                        Post = post,
+                        Tag = tag,
+                        PostId = post.Id,
+                        TagId = tag.Id
+                    };
 
-                _context.PostTags.Add(newPostTag);
+                    _context.PostTags.Add(newPostTag);
+                }
             }
 
             var res = await _context.SaveChangesAsyncWithValidation();

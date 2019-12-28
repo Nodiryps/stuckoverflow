@@ -13,6 +13,13 @@ export class PostService {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
+  getById(id: number) {
+    return this.http.get<Post>(`${this.baseUrl}api/posts/id/${id}`).pipe(
+      map(u => !u ? null : new Post(u)),
+      catchError(err => of(null))
+    );
+  }
+
   getAllQuestions() {
     return this.http.get<Post[]>(`${this.baseUrl}api/posts`).pipe(
       map(res => res.map(p => new Post(p)))
