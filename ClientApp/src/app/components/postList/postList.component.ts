@@ -19,7 +19,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 })
 
 export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
-    displayedColumns: string[] = ['vote', 'date', 'title', 'body', 'action'];
+    displayedColumns: string[] = ['score', 'timestamp', 'title', 'body', 'action'];
     dataSource: MatTableDataSource<Post> = new MatTableDataSource();
     filter: string;
     state: MatTableState;
@@ -35,8 +35,8 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
         public snackBar: MatSnackBar,
         private authenticationService: AuthenticationService,
         private router: Router
-        ) {
-            this.state = this.stateService.postListState;
+    ) {
+        this.state = this.stateService.postListState;
     }
 
     ngAfterViewInit(): void {
@@ -60,14 +60,14 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
         });
     }
 
-    selectionChanged(item) {
-        this.selectedValue = item;
-        if(item === 'Newest')
-            // this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
-        if(item === 'Votes')
-            this.stateService.postListState = new MatTableState('vote', 'asc', 5);
-        // this.refresh();
-    }
+    // selectionChanged(item) {
+    //     this.selectedValue = item;
+    //     if(item === 'Newest')
+    //         // this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
+    //     if(item === 'Votes')
+    //         this.stateService.postListState = new MatTableState('vote', 'asc', 5);
+    //     // this.refresh();
+    // }
 
     showDetail(post: Post) {
         this.postService.setPostDetail(post);
