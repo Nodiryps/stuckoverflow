@@ -29,7 +29,24 @@ namespace prid1920_g10.Controllers {
         [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PostDTO>>> GetAll() {
-            return (await this.GetQuestions().ToListAsync()).ToDTO();
+            // if (order == "Newest")
+            //     return (
+            //         await this.GetQuestions().OrderBy(p => p.Timestamp).ToListAsync()
+            //     ).ToDTO();
+            // else if (order == "Votes")
+            //     return (
+            //         await this.GetQuestions().OrderBy(p => p.Score).ToListAsync()
+            //     ).ToDTO();
+            // else if (order == "Unanswered")
+            //     return (
+            //             await this.GetQuestions().OrderBy(p => p.Answers.Count() <= 0).ToListAsync()
+            //         ).ToDTO();
+            // else if (order == "Tag")
+            //     return (
+            //             await this.GetQuestions().OrderBy(p => p.Tags.Count() <= 0).ToListAsync()
+            //         ).ToDTO();
+            // else
+                return (await this.GetQuestions().ToListAsync()).ToDTO();
         }
 
         private IQueryable<Post> GetQuestions() {

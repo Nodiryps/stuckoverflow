@@ -25,14 +25,18 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
     state: MatTableState;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
+    toggleBtnOptions: string[] = ['Newest', 'Votes', 'Unanswered', 'Tag']
+    selectedValue: string = this.toggleBtnOptions[0];
 
-    constructor(private postService: PostService,
+    constructor(
+        private postService: PostService,
         private stateService: StateService,
         public dialog: MatDialog,
         public snackBar: MatSnackBar,
         private authenticationService: AuthenticationService,
-        private router: Router) {
-        this.state = this.stateService.postListState;
+        private router: Router
+        ) {
+            this.state = this.stateService.postListState;
     }
 
     ngAfterViewInit(): void {
@@ -54,6 +58,15 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
             this.filter = this.state.filter;
 
         });
+    }
+
+    selectionChanged(item) {
+        this.selectedValue = item;
+        if(item === 'Newest')
+            // this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
+        if(item === 'Votes')
+            this.stateService.postListState = new MatTableState('vote', 'asc', 5);
+        // this.refresh();
     }
 
     showDetail(post: Post) {

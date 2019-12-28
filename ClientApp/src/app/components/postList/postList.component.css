@@ -21,6 +21,10 @@ td {
     padding: 100px;
 }
 
+.toggleBtn {
+    float: right;
+}
+
 .btnDetails {
     float: right;
 }

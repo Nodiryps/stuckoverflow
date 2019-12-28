@@ -16,6 +16,23 @@ namespace prid1920_g10.Models {
         public int? ParentId { get; set; }
         public int AuthorId { get; set; }
         public int? AcceptedAnswerId { get; set; }
+        public int Score { 
+            get  {
+                var s = 0;
+                var query = from v in Votes 
+                            where v.PostId == this.Id 
+                                || v.PostId == this.ParentId
+                            select v.UpDown;
+                foreach(var updown in query)
+                    s += updown;
+                return s;
+            }
+        }
+        // public IList<Post> WithTags { 
+        //     get  {
+                
+        //     }
+        // }
 
         [NotMapped]
         public IEnumerable<Tag> Tags { 
