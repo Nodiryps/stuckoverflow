@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { reject } from 'q';
 import { element } from 'protractor';
+import { User, Role } from 'src/app/models/user';
 
 @Component({
     selector: 'app-postList',
@@ -21,7 +22,7 @@ import { element } from 'protractor';
 })
 
 export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
-    displayedColumns: string[] = ['score', 'timestamp', 'title', 'body', 'action'];
+    displayedColumns: string[] = ['score', 'timestamp', 'title', 'tags', 'action'];
     dataSource: MatTableDataSource<Post> = new MatTableDataSource();
     filter: string;
     state: MatTableState;
@@ -30,6 +31,7 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
     toggleBtnOptions: string[] = ['Newest', 'Votes', 'Unanswered', 'Tag']
     selectedValue: string = this.toggleBtnOptions[0];
     unanswered: Post[] = []; //Posts du dataSource sans réponses
+    currUser: User;
 
     constructor(
         private postService: PostService,
@@ -40,6 +42,7 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
         private router: Router
     ) {
         this.state = this.stateService.postListState;
+        this.currUser = authenticationService.currentUser;
     }
 
     ngAfterViewInit(): void {
@@ -53,25 +56,35 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
         this.state.bind(this.dataSource);
         this.refresh();
 
-        this.showUnanswered();
+        // this.showUnanswered();
 
     }
 
     refresh() {
         this.postService.getAllQuestions().subscribe(p => {
             this.dataSource.data = p;
+            if (this.selectedValue === 'Newest')
+                this.state = this.stateService.postListState = new MatTableState('timestamp', 'desc', 5);
+            else if (this.selectedValue === 'Votes') {
+                this.state = this.stateService.postListState = new MatTableState('votes', 'desc', 5);
+            }
+            else if (this.selectedValue === 'Unanswered')
+                this.dataSource.data = _.filter(this.dataSource.data, p => p.acceptedAnswerId === null);
+            else if (this.selectedValue === 'Tag')
+                this.dataSource.data = _.filter(this.dataSource.data, p => p.tags.length > 0);
+
             this.state.restoreState(this.dataSource);
             this.filter = this.state.filter;
 
-            this.dataSource.data.forEach(element => {
-                this.postService.getAllQuestionsUnanswered(element.id).subscribe(a => {
-                    element.answers = a;
-                    if (element.answers.length === 0) {
-                        this.unanswered.push(element);
-                    }
-                });
-            });
-            console.log(this.unanswered);
+            //     this.dataSource.data.forEach(element => {
+            //         this.postService.getAllQuestionsUnanswered(element.id).subscribe(a => {
+            //             element.answers = a;
+            //             if (element.answers.length === 0) {
+            //                 this.unanswered.push(element);
+            //             }
+            //         });
+            //     });
+            //     console.log(this.unanswered);
         });
     }
 
@@ -79,14 +92,10 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
         this.dataSource.data = this.unanswered;
     }
 
-    // selectionChanged(item) {
-    //     this.selectedValue = item;
-    //     if(item === 'Newest')
-    //         // this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
-    //     if(item === 'Votes')
-    //         this.stateService.postListState = new MatTableState('vote', 'asc', 5);
-    //     // this.refresh();
-    // }
+    selectionChanged(item) {
+        this.selectedValue = item;
+        this.refresh();
+    }
 
     showDetail(post: Post) {
         this.postService.setPostDetail(post);
@@ -94,18 +103,20 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
     }
 
     delete(post: Post) {
-        const backup = this.dataSource.data;
-        this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
-        const snackBarRef = this.snackBar.open(`Post '${post.title}' will be deleted`, 'Undo', { duration: 10000 });
-        snackBarRef.afterDismissed().subscribe(res => {
-            if (!res.dismissedByAction) {
-                this.postService.delete(post).subscribe();
-                this.router.navigate(['/']);
-                this.refresh();
-            }
-            else
-                this.dataSource.data = backup;
-        });
+        if (this.currUser.role == Role.Admin) {
+            const backup = this.dataSource.data;
+            this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
+            const snackBarRef = this.snackBar.open(`Post '${post.title}' will be deleted`, 'Undo', { duration: 10000 });
+            snackBarRef.afterDismissed().subscribe(res => {
+                if (!res.dismissedByAction) {
+                    this.postService.delete(post).subscribe();
+                    this.router.navigate(['/']);
+                    this.refresh();
+                }
+                else
+                    this.dataSource.data = backup;
+            });
+        }
     }
 
     filterChanged(filterValue: string) {
@@ -116,21 +127,23 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
     }
 
     create() {
-        const post = new Post({});
-        const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: true } });
-        dlg.beforeClose().subscribe(res => {
-            if (res) {
-                this.dataSource.data = [...this.dataSource.data, new Post(res)];
-                this.postService.add(res).subscribe(res => {
-                    if (!res) {
-                        this.snackBar.open(`There was an error at the server. 
-                                            The post has not been created! Please try again.`,
-                            'Dismiss', { duration: 10000 });
-                        this.refresh();
-                    } this.refresh();
-                });
-            }
-        });
+        if (this.currUser.role == Role.Admin || this.currUser.role == Role.Member) {
+            const post = new Post({});
+            const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: true } });
+            dlg.beforeClose().subscribe(res => {
+                if (res) {
+                    this.dataSource.data = [...this.dataSource.data, new Post(res)];
+                    this.postService.add(res).subscribe(res => {
+                        if (!res) {
+                            this.snackBar.open(`There was an error at the server. 
+                                                The post has not been created! Please try again.`,
+                                'Dismiss', { duration: 10000 });
+                            this.refresh();
+                        } this.refresh();
+                    });
+                }
+            });
+        }
     }
 
     ngOnDestroy(): void {

@@ -9,13 +9,13 @@ th.mat-column-date {
     width: 110px;
 }
 th.mat-column-title {
-    width: 110px;
+    width: 250px;
 }
 th.mat-column-body {
-    width: 500px;
+    width: 250px;
 }
-th.mat-column-action, th.mat-column-date {
-    text-align: center;
+th.mat-column-action {
+    width: 200px;
 }
 td {
     padding: 100px;
@@ -25,12 +25,6 @@ td {
     float: right;
 }
 
-.btnDetails {
-    float: right;
-}
-.btnDelete {
-    float: right;
-}
 .btnAskQuestion {
     margin-top: 20px;
     margin-bottom: 20px;
