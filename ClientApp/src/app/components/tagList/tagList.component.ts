@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { Tag } from '../../models/tag';
 import { TagService } from '../../services/tag.service';
 import { EditTagComponent } from '../edit-tag/edit-tag.component';
+import { TagQuestionsComponent } from '../tagQuestions/tagQuestions.component';
 import { StateService } from 'src/app/services/state.service';
 import { MatTableState } from 'src/app/helpers/mattable.state';
 
@@ -63,6 +64,21 @@ export class TagListComponent implements AfterViewInit, OnDestroy {
         // en se mettant sur la première page
         if (this.dataSource.paginator)
             this.dataSource.paginator.firstPage();
+    }
+
+    getTagQuestions(tag: Tag) {
+        const dlg = this.dialog.open(TagQuestionsComponent, { data:{tag} });
+        dlg.beforeClose().subscribe(res => {
+            if(res) {
+                _.assign(tag, res);
+                this.tagService.getPostsByTagId(res).subscribe(res => {
+                    if (!res) {
+                        this.snackBar.open(`There was an error at the server. The GET has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+                        this.refresh();
+                    }
+                });
+            }
+        });
     }
 
     // appelée quand on clique sur le bouton "edit" d'un membre

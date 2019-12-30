@@ -22,8 +22,6 @@ export class EditPostComponent {
     public ctlTitle: FormControl;
     public ctlBody: FormControl;
     public isNew: boolean;
-    dataSource: MatTableDataSource<Post> = new MatTableDataSource();
-    state: MatTableState;
 
     constructor(
         public dialogRef: MatDialogRef<EditPostComponent>,

@@ -16,6 +16,7 @@ import { CounterComponent } from '../components/counter/counter.component';
 import { FetchDataComponent } from '../components/fetch-data/fetch-data.component';
 import { UserListComponent } from '../components/userList/userList.component';
 import { TagListComponent } from '../components/tagList/tagList.component';
+import { TagQuestionsComponent } from '../components/tagQuestions/tagQuestions.component';
 import { PostListComponent } from '../components/postList/postList.component';
 import { PostDetailComponent } from '../components/postDetail/postDetail.component';
 import { UnknownComponent } from '../components/unknown/unknown.component';
@@ -49,12 +50,14 @@ import { SetFocusDirective } from '../directives/setfocus.directive';
     CreatePostComponent,
     EditUserComponent,
     EditTagComponent,
-    EditPostComponent
+    EditPostComponent,
+    TagQuestionsComponent,
   ],
   entryComponents: [
     EditUserComponent,
     EditTagComponent,
-    EditPostComponent
+    EditPostComponent,
+    TagQuestionsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

@@ -38,7 +38,7 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
         private stateService: StateService,
         public dialog: MatDialog,
         public snackBar: MatSnackBar,
-        private authenticationService: AuthenticationService,
+        authenticationService: AuthenticationService,
         private router: Router
     ) {
         this.state = this.stateService.postListState;

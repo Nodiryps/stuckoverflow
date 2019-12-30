@@ -69,9 +69,32 @@ namespace prid1920_g10.Controllers {
                     select pt.TagId);
         }
 
+        [HttpGet("posts/{id}")]
+        public async Task<ActionResult<IEnumerable<PostDTO>>> GetPostsByTagId(int id) {
+            var posts = GetPosts(id);
+            if(posts == null)
+                return NotFound();
+            return (await posts.ToListAsync()).ToDTO();
+        }
+
+        private IQueryable<Post> GetPosts(int tagid) {
+            var postIds = GetPostIdsFromPostTags(tagid);
+
+            return (from post in _context.Posts
+                    join id in postIds on post.Id equals id
+                    where id == post.Id
+                    select post);
+        }
+
+        private IQueryable<int> GetPostIdsFromPostTags(int tagid) {
+            return (from pt in _context.PostTags
+                    where pt.TagId == tagid
+                    select pt.PostId);
+        }
+
         [Authorized(Role.Admin)]
         [HttpPost]
-        public async Task<ActionResult<UserDTO>> PostTag(TagDTO data) {
+        public async Task<ActionResult<TagDTO>> Post(TagDTO data) {
             var newTag = new Tag() {
                 Id = GetNewId(),
                 Name = data.Name
@@ -91,7 +114,7 @@ namespace prid1920_g10.Controllers {
 
         [Authorized(Role.Admin)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTag(int id, TagDTO dto) {
+        public async Task<IActionResult> Put(int id, TagDTO dto) {
             if (id != dto.Id)
                 return BadRequest();
 
@@ -113,7 +136,7 @@ namespace prid1920_g10.Controllers {
 
         [Authorized(Role.Admin)]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTag(int id) {
+        public async Task<IActionResult> Delete(int id) {
             var tag = await _context.Tags.FindAsync(id);
 
             if (tag == null)

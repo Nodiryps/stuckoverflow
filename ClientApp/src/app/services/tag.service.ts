@@ -1,8 +1,11 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Tag } from '../models/tag';
 import { map, flatMap, catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
+
+
+import { Tag } from '../models/tag';
+import { Post } from '../models/post';
 
 @Injectable({ providedIn: 'root' })
 export class TagService {
@@ -19,6 +22,12 @@ export class TagService {
         return this.http.get<Tag>(`${this.baseUrl}api/tags/id/${id}`).pipe(
             map(u => !u ? null : new Tag(u)),
             catchError(err => of(null))
+        );
+    }
+
+    getPostsByTagId(tag: Tag) {
+        return this.http.get<Post[]>(`${this.baseUrl}api/posts/${tag.id}`).pipe(
+            map(res => res.map(p => new Post(p)))
         );
     }
 

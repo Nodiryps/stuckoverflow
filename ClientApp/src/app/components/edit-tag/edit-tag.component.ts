@@ -46,20 +46,10 @@ export class EditTagComponent {
             id: this.ctlId,
             name: this.ctlName,
 
-        }, { validator: this.nameValidations });
+        });
         console.log(data);
         this.isNew = data.isNew;
         this.frm.patchValue(data.tag);
-    }
-
-    nameValidations(group: FormGroup): ValidationErrors {
-        if (!group.value) { return null; }
-        if (group.value.firstname !== '' && group.value.lastname === '') {
-            return { lastnameRequired: true };
-        }
-        if (group.value.firstname === '' && group.value.lastname !== '') {
-            return { firstnameRequired: true };
-        }
     }
 
     forbiddenValues(arr: Array<string>): any {
@@ -72,28 +62,6 @@ export class EditTagComponent {
             });
         };
     }
-
-
-    // Validateur asynchrone qui vérifie si le pseudo n'est pas déjà utilisé par un autre membre
-    // pseudoUsed(): any {
-    //     let timeout: NodeJS.Timer;
-    //     return (ctl: FormControl) => {
-    //         clearTimeout(timeout);
-    //         const pseudo = ctl.value;
-    //         return new Promise(resolve => {
-    //             timeout = setTimeout(() => {
-    //                 if (ctl.pristine) {
-    //                     resolve(null);
-    //                 } else {
-    //                     this.tagService.getByPseudoOrEmail(pseudo, '').subscribe(user => {
-    //                         resolve(user ? { pseudoUsed: true } : null);
-    //                     });
-    //                 }
-    //             }, 300);
-    //         });
-    //     };
-    // }
-
 
     onNoClick(): void {
         this.dialogRef.close();
