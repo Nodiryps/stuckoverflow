@@ -7,6 +7,14 @@
 
         <br>
 
+        <div class="row mt-3">
+            <div class="col-12">
+                <button mat-raised-button color="primary" (click)="create()">New Member</button>
+            </div>
+        </div>
+
+        <br>
+
         <div class="mat-elevation-z2">
             <table mat-table [dataSource]="dataSource" matSort matSortDisableClear>
                 <ng-container matColumnDef="id">
@@ -68,10 +76,5 @@
             </table>
             <mat-paginator [pageSize]="5" [pageSizeOptions]="[3, 5, 10, 25, 100]"></mat-paginator>
         </div>
-    </div>
-</div>
-<div class="row mt-3">
-    <div class="col-12">
-        <button mat-raised-button color="primary" (click)="create()">New Member</button>
     </div>
 </div>

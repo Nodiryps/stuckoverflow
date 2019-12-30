@@ -5,6 +5,7 @@ import { CounterComponent } from '../components/counter/counter.component';
 import { FetchDataComponent } from '../components/fetch-data/fetch-data.component';
 import { UserListComponent } from '../components/userList/userList.component';
 import { TagListComponent } from '../components/tagList/tagList.component';
+import { TagQuestionsComponent } from '../components/tagQuestions/tagQuestions.component';
 import { LoginComponent } from '../components/login/login.component';
 import { RestrictedComponent } from '../components/restricted/restricted.component';
 import { SignUpComponent } from '../components/signup/signup.component';
@@ -33,11 +34,16 @@ const appRoutes: Routes = [
     path: 'tags',
     component: TagListComponent,
     canActivate: [AuthGuard],
-    data: { roles: [Role.Admin] }
+  },
+  {
+    path: 'tagQuestions',
+    component: TagQuestionsComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'postdetail',
-    component: PostDetailComponent
+    component: PostDetailComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'login',

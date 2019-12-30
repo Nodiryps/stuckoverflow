@@ -7,6 +7,7 @@ import { EditTagComponent } from '../edit-tag/edit-tag.component';
 import { TagQuestionsComponent } from '../tagQuestions/tagQuestions.component';
 import { StateService } from 'src/app/services/state.service';
 import { MatTableState } from 'src/app/helpers/mattable.state';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-taglist',
@@ -22,7 +23,9 @@ export class TagListComponent implements AfterViewInit, OnDestroy {
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
-    constructor(private tagService: TagService, private stateService: StateService,
+    constructor(
+        private tagService: TagService, 
+        private stateService: StateService, private router: Router,
         public dialog: MatDialog, public snackBar: MatSnackBar) {
         this.state = this.stateService.tagListState;
     }
@@ -67,18 +70,20 @@ export class TagListComponent implements AfterViewInit, OnDestroy {
     }
 
     getTagQuestions(tag: Tag) {
-        const dlg = this.dialog.open(TagQuestionsComponent, { data:{tag} });
-        dlg.beforeClose().subscribe(res => {
-            if(res) {
-                _.assign(tag, res);
-                this.tagService.getPostsByTagId(res).subscribe(res => {
-                    if (!res) {
-                        this.snackBar.open(`There was an error at the server. The GET has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
-                        this.refresh();
-                    }
-                });
-            }
-        });
+        this.tagService.setTagQuestionsTag(tag);
+        this.router.navigate([`/tagQuestions`]);
+        // const dlg = this.dialog.open(TagQuestionsComponent, { data:{tag} });
+        // dlg.beforeClose().subscribe(res => {
+        //     if(res) {
+        //         _.assign(tag, res);
+        //         this.tagService.getPostsByTagId(res).subscribe(res => {
+        //             if (!res) {
+        //                 this.snackBar.open(`There was an error at the server. The GET has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+        //                 this.refresh();
+        //             }
+        //         });
+        //     }
+        // });
     }
 
     // appelée quand on clique sur le bouton "edit" d'un membre

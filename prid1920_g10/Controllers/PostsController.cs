@@ -58,8 +58,6 @@ namespace prid1920_g10.Controllers {
             );
         }
 
-
-
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<PostDTO>> GetPostById(int id) {
@@ -142,7 +140,22 @@ namespace prid1920_g10.Controllers {
             post.Id = dto.Id;
             post.Title = dto.Title;
             post.Body = dto.Body;
+            post.ParentId = dto.ParentId;
+            post.AuthorId = dto.AuthorId;
+            post.AcceptedAnswerId = dto.AcceptedAnswerId;
             // post.Timestamp = dto.Timestamp;
+            
+            await _context.SaveChangesAsyncWithValidation();
+
+            if(dto.Votes != null) {
+                foreach (var v in dto.Votes) {
+                    var newVote = new Vote();
+                    newVote.PostId = post.Id;
+                    newVote.AuthorId = v.AuthorId;
+                    newVote.UpDown = v.UpDown;
+                    post.Votes.Add(newVote);
+                }
+            }
 
             var res = await _context.SaveChangesAsyncWithValidation();
 

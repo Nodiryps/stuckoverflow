@@ -69,11 +69,13 @@ namespace prid1920_g10.Controllers {
                     select pt.TagId);
         }
 
+        [AllowAnonymous]
         [HttpGet("posts/{id}")]
         public async Task<ActionResult<IEnumerable<PostDTO>>> GetPostsByTagId(int id) {
             var posts = GetPosts(id);
             if(posts == null)
                 return NotFound();
+            Console.WriteLine("POOOSTS: " + posts);
             return (await posts.ToListAsync()).ToDTO();
         }
 

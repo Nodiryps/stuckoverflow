@@ -1,4 +1,10 @@
 <h3>Tag: {{selectedTag.name}}</h3>
+<br>
+
+<mat-form-field>
+    <input matInput (keyup)="filterChanged($event.target.value)" [value]="filter" placeholder="Filter" appSetFocus>
+</mat-form-field>
+<br>
 
 <div class="mat-elevation-z2">
     <table mat-table [dataSource]="dataSource" matSort matSortDisableClear>

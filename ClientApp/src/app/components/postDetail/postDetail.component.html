@@ -1,23 +1,32 @@
 <div class="title">
     <div class="reputation">
-        <p class="score"><b>{{score}}</b></p>
-        <p>reputation</p>
-        <button mat-icon-button tabindex="-1">
-            <mat-icon (click)="edit(post)">edit</mat-icon>
-        </button>
+        <p class="score"><b>{{currScore}}</b></p>
 
-        <!-- <button mat-icon-button tabindex="-1">
-            <mat-icon (click)="delete(post)">delete</mat-icon>
-        </button> -->
+        <div class="vote">
+            <button mat-icon-button tabindex="-1" [disabled]="alreadyVotedUp">
+                <mat-icon  (click)="voteUp()">keyboard_arrow_up</mat-icon>
+            </button>
+
+            <button mat-icon-button tabindex="-1" [disabled]="!undoableVote">
+                <mat-icon style="margin: auto; font-size: 20px;" (click)="voteUndo()">undo</mat-icon>
+            </button>
+
+            <button mat-icon-button tabindex="-1" [disabled]="alreadyVotedDown">
+                <mat-icon (click)="voteDown()">keyboard_arrow_down</mat-icon>
+            </button>
+        </div>
     </div>
-    <h3>{{post.title}}</h3>
-    <p>Author: {{author}}</p>
 
+    <h3>{{post.title}}</h3>
+    <p style="text-align: right;"> by: <b>{{author}}</b> </p>
 </div>
+
+<button mat-icon-button tabindex="-1">
+    <mat-icon (click)="edit(post)">edit</mat-icon>
+</button>
 
 <div>
     <p markdown>{{post.body}}</p>
-
 </div>
 
 <div>
@@ -35,15 +44,19 @@
 
 <div class="answers">
     <ul *ngFor="let answer of answers">
+        <div class="answer">
+            <li markdown>{{answer.body}}</li>
+            <p style="text-align: right;"> by: <b>{{answer.author}}</b> </p>
+        </div>
 
-        <li class="answer" markdown>{{answer.body}}</li>
         <button mat-icon-button tabindex="-1">
             <mat-icon (click)="edit(answer)">edit</mat-icon>
         </button>
+
         <button mat-icon-button tabindex="-1">
             <mat-icon (click)="delete(answer)">delete</mat-icon>
         </button>
-        <p>Author: {{answer.author}}</p>
+
         <ul class="cmts">
             <li *ngFor="let comment of answer.comments" markdown>{{comment.body}}</li>
             <p *ngIf="answer.comments?.length == 0">No comments...</p>

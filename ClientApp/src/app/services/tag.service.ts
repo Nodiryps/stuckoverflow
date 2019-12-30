@@ -9,6 +9,7 @@ import { Post } from '../models/post';
 
 @Injectable({ providedIn: 'root' })
 export class TagService {
+    tag: Tag;
     constructor(private http: HttpClient,
         @Inject('BASE_URL') private baseUrl: string) { }
 
@@ -29,6 +30,10 @@ export class TagService {
         return this.http.get<Post[]>(`${this.baseUrl}api/posts/${tag.id}`).pipe(
             map(res => res.map(p => new Post(p)))
         );
+    }
+
+    setTagQuestionsTag(t: Tag) {
+        this.tag = t;
     }
 
     public update(u: Tag): Observable<boolean> {

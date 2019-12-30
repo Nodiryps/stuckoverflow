@@ -1,10 +1,12 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { map, flatMap, catchError } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+
 import { Post } from '../models/post';
 import { Tag } from '../models/tag';
 import { Comment } from '../models/comment';
-import { map, flatMap, catchError } from 'rxjs/operators';
-import { Observable, of, Subject } from 'rxjs';
+import { Vote } from '../models/vote';
 
 @Injectable({ providedIn: 'root' })
 export class PostService {
@@ -76,7 +78,7 @@ export class PostService {
     return this.http.put<Post>(`${this.baseUrl}api/posts/${u.id}`, u).pipe(
       map(res => true),
       catchError(err => {
-        console.error(err + ' update');
+         console.error(err);
         return of(false);
       })
     );
@@ -86,7 +88,7 @@ export class PostService {
     return this.http.delete<boolean>(`${this.baseUrl}api/posts/${p.id}`).pipe(
       map(res => true),
       catchError(err => {
-        console.error(err + ' delete');
+        console.error(err);
         return of(false);
       })
     );

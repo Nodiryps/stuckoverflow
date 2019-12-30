@@ -1,19 +1,21 @@
 import { Post } from '../../models/post';
 import { User } from '../../models/user';
 import { Tag } from '../../models/tag';
+import { Vote } from 'src/app/models/vote';
 import { PostService } from '../../services/post.service';
 import { UserService } from 'src/app/services/user.service';
-import { reject } from 'q';
+import { CounterService } from 'src/app/services/counter.service';
+
+import { reject, resolve } from 'q';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
 import { EditPostComponent } from '../edit-post/edit-post.component';
 import { MatTableState } from 'src/app/helpers/mattable.state';
-
-
 import { Component, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar } from '@angular/material';
+import { MatTableDataSource, MatDialog, MatSnackBar } from '@angular/material';
 import { Validators, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -22,36 +24,48 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   styleUrls: ['./postDetail.component.css']
 })
 
-export class PostDetailComponent {
-  public frm: FormGroup;
-  public ctlReply: FormControl;
-  public post: Post;
-  public score: number;
-  public author: string;
-  public answers: Post[] = [];
+export class PostDetailComponent implements OnDestroy {
+  frm: FormGroup;
+  ctlReply: FormControl;
+  post: Post;
+  score: number;
+  currScore: number;
+  scoreHistory: string[] = [];
+  author: string;
+  answers: Post[] = [];
   dataSource: MatTableDataSource<Post> = new MatTableDataSource();
   state: MatTableState;
+  currUser: User;
+  alreadyVotedUp: boolean = false;
+  alreadyVotedDown: boolean = false;
+  undoableVote: boolean = false;
+  subscription: Subscription;
 
   constructor(
-    public postService: PostService,
-    public userService: UserService,
-    public router: Router,
-    public dialog: MatDialog,
-    public snackBar: MatSnackBar,
+    private counterService: CounterService,
+    private postService: PostService,
+    private userService: UserService,
+    private router: Router,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private authenticationService: AuthenticationService
-
   ) {
+    this.currUser = authenticationService.currentUser;
     this.post = new Post({});
     this.getQuestion()
       .then(() => {
-        this.score = postService.score;
-      }, () => console.log('fail: score'))
+        
+        this.subscription = counterService.counter$.subscribe(c => {
+          this.currScore = c;
+          this.score = postService.score;
+          counterService.score = this.score;
+        })
+      })
       .then(() => {
-        userService.getById(this.post.authorId).subscribe(u => this.author = new User(u).pseudo);
-      },
-        () => console.log('fail: author'))
-      //.then(() => { this.tags = this.post.tags })
+        userService.getById(this.post.authorId).subscribe(
+          u => this.author = new User(u).pseudo);
+      })
       .then(() => {
         postService.getAllAnswers().subscribe(a => {
           this.answers = a;
@@ -60,7 +74,7 @@ export class PostDetailComponent {
             userService.getById(element.authorId).subscribe(u => element.author = new User(u).pseudo)
           });
         });
-      }, () => console.log('fail: answers'));
+      })
 
     this.ctlReply = this.fb.control('',
       [
@@ -73,7 +87,6 @@ export class PostDetailComponent {
     });
   }
 
-
   getQuestion() {
     let timeout: NodeJS.Timeout;
     clearTimeout(timeout);
@@ -81,17 +94,67 @@ export class PostDetailComponent {
       timeout = setTimeout(() => {
         this.post = this.postService.post;
         if (this.post != null)
-          resolve('ok');
+          resolve();
         else
           reject(this.router.navigate(['/']));
       }, 300);
     })
   }
 
-  edit(post: Post) {
+  voteUp() {
+    if (!this.alreadyVotedUp) {
+      this.vote();
+      this.counterService.increment();
+      this.alreadyVotedUp = true;
+      this.alreadyVotedDown = false;
+      this.undoableVote = true;
+    }
+  }
 
-    console.log('XXXXXXXXXXXXXXXXXX: ' + post.id.toString());
-    //post : this.post;
+  voteDown() {
+    if (!this.alreadyVotedDown) {
+      this.vote();
+      this.counterService.decrement();
+      this.alreadyVotedUp = false;
+      this.alreadyVotedDown = true;
+      this.undoableVote = true;
+    }
+  }
+
+  voteUndo() {
+    if (this.undoableVote) {
+      this.counterService.reset();
+      this.alreadyVotedDown = false;
+      this.alreadyVotedUp = false;
+      this.undoableVote = false;
+    }
+  }
+
+  ngOnDestroy() {
+    new Promise(() => {
+      this.vote();
+      this.counterService.reset();
+    })
+      .then(() => this.subscription.unsubscribe())
+      .catch(err => console.log(err))
+  }
+
+  private vote() {
+    if (this.post !== null) {
+      if (this.alreadyVotedDown || this.alreadyVotedUp) {
+        this.post.votes.splice(this.post.votes.length - 1, 1); // if alreadyVoted, del last vote
+      }
+      let newVote = new Vote({});
+      newVote.authorId = this.currUser.id;
+      newVote.postId = this.post.id;
+      newVote.upDown = this.score - this.currScore;
+
+      this.post.votes.push(newVote);
+      this.postService.update(this.post);
+    }
+  }
+
+  edit(post: Post) {
     const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: false } });
     dlg.beforeClose().subscribe(res => {
       if (res) {

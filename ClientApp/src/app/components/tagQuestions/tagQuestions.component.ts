@@ -31,8 +31,8 @@ export class TagQuestionsComponent implements AfterViewInit {
     selectedTag: Tag = new Tag({});
 
     constructor(
-        public dialogRef: MatDialogRef<TagQuestionsComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: { tag: Tag; },
+        // public dialogRef: MatDialogRef<TagQuestionsComponent>,
+        // @Inject(MAT_DIALOG_DATA) public data: { tag: Tag; },
         private postService: PostService,
         private tagService: TagService,
         private stateService: StateService,
@@ -43,10 +43,19 @@ export class TagQuestionsComponent implements AfterViewInit {
     ) {
         this.state = this.stateService.tagQuestionsState;
         this.currUser = authenticationService.currentUser;
-        this.selectedTag = data.tag;
+        this.selectedTag = tagService.tag;
     }
 
     ngAfterViewInit(): void {
+        this.tagService.getPostsByTagId(this.selectedTag).subscribe(p => {
+            this.dataSource.data = p;
+            p.forEach(post => {
+                console.log("posts: " + post.id)
+            })
+            this.state.restoreState(this.dataSource);
+            this.filter = this.state.filter;
+        });
+
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.dataSource.filterPredicate = (data: Post, filter: string) => {
@@ -61,6 +70,9 @@ export class TagQuestionsComponent implements AfterViewInit {
     refresh() {
         this.tagService.getPostsByTagId(this.selectedTag).subscribe(p => {
             this.dataSource.data = p;
+            p.forEach(post => {
+                console.log("posts: " + post.id)
+            })
             this.state.restoreState(this.dataSource);
             this.filter = this.state.filter;
         });
@@ -82,11 +94,11 @@ export class TagQuestionsComponent implements AfterViewInit {
             this.dataSource.paginator.firstPage();
     }
     
-    onNoClick(): void {
-        this.dialogRef.close();
-    }
+    // onNoClick(): void {
+    //     this.dialogRef.close();
+    // }
 
-    cancel() {
-        this.dialogRef.close();
-    }
+    // cancel() {
+    //     this.dialogRef.close();
+    // }
 }
