@@ -21,6 +21,11 @@ export class Post {
     comments: Comment[];
     author: string = 'UNKNOWN';
     score: number = 0;
+    currScore: number = 0;
+
+    alreadyVotedUp: boolean = false;
+    alreadyVotedDown: boolean = false;
+    undoableVote: boolean = false;
 
     constructor(data: any) {
         if (data) {
@@ -35,11 +40,11 @@ export class Post {
             this.tags = data.tags;
             this.postTags = data.postTags;
             this.comments = data.comments;
-            this.score = this.getScore();
             this.answers = data.answers;
+            this.score = this.getScore();
+            this.currScore = this.score;
         }
     }
-
 
     getScore(): number {
         let res: number = 0;

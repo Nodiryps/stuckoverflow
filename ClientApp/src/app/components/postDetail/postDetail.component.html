@@ -1,18 +1,18 @@
 <div class="title">
     <div class="reputation">
-        <p class="score"><b>{{currScore}}</b></p>
+        <p class="score"><b>{{post.score}}</b></p>
 
         <div class="vote">
-            <button mat-icon-button tabindex="-1" [disabled]="alreadyVotedUp">
-                <mat-icon  (click)="voteUp()">keyboard_arrow_up</mat-icon>
+            <button mat-icon-button tabindex="-1" [disabled]="post.alreadyVotedUp">
+                <mat-icon (click)="voteUp(post)">keyboard_arrow_up</mat-icon>
             </button>
 
-            <button mat-icon-button tabindex="-1" [disabled]="!undoableVote">
-                <mat-icon style="margin: auto; font-size: 20px;" (click)="voteUndo()">undo</mat-icon>
+            <button mat-icon-button tabindex="-1" [disabled]="!post.undoableVote">
+                <mat-icon style="margin: auto; font-size: 20px;" (click)="voteUndo(post)">undo</mat-icon>
             </button>
 
-            <button mat-icon-button tabindex="-1" [disabled]="alreadyVotedDown">
-                <mat-icon (click)="voteDown()">keyboard_arrow_down</mat-icon>
+            <button mat-icon-button tabindex="-1" [disabled]="post.alreadyVotedDown">
+                <mat-icon (click)="voteDown(post)">keyboard_arrow_down</mat-icon>
             </button>
         </div>
     </div>
@@ -44,6 +44,23 @@
 
 <div class="answers">
     <ul *ngFor="let answer of answers">
+
+        <p class="score"><b>{{answer.score}}</b></p>
+
+        <div class="vote">
+            <button mat-icon-button tabindex="-1" [disabled]="answer.alreadyVotedUp">
+                <mat-icon (click)="voteUp(answer)">keyboard_arrow_up</mat-icon>
+            </button>
+
+            <button mat-icon-button tabindex="-1" [disabled]="!answer.undoableVote">
+                <mat-icon style="margin: auto; font-size: 20px;" (click)="voteUndo(answer)">undo</mat-icon>
+            </button>
+
+            <button mat-icon-button tabindex="-1" [disabled]="answer.alreadyVotedDown">
+                <mat-icon (click)="voteDown(answer)">keyboard_arrow_down</mat-icon>
+            </button>
+        </div>
+
         <div class="answer">
             <li markdown>{{answer.body}}</li>
             <p style="text-align: right;"> by: <b>{{answer.author}}</b> </p>

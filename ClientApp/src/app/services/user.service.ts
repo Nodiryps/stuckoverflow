@@ -42,7 +42,7 @@ export class UserService {
     return this.http.put<User>(`${this.baseUrl}api/users/${u.pseudo}`, u).pipe(
       map(res => true),
       catchError(err => {
-        console.error(err + ' update');
+        console.error(err);
         return of(false);
       })
     );
@@ -52,7 +52,7 @@ export class UserService {
     return this.http.delete<boolean>(`${this.baseUrl}api/users/${u.pseudo}`).pipe(
       map(res => true),
       catchError(err => {
-        console.error(err + ' delete');
+        console.error(err);
         return of(false);
       })
     );

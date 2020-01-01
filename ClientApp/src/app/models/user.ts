@@ -1,3 +1,7 @@
+import { Post } from "./post";
+import { Comment } from "./comment";
+import { Vote } from "./vote";
+
 export enum Role { Member = 0, Manager = 1, Admin = 2 }
 
 export class User {
@@ -10,7 +14,13 @@ export class User {
     birthDate: string;
     reputation: number;
     role: Role;
+    // posts: Post[];
+    // comments: Comment[];
+    // votes: Vote[];
+
     token: string;
+
+
 
     constructor(data: any) {
         if(data) { 
@@ -25,6 +35,9 @@ export class User {
                 data.birthDate.substring(0, 10) : data.birthDate;
             this.reputation = data.reputation;
             this.role = data.role || Role.Member;
+            // this.posts = data.posts;
+            // this.comments = data.comments;
+            // this.votes = data.votes;
             this.token = data.token;
         }
     }

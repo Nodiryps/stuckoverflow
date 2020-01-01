@@ -24,22 +24,16 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./postDetail.component.css']
 })
 
-export class PostDetailComponent implements OnDestroy {
+export class PostDetailComponent { // implements OnDestroy {
   frm: FormGroup;
   ctlReply: FormControl;
   post: Post;
-  score: number;
-  currScore: number;
   scoreHistory: string[] = [];
   author: string;
   answers: Post[] = [];
   dataSource: MatTableDataSource<Post> = new MatTableDataSource();
   state: MatTableState;
   currUser: User;
-  alreadyVotedUp: boolean = false;
-  alreadyVotedDown: boolean = false;
-  undoableVote: boolean = false;
-  subscription: Subscription;
 
   constructor(
     private counterService: CounterService,
@@ -51,15 +45,15 @@ export class PostDetailComponent implements OnDestroy {
     private fb: FormBuilder,
     private authenticationService: AuthenticationService
   ) {
-    this.currUser = authenticationService.currentUser;
+    if(authenticationService.currentUser !== null)
+      this.currUser = authenticationService.currentUser;
     this.post = new Post({});
     this.getQuestion()
       .then(() => {
-        
-        this.subscription = counterService.counter$.subscribe(c => {
-          this.currScore = c;
-          this.score = postService.score;
-          counterService.score = this.score;
+        counterService.counter$.subscribe(c => {
+          this.post.score = c;
+          // this.score = postService.score;
+          counterService.score = this.post.score;
         })
       })
       .then(() => {
@@ -101,56 +95,85 @@ export class PostDetailComponent implements OnDestroy {
     })
   }
 
-  voteUp() {
-    if (!this.alreadyVotedUp) {
-      this.vote();
+  // CurrUserLastVote(post: Post) {
+  //   if (this.currUserAlreadyVoted(post) !== undefined) {
+  //     const vote = this.currUserAlreadyVoted(post);
+  //     if (vote.upDown === 1)
+  //       post.alreadyVotedUp = true; // so cannot revote up
+  //     else if (vote.upDown === -1)
+  //       post.alreadyVotedDown = true;
+  //   }
+  // }
+
+  // currUserAlreadyVoted(post: Post) {
+  //   if(this.currUser !== null)
+  //     return this.currUser.votes.find(v => v.postId === post.id);
+  // }
+
+  voteUp(post: Post) {
+    // this.CurrUserLastVote(post);
+    if (!post.alreadyVotedUp) {
+      this.vote(post, 1);
       this.counterService.increment();
-      this.alreadyVotedUp = true;
-      this.alreadyVotedDown = false;
-      this.undoableVote = true;
+      post.alreadyVotedUp = true;
+      post.alreadyVotedDown = false;
+      post.undoableVote = true;
     }
   }
 
-  voteDown() {
-    if (!this.alreadyVotedDown) {
-      this.vote();
+  voteDown(post: Post) {
+    // this.CurrUserLastVote(post);
+    if (!post.alreadyVotedDown) {
+      this.vote(post, -1);
       this.counterService.decrement();
-      this.alreadyVotedUp = false;
-      this.alreadyVotedDown = true;
-      this.undoableVote = true;
+      post.alreadyVotedUp = false;
+      post.alreadyVotedDown = true;
+      post.undoableVote = true;
     }
   }
 
-  voteUndo() {
-    if (this.undoableVote) {
+  voteUndo(post: Post) {
+    // this.CurrUserLastVote(post);
+    if (post.undoableVote) {
+      this.undoVote(post);
       this.counterService.reset();
-      this.alreadyVotedDown = false;
-      this.alreadyVotedUp = false;
-      this.undoableVote = false;
+      post.currScore = post.score;
+      post.alreadyVotedDown = false;
+      post.alreadyVotedUp = false;
+      post.undoableVote = false;
     }
   }
 
-  ngOnDestroy() {
-    new Promise(() => {
-      this.vote();
-      this.counterService.reset();
-    })
-      .then(() => this.subscription.unsubscribe())
-      .catch(err => console.log(err))
-  }
-
-  private vote() {
-    if (this.post !== null) {
-      if (this.alreadyVotedDown || this.alreadyVotedUp) {
-        this.post.votes.splice(this.post.votes.length - 1, 1); // if alreadyVoted, del last vote
+  private undoVote(post: Post) {
+    post.votes.splice(post.votes.length - 1, 1); // del last vote
+    this.postService.update(post).subscribe(res => {
+      if (!res) {
+        this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+        this.refreshPost();
       }
-      let newVote = new Vote({});
-      newVote.authorId = this.currUser.id;
-      newVote.postId = this.post.id;
-      newVote.upDown = this.score - this.currScore;
+    });
+  }
 
-      this.post.votes.push(newVote);
-      this.postService.update(this.post);
+  private vote(post: Post, vote: number) {
+    if (post !== null) {
+
+      if (Math.abs(vote) !== 1) {
+        this.snackBar.open(`vote !== 1 OR -1`, 'Dismiss', { duration: 10000 });
+        this.refreshPost();
+      }
+
+      let newVote = new Vote({});
+      newVote.authorId = this.authenticationService.currentUser.id;
+      newVote.postId = post.id;
+      newVote.upDown = vote;
+
+      post.votes.push(newVote);
+      this.postService.update(post).subscribe(res => {
+        if (!res) {
+          this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+          this.refreshPost();
+        }
+      });
     }
   }
 
@@ -220,4 +243,13 @@ export class PostDetailComponent implements OnDestroy {
       this.state.restoreState(this.dataSource);
     });
   }
+
+  // ngOnDestroy() {
+  //   new Promise(() => {
+  //     this.vote();
+  //     this.counterService.reset();
+  //   })
+  //     .then(() => this.subscription.unsubscribe())
+  //     .catch(err => console.log(err))
+  // }
 }

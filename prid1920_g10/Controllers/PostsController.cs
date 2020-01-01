@@ -137,18 +137,17 @@ namespace prid1920_g10.Controllers {
             if (post == null)
                 return NotFound();
 
-            post.Id = dto.Id;
             post.Title = dto.Title;
             post.Body = dto.Body;
-            post.ParentId = dto.ParentId;
-            post.AuthorId = dto.AuthorId;
             post.AcceptedAnswerId = dto.AcceptedAnswerId;
-            // post.Timestamp = dto.Timestamp;
+            // post.Timestamp = DateTime.Now;
             
-            await _context.SaveChangesAsyncWithValidation();
 
             if(dto.Votes != null) {
                 foreach (var v in dto.Votes) {
+                    if(VoteAlreadyExists(v.AuthorId)) {
+                        await this.DeleteVote(this.GetVoteFromVoteDTO(v));
+                    }
                     var newVote = new Vote();
                     newVote.PostId = post.Id;
                     newVote.AuthorId = v.AuthorId;
@@ -156,12 +155,28 @@ namespace prid1920_g10.Controllers {
                     post.Votes.Add(newVote);
                 }
             }
-
             var res = await _context.SaveChangesAsyncWithValidation();
-
             if (!res.IsEmpty)
                 return BadRequest(res);
+            return NoContent();
+        }
 
+        private Vote GetVoteFromVoteDTO(VoteDTO dto) {
+            return (from v in _context.Votes
+                    where v.AuthorId == dto.AuthorId
+                        && v.PostId == dto.PostId
+                    select v).FirstOrDefault();
+        }
+
+        private bool VoteAlreadyExists(int authId) {
+            return (from v in _context.Votes
+                    where v.AuthorId == authId
+                    select v).FirstOrDefault() != null;
+        }
+
+        private async Task<IActionResult> DeleteVote(Vote v) {
+            _context.Votes.Remove(v);
+            await _context.SaveChangesAsync();
             return NoContent();
         }
 
