@@ -318,7 +318,7 @@ namespace prid1920_g10.Controllers {
                         }
                     ),
                     IssuedAt = DateTime.UtcNow,
-                    Expires = DateTime.UtcNow.AddMinutes(10),
+                    Expires = DateTime.UtcNow.AddMinutes(10000),
                     SigningCredentials = new SigningCredentials
                         (
                             new SymmetricSecurityKey(key),

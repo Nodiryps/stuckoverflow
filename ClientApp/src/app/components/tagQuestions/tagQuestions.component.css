@@ -1,0 +1,37 @@
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+th.mat-column-actions {
+    width: 110px;
+}
+
+table {
+    width: 100%;
+}
+
+th.mat-column-date {
+    width: 110px;
+}
+th.mat-column-title {
+    width: 250px;
+}
+th.mat-column-body {
+    width: 250px;
+}
+th.mat-column-action {
+    width: 200px;
+}
+td {
+    padding: 100px;
+}
+
+.toggleBtn {
+    float: right;
+}
+
+.btnAskQuestion {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

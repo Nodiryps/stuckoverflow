@@ -70,10 +70,10 @@ namespace prid1920_g10.Controllers {
         }
 
         [AllowAnonymous]
-        [HttpGet("posts/{id}")]
+        [HttpGet("tags/posts/{id}")]
         public async Task<ActionResult<IEnumerable<PostDTO>>> GetPostsByTagId(int id) {
             var posts = GetPosts(id);
-            if(posts == null)
+            if (posts == null)
                 return NotFound();
             Console.WriteLine("POOOSTS: " + posts);
             return (await posts.ToListAsync()).ToDTO();

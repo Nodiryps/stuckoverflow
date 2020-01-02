@@ -93,7 +93,7 @@ export class TagQuestionsComponent implements AfterViewInit {
         if (this.dataSource.paginator)
             this.dataSource.paginator.firstPage();
     }
-    
+
     // onNoClick(): void {
     //     this.dialogRef.close();
     // }

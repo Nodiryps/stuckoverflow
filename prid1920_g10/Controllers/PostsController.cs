@@ -68,6 +68,31 @@ namespace prid1920_g10.Controllers {
             return post.ToDTO();
         }
 
+        [AllowAnonymous]
+        [HttpGet("tags/{id}")]
+        public async Task<ActionResult<IEnumerable<PostDTO>>> GetPostsByTagId(int id) {
+            var posts = GetPosts(id);
+            if (posts == null)
+                return NotFound();
+            Console.WriteLine("POOOSTS: " + posts);
+            return (await posts.ToListAsync()).ToDTO();
+        }
+
+        private IQueryable<Post> GetPosts(int tagid) {
+            var postIds = GetPostIdsFromPostTags(tagid);
+
+            return (from post in _context.Posts
+                    join id in postIds on post.Id equals id
+                    where id == post.Id
+                    select post);
+        }
+
+        private IQueryable<int> GetPostIdsFromPostTags(int tagid) {
+            return (from pt in _context.PostTags
+                    where pt.TagId == tagid
+                    select pt.PostId);
+        }
+
         [AllowAnonymous] //[Authorized(Role.Admin, Role.Member)]
         [HttpPost]
         public async Task<ActionResult<PostDTO>> PostPost(PostDTO data) {
@@ -141,11 +166,11 @@ namespace prid1920_g10.Controllers {
             post.Body = dto.Body;
             post.AcceptedAnswerId = dto.AcceptedAnswerId;
             // post.Timestamp = DateTime.Now;
-            
 
-            if(dto.Votes != null) {
+
+            if (dto.Votes != null) {
                 foreach (var v in dto.Votes) {
-                    if(VoteAlreadyExists(v.AuthorId)) {
+                    if (VoteAlreadyExists(v.AuthorId)) {
                         await this.DeleteVote(this.GetVoteFromVoteDTO(v));
                     }
                     var newVote = new Vote();

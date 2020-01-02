@@ -27,7 +27,7 @@ export class TagService {
     }
 
     getPostsByTagId(tag: Tag) {
-        return this.http.get<Post[]>(`${this.baseUrl}api/posts/${tag.id}`).pipe(
+        return this.http.get<Post[]>(`${this.baseUrl}api/posts/tags/${tag.id}`).pipe(
             map(res => res.map(p => new Post(p)))
         );
     }
