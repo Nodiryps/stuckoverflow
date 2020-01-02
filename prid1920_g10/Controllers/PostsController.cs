@@ -170,7 +170,7 @@ namespace prid1920_g10.Controllers {
 
             if (dto.Votes != null) {
                 foreach (var v in dto.Votes) {
-                    if (VoteAlreadyExists(v.AuthorId)) {
+                    if (VoteAlreadyExists(v.AuthorId, v.PostId)) {
                         await this.DeleteVote(this.GetVoteFromVoteDTO(v));
                     }
                     var newVote = new Vote();
@@ -193,9 +193,10 @@ namespace prid1920_g10.Controllers {
                     select v).FirstOrDefault();
         }
 
-        private bool VoteAlreadyExists(int authId) {
+        private bool VoteAlreadyExists(int authId, int postId) {
             return (from v in _context.Votes
                     where v.AuthorId == authId
+                    && v.PostId == postId
                     select v).FirstOrDefault() != null;
         }
 

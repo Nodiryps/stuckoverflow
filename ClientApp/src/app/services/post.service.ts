@@ -16,7 +16,7 @@ export class PostService {
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
   getById(id: number) {
-    return this.http.get<Post>(`${this.baseUrl}api/posts/id/${id}`).pipe(
+    return this.http.get<Post>(`${this.baseUrl}api/posts/${id}`).pipe(
       map(u => !u ? null : new Post(u)),
       catchError(err => of(null))
     );
@@ -78,7 +78,7 @@ export class PostService {
     return this.http.put<Post>(`${this.baseUrl}api/posts/${u.id}`, u).pipe(
       map(res => true),
       catchError(err => {
-         console.error(err);
+        console.error(err);
         return of(false);
       })
     );

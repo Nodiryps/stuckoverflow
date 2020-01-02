@@ -28,6 +28,7 @@ export class PostDetailComponent { // implements OnDestroy {
   frm: FormGroup;
   ctlReply: FormControl;
   post: Post;
+  acceptedAnswer: Post;
   scoreHistory: string[] = [];
   author: string;
   answers: Post[] = [];
@@ -45,9 +46,10 @@ export class PostDetailComponent { // implements OnDestroy {
     private fb: FormBuilder,
     private authenticationService: AuthenticationService
   ) {
-    if(authenticationService.currentUser !== null)
+    if (authenticationService.currentUser !== null)
       this.currUser = authenticationService.currentUser;
     this.post = new Post({});
+    this.acceptedAnswer = new Post({});
     this.getQuestion()
       .then(() => {
         counterService.counter$.subscribe(c => {
@@ -67,9 +69,16 @@ export class PostDetailComponent { // implements OnDestroy {
             postService.getAllComments(element.id).subscribe(c => element.comments = c);
             userService.getById(element.authorId).subscribe(u => element.author = new User(u).pseudo)
           });
+          this.answers = _.orderBy(this.answers, (p => p.score), "desc");
         });
       })
-
+      .then(() => {
+        if (this.post.acceptedAnswerId != null) {
+          postService.getById(this.post.acceptedAnswerId).subscribe(a => {
+            this.acceptedAnswer = a;
+          });
+        }
+      })
     this.ctlReply = this.fb.control('',
       [
         Validators.required,
@@ -219,12 +228,29 @@ export class PostDetailComponent { // implements OnDestroy {
     });
   }
 
+  accept(p: Post) {
+    this.post.acceptedAnswerId = p.id;
+    this.acceptedAnswer = p;
+    this.postService.update(this.post).subscribe(res => {
+      if (!res) {
+        this.snackBar.open(`Theres was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+      }
+    });
+    this.refreshPost();
+  }
+
   showDetail(post: Post) {
     this.postService.setPostDetail(post);
     this.router.navigate([`/postdetail`]);
   }
 
   refreshPost() {
+    if (this.post.acceptedAnswerId != null) {
+      this.postService.getById(this.post.acceptedAnswerId).subscribe(a => {
+        this.acceptedAnswer = a;
+      });
+    }
+
     this.postService.getAllAnswers().subscribe(a => {
       this.answers = a;
       this.answers.forEach(element => {
@@ -233,6 +259,7 @@ export class PostDetailComponent { // implements OnDestroy {
       });
     });
     this.ctlReply.setValue('');
+    this.answers = _.orderBy(this.answers, (p => p.score), "desc");
   }
 
   refresh() {

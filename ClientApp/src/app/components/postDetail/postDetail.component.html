@@ -42,6 +42,11 @@
     <p *ngIf="comments?.length == 0">No comments...</p>
 </div>
 
+<!-- <div class="accept">
+    <p style="text-align: right;"> Accepted answer : <b>{{acceptedAnswer.body}}</b> </p>
+    <p style="text-align: right;"> Accepted answer authorID : <b>{{acceptedAnswer.authorId}}</b> </p>
+</div> -->
+
 <div class="answers">
     <ul *ngFor="let answer of answers">
 
@@ -72,6 +77,10 @@
 
         <button mat-icon-button tabindex="-1">
             <mat-icon (click)="delete(answer)">delete</mat-icon>
+        </button>
+
+        <button mat-icon-button tabindex="-1">
+            <mat-icon (click)="accept(answer)">check</mat-icon>
         </button>
 
         <ul class="cmts">
