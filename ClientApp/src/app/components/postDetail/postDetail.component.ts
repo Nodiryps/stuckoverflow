@@ -65,20 +65,28 @@ export class PostDetailComponent { // implements OnDestroy {
       .then(() => {
         postService.getAllAnswers().subscribe(a => {
           this.answers = a;
+          let acceptedAnswer = null;
+          
           this.answers.forEach(element => {
+            if(this.post.acceptedAnswerId === element.id)
+              acceptedAnswer = element;
+
             postService.getAllComments(element.id).subscribe(c => element.comments = c);
             userService.getById(element.authorId).subscribe(u => element.author = new User(u).pseudo)
           });
           this.answers = _.orderBy(this.answers, (p => p.score), "desc");
+                    
+          if(acceptedAnswer != null)
+            this.answers.unshift(acceptedAnswer);
         });
       })
-      .then(() => {
-        if (this.post.acceptedAnswerId != null) {
-          postService.getById(this.post.acceptedAnswerId).subscribe(a => {
-            this.acceptedAnswer = a;
-          });
-        }
-      })
+      // .then(() => {
+      //   if (this.post.acceptedAnswerId != null) {
+      //     postService.getById(this.post.acceptedAnswerId).subscribe(a => {
+      //       this.acceptedAnswer = a;
+      //     });
+      //   }
+      // })
     this.ctlReply = this.fb.control('',
       [
         Validators.required,

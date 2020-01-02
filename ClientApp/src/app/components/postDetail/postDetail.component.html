@@ -49,7 +49,7 @@
 
 <div class="answers">
     <ul *ngFor="let answer of answers">
-
+     
         <p class="score"><b>{{answer.score}}</b></p>
 
         <div class="vote">
@@ -67,6 +67,11 @@
         </div>
 
         <div class="answer">
+            <mat-icon style="font-size: 60px; margin: auto;"
+                color="warn" *ngIf="post.acceptedAnswerId == answer.id">
+                check
+            </mat-icon>
+ 
             <li markdown>{{answer.body}}</li>
             <p style="text-align: right;"> by: <b>{{answer.author}}</b> </p>
         </div>
