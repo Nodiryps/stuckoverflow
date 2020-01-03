@@ -63,30 +63,15 @@ export class PostDetailComponent { // implements OnDestroy {
           u => this.author = new User(u).pseudo);
       })
       .then(() => {
-        postService.getAllAnswers().subscribe(a => {
-          this.answers = a;
-          let acceptedAnswer = null;
-          
-          this.answers.forEach(element => {
-            if(this.post.acceptedAnswerId === element.id)
-              acceptedAnswer = element;
-
-            postService.getAllComments(element.id).subscribe(c => element.comments = c);
-            userService.getById(element.authorId).subscribe(u => element.author = new User(u).pseudo)
-          });
-          this.answers = _.orderBy(this.answers, (p => p.score), "desc");
-                    
-          if(acceptedAnswer != null)
-            this.answers.unshift(acceptedAnswer);
-        });
+        this.refreshPost();
       })
-      // .then(() => {
-      //   if (this.post.acceptedAnswerId != null) {
-      //     postService.getById(this.post.acceptedAnswerId).subscribe(a => {
-      //       this.acceptedAnswer = a;
-      //     });
-      //   }
-      // })
+    // .then(() => {
+    //   if (this.post.acceptedAnswerId != null) {
+    //     postService.getById(this.post.acceptedAnswerId).subscribe(a => {
+    //       this.acceptedAnswer = a;
+    //     });
+    //   }
+    // })
     this.ctlReply = this.fb.control('',
       [
         Validators.required,
@@ -236,12 +221,17 @@ export class PostDetailComponent { // implements OnDestroy {
     });
   }
 
-  accept(p: Post) {
-    this.post.acceptedAnswerId = p.id;
-    this.acceptedAnswer = p;
+  accept(answer: Post) {
+    const acceptedAnswer = this.answers.find(a => this.post.acceptedAnswerId === a.id);
+    if (acceptedAnswer != undefined) {
+      this.post.acceptedAnswerId = null;
+    }
+    this.post.acceptedAnswerId = answer.id;
+    // this.acceptedAnswer = answer;
     this.postService.update(this.post).subscribe(res => {
       if (!res) {
-        this.snackBar.open(`Theres was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+        this.snackBar.open(`Theres was an error at the server. 
+          The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
       }
     });
     this.refreshPost();
@@ -253,21 +243,37 @@ export class PostDetailComponent { // implements OnDestroy {
   }
 
   refreshPost() {
-    if (this.post.acceptedAnswerId != null) {
-      this.postService.getById(this.post.acceptedAnswerId).subscribe(a => {
-        this.acceptedAnswer = a;
-      });
-    }
-
     this.postService.getAllAnswers().subscribe(a => {
       this.answers = a;
+      let acceptedAnswer = null;
+
       this.answers.forEach(element => {
+        if (this.post.acceptedAnswerId === element.id)
+          acceptedAnswer = element;
         this.postService.getAllComments(element.id).subscribe(c => element.comments = c);
         this.userService.getById(element.authorId).subscribe(u => element.author = new User(u).pseudo)
       });
+      this.answers = _.orderBy(this.answers, (p => p.score), "desc");
+      this.answers = _.filter(this.answers, a => this.post.acceptedAnswerId !== a.id); // to avoid duplicating accepted answers
+
+      if (acceptedAnswer != undefined)
+        this.answers.unshift(acceptedAnswer);
     });
-    this.ctlReply.setValue('');
-    this.answers = _.orderBy(this.answers, (p => p.score), "desc");
+    // if (this.post.acceptedAnswerId != null) {
+    //   this.postService.getById(this.post.acceptedAnswerId).subscribe(a => {
+    //     this.acceptedAnswer = a;
+    //   });
+    // }
+
+    // this.postService.getAllAnswers().subscribe(a => {
+    //   this.answers = a;
+    //   this.answers.forEach(element => {
+    //     this.postService.getAllComments(element.id).subscribe(c => element.comments = c);
+    //     this.userService.getById(element.authorId).subscribe(u => element.author = new User(u).pseudo)
+    //   });
+    // });
+    // this.ctlReply.setValue('');
+    // this.answers = _.orderBy(this.answers, (p => p.score), "desc");
   }
 
   refresh() {

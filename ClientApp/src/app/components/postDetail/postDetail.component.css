@@ -34,6 +34,11 @@ li {
 .answers {
     padding-top: 70px;
 }
+.acceptedAnswerIcon {
+    font-size: 60px; 
+    margin: auto;
+    color: green;
+}
 
 form {
     width: 100%;

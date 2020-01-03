@@ -67,8 +67,7 @@
         </div>
 
         <div class="answer">
-            <mat-icon style="font-size: 60px; margin: auto;"
-                color="warn" *ngIf="post.acceptedAnswerId == answer.id">
+            <mat-icon class="acceptedAnswerIcon" *ngIf="post.acceptedAnswerId == answer.id">
                 check
             </mat-icon>
  
@@ -77,15 +76,15 @@
         </div>
 
         <button mat-icon-button tabindex="-1">
-            <mat-icon (click)="edit(answer)">edit</mat-icon>
+            <mat-icon color="primary" (click)="edit(answer)">edit</mat-icon>
         </button>
 
         <button mat-icon-button tabindex="-1">
-            <mat-icon (click)="delete(answer)">delete</mat-icon>
+            <mat-icon color="primary" (click)="delete(answer)">delete</mat-icon>
         </button>
 
         <button mat-icon-button tabindex="-1">
-            <mat-icon (click)="accept(answer)">check</mat-icon>
+            <mat-icon color="primary" (click)="accept(answer)">check</mat-icon>
         </button>
 
         <ul class="cmts">
