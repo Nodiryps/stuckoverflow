@@ -170,7 +170,8 @@ namespace prid1920_g10.Controllers {
 
             if (dto.Votes != null) {
                 foreach (var v in dto.Votes) {
-                    if (VoteAlreadyExists(v.AuthorId, v.PostId)) {
+                    if (VoteAlreadyExists(v)) {
+                        Console.WriteLine("CONSOLE: VoteAlreadyExists " + VoteAlreadyExists(v));
                         await this.DeleteVote(this.GetVoteFromVoteDTO(v));
                     }
                     var newVote = new Vote();
@@ -178,6 +179,7 @@ namespace prid1920_g10.Controllers {
                     newVote.AuthorId = v.AuthorId;
                     newVote.UpDown = v.UpDown;
                     post.Votes.Add(newVote);
+                    await _context.SaveChangesAsync();
                 }
             }
             var res = await _context.SaveChangesAsyncWithValidation();
@@ -193,14 +195,12 @@ namespace prid1920_g10.Controllers {
                     select v).FirstOrDefault();
         }
 
-        private bool VoteAlreadyExists(int authId, int postId) {
-            return (from v in _context.Votes
-                    where v.AuthorId == authId
-                    && v.PostId == postId
-                    select v).FirstOrDefault() != null;
+        private bool VoteAlreadyExists(VoteDTO v) {
+            return this.GetVoteFromVoteDTO(v) != null;
         }
 
         private async Task<IActionResult> DeleteVote(Vote v) {
+            Console.WriteLine("CONSOLE: DeleteVote");
             _context.Votes.Remove(v);
             await _context.SaveChangesAsync();
             return NoContent();

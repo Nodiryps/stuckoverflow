@@ -18,7 +18,7 @@
     </div>
 
     <h3>{{post.title}}</h3>
-    <p style="text-align: right;"> by: <b>{{author}}</b> </p>
+    <p style="text-align: right;"> by: <b>{{author !== null ? author.pseudo : 'unknown'}}</b> </p>
 </div>
 
 <button mat-icon-button tabindex="-1">
@@ -72,7 +72,7 @@
             </mat-icon>
  
             <li markdown>{{answer.body}}</li>
-            <p style="text-align: right;"> by: <b>{{answer.author}}</b> </p>
+            <p style="text-align: right;"> by: <b>{{answer.author !== null ? answer.author.pseudo : 'unknown'}}</b> </p>
         </div>
 
         <button mat-icon-button tabindex="-1">

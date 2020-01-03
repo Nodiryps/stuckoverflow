@@ -36,8 +36,10 @@ li {
 }
 .acceptedAnswerIcon {
     font-size: 60px; 
-    margin: auto;
+    margin-left: 10px;
+    margin-right: 10px;
     color: green;
+    background-color: white;
 }
 
 form {

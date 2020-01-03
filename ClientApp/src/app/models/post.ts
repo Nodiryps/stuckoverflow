@@ -1,10 +1,8 @@
 import { Tag } from "./tag";
 import { Vote } from "./vote";
 import { Comment } from "./comment";
-import { List } from "lodash";
-import { empty } from "rxjs";
-import { OverlayPositionBuilder } from "@angular/cdk/overlay";
 import { PostTag } from "./postTag";
+import { User } from "./user";
 
 export class Post {
     id: number;
@@ -19,7 +17,7 @@ export class Post {
     tags: Tag[] = [];
     postTags: PostTag[] = [];
     comments: Comment[];
-    author: string = 'UNKNOWN';
+    author: User = new User({});
     score: number = 0;
     currScore: number = 0;
 

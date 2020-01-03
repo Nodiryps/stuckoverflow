@@ -28,13 +28,15 @@ export class PostDetailComponent { // implements OnDestroy {
   frm: FormGroup;
   ctlReply: FormControl;
   post: Post;
-  acceptedAnswer: Post;
-  scoreHistory: string[] = [];
-  author: string;
+  author: User;
   answers: Post[] = [];
   dataSource: MatTableDataSource<Post> = new MatTableDataSource();
   state: MatTableState;
   currUser: User;
+  voteHistoric = [{}];
+  reputationToVoteUp = 15;
+  reputationToVoteDown = 30;
+  reputationMin = 0;
 
   constructor(
     private counterService: CounterService,
@@ -49,7 +51,6 @@ export class PostDetailComponent { // implements OnDestroy {
     if (authenticationService.currentUser !== null)
       this.currUser = authenticationService.currentUser;
     this.post = new Post({});
-    this.acceptedAnswer = new Post({});
     this.getQuestion()
       .then(() => {
         counterService.counter$.subscribe(c => {
@@ -60,7 +61,7 @@ export class PostDetailComponent { // implements OnDestroy {
       })
       .then(() => {
         userService.getById(this.post.authorId).subscribe(
-          u => this.author = new User(u).pseudo);
+          u => this.author = new User(u));
       })
       .then(() => {
         this.refreshPost();
@@ -112,26 +113,43 @@ export class PostDetailComponent { // implements OnDestroy {
   //     return this.currUser.votes.find(v => v.postId === post.id);
   // }
 
+  isCurrUserReputationOK(repMin: number) {
+    return this.currUser.reputation >= repMin;
+  }
+
   voteUp(post: Post) {
     // this.CurrUserLastVote(post);
-    if (!post.alreadyVotedUp) {
+    if (// this.isCurrUserReputationOK(this.reputationToVoteUp) && 
+      !post.alreadyVotedUp) {
       this.vote(post, 1);
       this.counterService.increment();
+
       post.alreadyVotedUp = true;
       post.alreadyVotedDown = false;
       post.undoableVote = true;
+
+      post.author.reputation += 10;
     }
+    else if (!this.isCurrUserReputationOK(this.reputationToVoteUp))
+      this.snackBar.open(`Can't vote. Your reputation is < ` + this.reputationToVoteUp, 'Dismiss', { duration: 10000 });
   }
 
   voteDown(post: Post) {
     // this.CurrUserLastVote(post);
-    if (!post.alreadyVotedDown) {
+    if (// this.isCurrUserReputationOK(this.reputationToVoteDown) && 
+      !post.alreadyVotedDown) {
       this.vote(post, -1);
       this.counterService.decrement();
+
       post.alreadyVotedUp = false;
       post.alreadyVotedDown = true;
       post.undoableVote = true;
+
+      post.author.reputation += -2;
+      this.currUser.reputation += -1;
     }
+    else if (!this.isCurrUserReputationOK(this.reputationToVoteDown))
+      this.snackBar.open(`Can't vote. Your reputation is < ` + this.reputationToVoteDown, 'Dismiss', { duration: 10000 });
   }
 
   voteUndo(post: Post) {
@@ -140,6 +158,13 @@ export class PostDetailComponent { // implements OnDestroy {
       this.undoVote(post);
       this.counterService.reset();
       post.currScore = post.score;
+      if (post.alreadyVotedDown) {
+        post.author.reputation -= -2;
+        this.currUser.reputation -= -1;
+      }
+      else if (post.alreadyVotedUp)
+        post.author.reputation -= 10;
+
       post.alreadyVotedDown = false;
       post.alreadyVotedUp = false;
       post.undoableVote = false;
@@ -158,12 +183,6 @@ export class PostDetailComponent { // implements OnDestroy {
 
   private vote(post: Post, vote: number) {
     if (post !== null) {
-
-      if (Math.abs(vote) !== 1) {
-        this.snackBar.open(`vote !== 1 OR -1`, 'Dismiss', { duration: 10000 });
-        this.refreshPost();
-      }
-
       let newVote = new Vote({});
       newVote.authorId = this.authenticationService.currentUser.id;
       newVote.postId = post.id;
@@ -177,6 +196,32 @@ export class PostDetailComponent { // implements OnDestroy {
         }
       });
     }
+  }
+
+  isTheAuthor(post: Post) {
+    return this.currUser.id === post.authorId;
+  }
+
+  accept(answer: Post) {
+    if (this.isCurrUserReputationOK(this.reputationMin) && this.isTheAuthor(answer)) {
+      const acceptedAnswer = this.answers.find(a => this.post.acceptedAnswerId === a.id);
+      if (acceptedAnswer != undefined) {
+        this.post.acceptedAnswerId = null;
+      }
+      this.post.acceptedAnswerId = answer.id;
+      this.postService.update(this.post).subscribe(res => {
+        if (!res) {
+          this.snackBar.open(`Theres was an error at the server. 
+            The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+        }
+      });
+      this.refreshPost();
+    }
+    else if (this.isCurrUserReputationOK(this.reputationMin)) {
+      this.snackBar.open(`Can't accept. Your reputation is < ` + this.reputationMin, 'Dismiss', { duration: 10000 });
+    }
+    else
+      this.snackBar.open(`You have to be the author of the question to an answer.` + this.reputationMin, 'Dismiss', { duration: 10000 });
   }
 
   edit(post: Post) {
@@ -221,22 +266,6 @@ export class PostDetailComponent { // implements OnDestroy {
     });
   }
 
-  accept(answer: Post) {
-    const acceptedAnswer = this.answers.find(a => this.post.acceptedAnswerId === a.id);
-    if (acceptedAnswer != undefined) {
-      this.post.acceptedAnswerId = null;
-    }
-    this.post.acceptedAnswerId = answer.id;
-    // this.acceptedAnswer = answer;
-    this.postService.update(this.post).subscribe(res => {
-      if (!res) {
-        this.snackBar.open(`Theres was an error at the server. 
-          The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
-      }
-    });
-    this.refreshPost();
-  }
-
   showDetail(post: Post) {
     this.postService.setPostDetail(post);
     this.router.navigate([`/postdetail`]);
@@ -251,7 +280,7 @@ export class PostDetailComponent { // implements OnDestroy {
         if (this.post.acceptedAnswerId === element.id)
           acceptedAnswer = element;
         this.postService.getAllComments(element.id).subscribe(c => element.comments = c);
-        this.userService.getById(element.authorId).subscribe(u => element.author = new User(u).pseudo)
+        this.userService.getById(element.authorId).subscribe(u => element.author = new User(u))
       });
       this.answers = _.orderBy(this.answers, (p => p.score), "desc");
       this.answers = _.filter(this.answers, a => this.post.acceptedAnswerId !== a.id); // to avoid duplicating accepted answers
@@ -259,21 +288,6 @@ export class PostDetailComponent { // implements OnDestroy {
       if (acceptedAnswer != undefined)
         this.answers.unshift(acceptedAnswer);
     });
-    // if (this.post.acceptedAnswerId != null) {
-    //   this.postService.getById(this.post.acceptedAnswerId).subscribe(a => {
-    //     this.acceptedAnswer = a;
-    //   });
-    // }
-
-    // this.postService.getAllAnswers().subscribe(a => {
-    //   this.answers = a;
-    //   this.answers.forEach(element => {
-    //     this.postService.getAllComments(element.id).subscribe(c => element.comments = c);
-    //     this.userService.getById(element.authorId).subscribe(u => element.author = new User(u).pseudo)
-    //   });
-    // });
-    // this.ctlReply.setValue('');
-    // this.answers = _.orderBy(this.answers, (p => p.score), "desc");
   }
 
   refresh() {
@@ -284,13 +298,4 @@ export class PostDetailComponent { // implements OnDestroy {
       this.state.restoreState(this.dataSource);
     });
   }
-
-  // ngOnDestroy() {
-  //   new Promise(() => {
-  //     this.vote();
-  //     this.counterService.reset();
-  //   })
-  //     .then(() => this.subscription.unsubscribe())
-  //     .catch(err => console.log(err))
-  // }
 }
