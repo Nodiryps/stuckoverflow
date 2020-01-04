@@ -24,6 +24,7 @@ import { CreatePostComponent } from '../components/create-post/create-post.compo
 import { SharedModule } from './shared.module';
 import { EditUserComponent } from '../components/edit-user/edit-user.component';
 import { EditTagComponent } from '../components/edit-tag/edit-tag.component';
+import { EditCommentComponent } from '../components/edit-comment/edit-comment.component';
 import { EditPostComponent } from '../components/edit-post/edit-post.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SetFocusDirective } from '../directives/setfocus.directive';
@@ -47,6 +48,7 @@ import { SetFocusDirective } from '../directives/setfocus.directive';
     EditUserComponent,
     EditTagComponent,
     EditPostComponent,
+    EditCommentComponent,
     TagQuestionsComponent,
   ],
   entryComponents: [

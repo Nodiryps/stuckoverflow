@@ -5,6 +5,8 @@ import { Vote } from 'src/app/models/vote';
 import { PostService } from '../../services/post.service';
 import { UserService } from 'src/app/services/user.service';
 import { CounterService } from 'src/app/services/counter.service';
+import { Comment } from '../../models/comment';
+import { EditCommentComponent } from '../edit-comment/edit-comment.component';
 
 import { reject, resolve } from 'q';
 import * as _ from 'lodash';
@@ -90,8 +92,8 @@ export class PostDetailComponent { // implements OnDestroy {
   }
 
   voteUp(post: Post) {
-    if (this.isCurrUserReputationOK(this.reputationToVoteUp) && 
-        !post.alreadyVotedUp) {
+    if (this.isCurrUserReputationOK(this.reputationToVoteUp) &&
+      !post.alreadyVotedUp) {
       this.vote(post, 1);
       post.currScore = post.score + 1;
 
@@ -106,8 +108,8 @@ export class PostDetailComponent { // implements OnDestroy {
   }
 
   voteDown(post: Post) {
-    if (this.isCurrUserReputationOK(this.reputationToVoteDown) && 
-        !post.alreadyVotedDown) {
+    if (this.isCurrUserReputationOK(this.reputationToVoteDown) &&
+      !post.alreadyVotedDown) {
       this.vote(post, -1);
       post.currScore = post.score - 1;
 
@@ -161,8 +163,8 @@ export class PostDetailComponent { // implements OnDestroy {
   }
 
   accept(answer: Post) {
-    if (this.isCurrUserReputationOK(this.reputationMin) && 
-        this.authService.isTheAuthor(this.post)) {
+    if (this.isCurrUserReputationOK(this.reputationMin) &&
+      this.authService.isTheAuthor(this.post)) {
       const acceptedAnswer = this.answers.find(a => this.post.acceptedAnswerId === a.id);
       if (acceptedAnswer != undefined) {
         this.post.acceptedAnswerId = null;
@@ -188,22 +190,44 @@ export class PostDetailComponent { // implements OnDestroy {
       this.snackBar.open(`You have to be the author of the question to an answer.` + this.reputationMin, 'Dismiss', { duration: 10000 });
   }
 
-  edit(post: Post) {
-    if (this.authService.isTheAuthor(post)) {
-      const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: false } });
-      dlg.beforeClose().subscribe(res => {
-        if (res) {
-          _.assign(post, res);
-          this.postService.update(res).subscribe(res => {
-            if (!res) {
-              this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
-              this.refreshPost();
-            }
-          });
-        }
-      });
-    }
+  edit(post: Post, isComment: boolean, isAnswer: boolean) {
+    const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: false, isComment: isComment, isAnswer: isAnswer } });
+    dlg.beforeClose().subscribe(res => {
+      if (res) {
+        _.assign(post, res);
+        this.postService.update(res).subscribe(res => {
+          if (!res) {
+            this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+            this.refreshPost();
+          }
+        });
+      }
+    });
+    this.refreshPost();
   }
+
+  comment(post: Post) {
+
+    const newComment = new Comment({});
+    newComment.postId = post.id;
+    newComment.authorId = this.authService.currentUser.id;
+
+    console.log('ID:  ' + newComment.authorId)
+
+    const dlg = this.dialog.open(EditCommentComponent, { data: { newComment, isNew: false, isComment: true, isAnswer: false } });
+    dlg.beforeClose().subscribe(res => {
+      if (res) {
+        //_.assign(newComment, res);
+        this.postService.addComment(res).subscribe(res => {
+          if (!res) {
+            this.snackBar.open(`There was an error at the server. The POST Comment has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+            this.refreshPost();
+          }
+        });
+      }
+    });
+  }
+
 
   delete(post: Post) {
     if (this.authService.isTheAuthor(post) || this.authService.isAdmin()) {

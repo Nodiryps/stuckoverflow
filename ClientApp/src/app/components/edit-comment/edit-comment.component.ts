@@ -5,38 +5,34 @@ import { PostService } from '../../services/post.service';
 import { FormBuilder, FormGroup, Validators, FormControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 import * as _ from 'lodash';
 import { Post } from 'src/app/models/post';
+import { Comment } from 'src/app/models/comment';
 import { Router } from '@angular/router';
 import { MatTableState } from 'src/app/helpers/mattable.state';
 //import { post } from 'selenium-webdriver/http';
 
 
 @Component({
-    selector: 'app-edit-post-mat',
-    templateUrl: './edit-post.component.html',
-    styleUrls: ['./edit-post.component.css']
+    selector: 'app-edit-comment-mat',
+    templateUrl: './edit-comment.component.html',
+    styleUrls: ['./edit-comment.component.css']
 })
 
-export class EditPostComponent {
+export class EditCommentComponent {
     public frm: FormGroup;
-    public ctlId: FormControl;
-    public ctlTitle: FormControl;
+    //public ctlId: FormControl;
+
     public ctlBody: FormControl;
     public isNew: boolean;
     public isComment: boolean;
     public isAnswer: boolean;
 
     constructor(
-        public dialogRef: MatDialogRef<EditPostComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: { post: Post; isNew: boolean; isComment: boolean, isAnswer: boolean }, private fb: FormBuilder,
+        public dialogRef: MatDialogRef<EditCommentComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: { comment: Comment; isNew: boolean; isComment: boolean, isAnswer: boolean },
+        private fb: FormBuilder,
         public postService: PostService,
         public router: Router,
     ) {
-        this.ctlTitle = this.fb.control('',
-            [
-                //Validators.required, 
-            ]
-        );
-
         this.ctlBody = this.fb.control('',
             [
                 Validators.required,
@@ -44,13 +40,11 @@ export class EditPostComponent {
         );
 
         this.frm = this.fb.group({
-            id: this.ctlId,
-            title: this.ctlTitle,
+            //id: this.ctlId,
             body: this.ctlBody,
         });
         console.log(data);
-        this.isNew = data.isNew;
-        this.frm.patchValue(data.post);
+
     }
 
     onNoClick(): void {

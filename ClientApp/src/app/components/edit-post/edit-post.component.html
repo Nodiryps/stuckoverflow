@@ -1,8 +1,8 @@
 <form id="frm" [formGroup]="frm" novalidate>
     <h1>{{(!isNew ? 'Edit existing' : 'Add a new') + ' question'}}</h1>
     <div>
-        <mat-form-field>
-            <input matInput placeholder="Title" [formControl]="ctlTitle" required appSetFocus>
+        <mat-form-field *ngIf="!isComment && !isAnswer"> <input matInput placeholder="Title" [formControl]="ctlTitle"
+                required appSetFocus>
             <mat-error class="float-right" *ngIf="ctlTitle.hasError('required')">Required</mat-error>
             <mat-error class="float-right" *ngIf="ctlTitle.hasError('minlength')">Minimum length is
                 {{ctlTitle.errors['minlength'].requiredLength}}</mat-error>
@@ -22,9 +22,9 @@
             <mat-error class="float-right" *ngIf="ctlBody.hasError('minlength')">Minimum length is
                 {{ctlBody.errors['minlength'].requiredLength}}</mat-error>
         </mat-form-field>
-    <div *ngIf="frm.errors">
+        <div *ngIf="frm.errors">
+        </div>
     </div>
-</div>
     <div class="footer">
         <button type="submit" mat-button form="frm" [disabled]="frm.pristine || frm.invalid || frm.pending"
             (click)="update()">{{!isNew ? 'Update' : 'Add'}}</button>

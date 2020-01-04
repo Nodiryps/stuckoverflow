@@ -22,7 +22,7 @@
 </div>
 
 <button mat-icon-button tabindex="-1">
-    <mat-icon (click)="edit(post)">edit</mat-icon>
+    <mat-icon (click)="edit(post, false, false)">edit</mat-icon>
 </button>
 
 <div>
@@ -49,7 +49,7 @@
 
 <div class="answers">
     <ul *ngFor="let answer of answers">
-     
+
         <p class="score"><b>{{answer.currScore}}</b></p>
 
         <div class="vote">
@@ -70,13 +70,13 @@
             <mat-icon class="acceptedAnswerIcon" *ngIf="post.acceptedAnswerId == answer.id">
                 check
             </mat-icon>
- 
+
             <li markdown>{{answer.body}}</li>
             <p style="text-align: right;"> by: <b>{{answer.author !== null ? answer.author.pseudo : 'unknown'}}</b> </p>
         </div>
 
         <button mat-icon-button tabindex="-1">
-            <mat-icon color="primary" (click)="edit(answer)">edit</mat-icon>
+            <mat-icon color="primary" (click)="edit(answer,false, true)">edit</mat-icon>
         </button>
 
         <button mat-icon-button tabindex="-1">
@@ -85,6 +85,11 @@
 
         <button mat-icon-button tabindex="-1">
             <mat-icon color="primary" (click)="accept(answer)">check</mat-icon>
+        </button>
+
+        <button mat-icon-button tabindex="-1">
+            Add comment
+            <mat-icon color="primary" (click)="comment(answer)">add</mat-icon>
         </button>
 
         <ul class="cmts">
