@@ -1,8 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
 
 import { HomeComponent } from '../components/home/home.component';
-import { CounterComponent } from '../components/counter/counter.component';
-import { FetchDataComponent } from '../components/fetch-data/fetch-data.component';
 import { UserListComponent } from '../components/userList/userList.component';
 import { TagListComponent } from '../components/tagList/tagList.component';
 import { TagQuestionsComponent } from '../components/tagQuestions/tagQuestions.component';
@@ -19,8 +17,6 @@ import { Post } from '../models/post';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
-  { path: 'counter', component: CounterComponent },
-  { path: 'fetch-data', component: FetchDataComponent },
   { path: 'signup', component: SignUpComponent },
   { path: 'create-post', component: CreatePostComponent },
   { path: 'edit-post', component: EditPostComponent },

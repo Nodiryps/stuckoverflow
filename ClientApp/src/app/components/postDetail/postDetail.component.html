@@ -1,6 +1,6 @@
 <div class="title">
     <div class="reputation">
-        <p class="score"><b>{{post.score}}</b></p>
+        <p class="score"><b>{{post.currScore}}</b></p>
 
         <div class="vote">
             <button mat-icon-button tabindex="-1" [disabled]="post.alreadyVotedUp">
@@ -50,7 +50,7 @@
 <div class="answers">
     <ul *ngFor="let answer of answers">
      
-        <p class="score"><b>{{answer.score}}</b></p>
+        <p class="score"><b>{{answer.currScore}}</b></p>
 
         <div class="vote">
             <button mat-icon-button tabindex="-1" [disabled]="answer.alreadyVotedUp">

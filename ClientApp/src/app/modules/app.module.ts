@@ -12,8 +12,6 @@ import { JwtInterceptor } from '../interceptors/jwt.interceptor';
 import { NavMenuComponent } from '../components/nav-menu/nav-menu.component';
 import { HomeComponent } from '../components/home/home.component';
 import { LoginComponent } from '../components/login/login.component';
-import { CounterComponent } from '../components/counter/counter.component';
-import { FetchDataComponent } from '../components/fetch-data/fetch-data.component';
 import { UserListComponent } from '../components/userList/userList.component';
 import { TagListComponent } from '../components/tagList/tagList.component';
 import { TagQuestionsComponent } from '../components/tagQuestions/tagQuestions.component';
@@ -36,8 +34,6 @@ import { SetFocusDirective } from '../directives/setfocus.directive';
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
     LoginComponent,
     UserListComponent,
     TagListComponent,

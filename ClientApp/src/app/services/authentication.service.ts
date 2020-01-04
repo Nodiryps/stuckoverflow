@@ -1,8 +1,9 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, flatMap } from 'rxjs/operators';
-import { User } from '../models/user';
+import { User, Role } from '../models/user';
 import { Observable } from 'rxjs';
+import { Post } from '../models/post';
 
 
 @Injectable({ providedIn: 'root' })
@@ -13,6 +14,15 @@ export class AuthenticationService {
         // au départ on récupère un éventuel utilisateur stocké dans le sessionStorage
         const data = JSON.parse(sessionStorage.getItem('currentUser'));
         this.currentUser = data ? new User(data) : null;
+    }
+
+    isAdmin() {
+        return this.currentUser.role === Role.Admin;
+    }
+
+
+    isTheAuthor(post: Post) {
+        return this.currentUser.id === post.authorId;
     }
 
     login(pseudo: string, password: string) {
@@ -41,7 +51,7 @@ export class AuthenticationService {
     // }
 
     public isAvailable(pseudo: string, email: string): Observable<boolean> {
-        if(pseudo !== '')
+        if (pseudo !== '')
             return this.http.get<boolean>(`${this.baseUrl}api/users/available/${pseudo}`);
         else
             return this.http.get<boolean>(`${this.baseUrl}api/users/available/${email}`);

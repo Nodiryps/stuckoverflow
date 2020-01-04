@@ -7,12 +7,12 @@ export class CounterService {
     private counterSource = new BehaviorSubject<number>(this.score);
     public counter$ = this.counterSource.asObservable();
 
-    increment() {
-        this.counterSource.next(this.counterSource.getValue() + 1);
+    increment(score: number) {
+        this.counterSource.next(score + 1);
     }
     
-    decrement() {
-        this.counterSource.next(this.counterSource.getValue() - 1);
+    decrement(score: number) {
+        this.counterSource.next(score - 1);
     }
 
     reset() {

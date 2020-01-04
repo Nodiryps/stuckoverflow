@@ -1,5 +1,5 @@
 import { Post } from '../../models/post';
-import { User } from '../../models/user';
+import { User, Role } from '../../models/user';
 import { Tag } from '../../models/tag';
 import { Vote } from 'src/app/models/vote';
 import { PostService } from '../../services/post.service';
@@ -33,31 +33,25 @@ export class PostDetailComponent { // implements OnDestroy {
   dataSource: MatTableDataSource<Post> = new MatTableDataSource();
   state: MatTableState;
   currUser: User;
-  voteHistoric = [{}];
   reputationToVoteUp = 15;
   reputationToVoteDown = 30;
   reputationMin = 0;
 
   constructor(
-    private counterService: CounterService,
     private postService: PostService,
     private userService: UserService,
     private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private fb: FormBuilder,
-    private authenticationService: AuthenticationService
+    private authService: AuthenticationService
   ) {
-    if (authenticationService.currentUser !== null)
-      this.currUser = authenticationService.currentUser;
+    if (authService.currentUser !== null)
+      this.currUser = authService.currentUser;
     this.post = new Post({});
     this.getQuestion()
       .then(() => {
-        counterService.counter$.subscribe(c => {
-          this.post.score = c;
-          // this.score = postService.score;
-          counterService.score = this.post.score;
-        })
+        this.post.currScore = this.post.score = postService.score;
       })
       .then(() => {
         userService.getById(this.post.authorId).subscribe(
@@ -66,13 +60,6 @@ export class PostDetailComponent { // implements OnDestroy {
       .then(() => {
         this.refreshPost();
       })
-    // .then(() => {
-    //   if (this.post.acceptedAnswerId != null) {
-    //     postService.getById(this.post.acceptedAnswerId).subscribe(a => {
-    //       this.acceptedAnswer = a;
-    //     });
-    //   }
-    // })
     this.ctlReply = this.fb.control('',
       [
         Validators.required,
@@ -98,31 +85,15 @@ export class PostDetailComponent { // implements OnDestroy {
     })
   }
 
-  // CurrUserLastVote(post: Post) {
-  //   if (this.currUserAlreadyVoted(post) !== undefined) {
-  //     const vote = this.currUserAlreadyVoted(post);
-  //     if (vote.upDown === 1)
-  //       post.alreadyVotedUp = true; // so cannot revote up
-  //     else if (vote.upDown === -1)
-  //       post.alreadyVotedDown = true;
-  //   }
-  // }
-
-  // currUserAlreadyVoted(post: Post) {
-  //   if(this.currUser !== null)
-  //     return this.currUser.votes.find(v => v.postId === post.id);
-  // }
-
   isCurrUserReputationOK(repMin: number) {
     return this.currUser.reputation >= repMin;
   }
 
   voteUp(post: Post) {
-    // this.CurrUserLastVote(post);
-    if (// this.isCurrUserReputationOK(this.reputationToVoteUp) && 
-      !post.alreadyVotedUp) {
+    if (this.isCurrUserReputationOK(this.reputationToVoteUp) && 
+        !post.alreadyVotedUp) {
       this.vote(post, 1);
-      this.counterService.increment();
+      post.currScore = post.score + 1;
 
       post.alreadyVotedUp = true;
       post.alreadyVotedDown = false;
@@ -135,11 +106,10 @@ export class PostDetailComponent { // implements OnDestroy {
   }
 
   voteDown(post: Post) {
-    // this.CurrUserLastVote(post);
-    if (// this.isCurrUserReputationOK(this.reputationToVoteDown) && 
-      !post.alreadyVotedDown) {
+    if (this.isCurrUserReputationOK(this.reputationToVoteDown) && 
+        !post.alreadyVotedDown) {
       this.vote(post, -1);
-      this.counterService.decrement();
+      post.currScore = post.score - 1;
 
       post.alreadyVotedUp = false;
       post.alreadyVotedDown = true;
@@ -153,17 +123,9 @@ export class PostDetailComponent { // implements OnDestroy {
   }
 
   voteUndo(post: Post) {
-    // this.CurrUserLastVote(post);
     if (post.undoableVote) {
       this.undoVote(post);
-      this.counterService.reset();
       post.currScore = post.score;
-      if (post.alreadyVotedDown) {
-        post.author.reputation -= -2;
-        this.currUser.reputation -= -1;
-      }
-      else if (post.alreadyVotedUp)
-        post.author.reputation -= 10;
 
       post.alreadyVotedDown = false;
       post.alreadyVotedUp = false;
@@ -184,7 +146,7 @@ export class PostDetailComponent { // implements OnDestroy {
   private vote(post: Post, vote: number) {
     if (post !== null) {
       let newVote = new Vote({});
-      newVote.authorId = this.authenticationService.currentUser.id;
+      newVote.authorId = this.authService.currentUser.id;
       newVote.postId = post.id;
       newVote.upDown = vote;
 
@@ -198,23 +160,25 @@ export class PostDetailComponent { // implements OnDestroy {
     }
   }
 
-  isTheAuthor(post: Post) {
-    return this.currUser.id === post.authorId;
-  }
-
   accept(answer: Post) {
-    if (this.isCurrUserReputationOK(this.reputationMin) && this.isTheAuthor(answer)) {
+    if (this.isCurrUserReputationOK(this.reputationMin) && 
+        this.authService.isTheAuthor(this.post)) {
       const acceptedAnswer = this.answers.find(a => this.post.acceptedAnswerId === a.id);
       if (acceptedAnswer != undefined) {
         this.post.acceptedAnswerId = null;
       }
       this.post.acceptedAnswerId = answer.id;
+
+      answer.author.reputation += 15;
+      this.post.author.reputation += 2;
+
       this.postService.update(this.post).subscribe(res => {
         if (!res) {
           this.snackBar.open(`Theres was an error at the server. 
             The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
         }
       });
+
       this.refreshPost();
     }
     else if (this.isCurrUserReputationOK(this.reputationMin)) {
@@ -225,40 +189,44 @@ export class PostDetailComponent { // implements OnDestroy {
   }
 
   edit(post: Post) {
-    const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: false } });
-    dlg.beforeClose().subscribe(res => {
-      if (res) {
-        _.assign(post, res);
-        this.postService.update(res).subscribe(res => {
-          if (!res) {
-            this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
-            this.refreshPost();
-          }
-        });
-      }
-    });
+    if (this.authService.isTheAuthor(post)) {
+      const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: false } });
+      dlg.beforeClose().subscribe(res => {
+        if (res) {
+          _.assign(post, res);
+          this.postService.update(res).subscribe(res => {
+            if (!res) {
+              this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+              this.refreshPost();
+            }
+          });
+        }
+      });
+    }
   }
 
   delete(post: Post) {
-    const backup = this.dataSource.data;
-    this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
-    const snackBarRef = this.snackBar.open(`Post '${post.title}' will be deleted`, 'Undo', { duration: 10000 });
-    snackBarRef.afterDismissed().subscribe(res => {
-      if (!res.dismissedByAction) {
-        this.postService.delete(post).subscribe();
-        this.router.navigate(['/']);
-        this.refresh();
-      }
-      else
-        this.dataSource.data = backup;
-    });
+    if (this.authService.isTheAuthor(post) || this.authService.isAdmin()) {
+      const backup = this.dataSource.data;
+      this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
+      const snackBarRef = this.snackBar.open(`Post '${post.title}' will be deleted`, 'Undo', { duration: 10000 });
+      snackBarRef.afterDismissed().subscribe(res => {
+        if (!res.dismissedByAction) {
+          this.postService.delete(post).subscribe();
+          this.router.navigate(['/']);
+          this.refresh();
+        }
+        else
+          this.dataSource.data = backup;
+      });
+    }
   }
 
   reply() {
     const post = new Post({});
 
     post.body = this.ctlReply.value;
-    post.authorId = this.authenticationService.currentUser.id;
+    post.authorId = this.currUser.id;
     post.parentId = this.post.id;
 
     this.postService.add(post).subscribe(() => {
