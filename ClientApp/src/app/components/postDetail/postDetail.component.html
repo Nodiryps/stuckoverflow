@@ -94,21 +94,21 @@
 
         <ul class="cmts">
             <li *ngFor="let comment of answer.comments" markdown>{{comment.body}}</li>
+            <!-- <form class="frmCmt" [formGroup]="frmComment" novalidate>
+                <mat-form-field>
+                    <label for="simple">
+                        <h6>Comment: </h6>
+                    </label>
+                    <simplemde name="simple" matInput [formControl]="ctlComment"
+                        [options]="{ toolbar: ['bold', 'italic', 'heading', '|', 'quote'] }" required></simplemde>
+                    <input type="text" matInput [formControl]="ctlComment" hidden>
+                </mat-form-field>
+                <div>
+                    <button mat-stroked-button (click)="comment2(answer)">Comment it!</button>
+                </div>
+            </form> -->
             <p *ngIf="answer.comments?.length == 0">No comments...</p>
         </ul>
-        <!-- <form [formGroup]="frmComment" novalidate>
-            <mat-form-field>
-                <label for="simple">
-                    <h4>Comment</h4>
-                </label>
-                <simplemde name="simple" matInput [formControl]="ctlComment"
-                    [options]="{ toolbar: ['bold', 'italic', 'heading', '|', 'quote'] }" required></simplemde>
-                <input type="text" matInput [formControl]="ctlComment" hidden>
-            </mat-form-field>
-            <div>
-                <button mat-stroked-button (click)="reply()" [disabled]="frm.invalid">Create it!</button>
-            </div>
-        </form> -->
     </ul>
 </div>
 

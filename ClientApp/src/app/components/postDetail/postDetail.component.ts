@@ -29,6 +29,8 @@ import { Subscription } from 'rxjs';
 export class PostDetailComponent { // implements OnDestroy {
   frm: FormGroup;
   ctlReply: FormControl;
+  frmComment: FormGroup;
+  ctlComment: FormControl;
   post: Post;
   author: User;
   answers: Post[] = [];
@@ -62,6 +64,7 @@ export class PostDetailComponent { // implements OnDestroy {
       .then(() => {
         this.refreshPost();
       })
+
     this.ctlReply = this.fb.control('',
       [
         Validators.required,
@@ -69,6 +72,16 @@ export class PostDetailComponent { // implements OnDestroy {
     );
 
     this.frm = this.fb.group({
+      body: this.ctlReply,
+    });
+
+    this.ctlComment = this.fb.control('',
+      [
+        //Validators.required,
+      ]
+    );
+
+    this.frmComment = this.fb.group({
       body: this.ctlReply,
     });
   }
@@ -207,18 +220,15 @@ export class PostDetailComponent { // implements OnDestroy {
   }
 
   comment(post: Post) {
-
     const newComment = new Comment({});
+    newComment.authorId = this.currUser.id;
     newComment.postId = post.id;
-    newComment.authorId = this.authService.currentUser.id;
-
     console.log('ID:  ' + newComment.authorId)
-
-    const dlg = this.dialog.open(EditCommentComponent, { data: { newComment, isNew: false, isComment: true, isAnswer: false } });
+    const dlg = this.dialog.open(EditCommentComponent, { data: { newComment, isNew: true, isComment: true, isAnswer: false } });
     dlg.beforeClose().subscribe(res => {
       if (res) {
-        //_.assign(newComment, res);
-        this.postService.addComment(res).subscribe(res => {
+        _.assign(newComment, res);
+        this.postService.addComment(newComment).subscribe(res => {
           if (!res) {
             this.snackBar.open(`There was an error at the server. The POST Comment has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
             this.refreshPost();
