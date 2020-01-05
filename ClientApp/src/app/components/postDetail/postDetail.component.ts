@@ -116,6 +116,12 @@ export class PostDetailComponent { // implements OnDestroy {
       post.undoableVote = true;
 
       post.author.reputation += 10;
+      this.userService.update(post.author).subscribe(res => {
+        if (!res) {
+          this.snackBar.open(`There was an error at the server. 
+            The update (user) has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+        }
+      });
     }
     else if (!this.isCurrUserReputationOK(this.reputationToVoteUp))
       this.snackBar.open(`Can't vote. Your reputation is < ` + this.reputationToVoteUp, 'Dismiss', { duration: 10000 });
@@ -133,6 +139,18 @@ export class PostDetailComponent { // implements OnDestroy {
 
       post.author.reputation += -2;
       this.currUser.reputation += -1;
+      this.userService.update(post.author).subscribe(res => {
+        if (!res) {
+          this.snackBar.open(`There was an error at the server. 
+            The update (userAnswer) has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+        }
+      });
+      this.userService.update(this.currUser).subscribe(res => {
+        if (!res) {
+          this.snackBar.open(`There was an error at the server. 
+            The update (userQuestion) has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+        }
+      });
     }
     else if (!this.isCurrUserReputationOK(this.reputationToVoteDown))
       this.snackBar.open(`Can't vote. Your reputation is < ` + this.reputationToVoteDown, 'Dismiss', { duration: 10000 });
@@ -167,9 +185,11 @@ export class PostDetailComponent { // implements OnDestroy {
       newVote.upDown = vote;
 
       post.votes.push(newVote);
+
       this.postService.update(post).subscribe(res => {
         if (!res) {
-          this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+          this.snackBar.open(`There was an error at the server. 
+            The update (post) has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
           this.refreshPost();
         }
       });
@@ -186,22 +206,37 @@ export class PostDetailComponent { // implements OnDestroy {
       this.post.acceptedAnswerId = answer.id;
 
       answer.author.reputation += 15;
-      this.post.author.reputation += 2;
+      this.currUser.reputation += 2;
+      console.log("userQ: " + this.currUser.pseudo)
+      console.log("userA: " + answer.author.pseudo)
+
+      this.userService.update(this.currUser).subscribe(res => {
+        if (!res) {
+          this.snackBar.open(`There was an error at the server. 
+            The update (userQuestion) has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+        }
+      });
+      this.userService.update(answer.author).subscribe(res => {
+        if (!res) {
+          this.snackBar.open(`There was an error at the server. 
+            The update (userAnswer) has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+        }
+      });
 
       this.postService.update(this.post).subscribe(res => {
         if (!res) {
           this.snackBar.open(`Theres was an error at the server. 
-            The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+            The update (post) has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
         }
       });
 
       this.refreshPost();
     }
-    else if (this.isCurrUserReputationOK(this.reputationMin)) {
-      this.snackBar.open(`Can't accept. Your reputation is < ` + this.reputationMin, 'Dismiss', { duration: 10000 });
+    else if (!this.authService.isTheAuthorOfAPost(this.post)) {
+      this.snackBar.open(`You have to be the author of the question to an answer.` + this.reputationMin, 'Dismiss', { duration: 10000 });
     }
     else
-      this.snackBar.open(`You have to be the author of the question to an answer.` + this.reputationMin, 'Dismiss', { duration: 10000 });
+      this.snackBar.open(`Can't accept. Your reputation is < ` + this.reputationMin, 'Dismiss', { duration: 10000 });
   }
 
   edit(post: Post, isComment: boolean, isAnswer: boolean) {

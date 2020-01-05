@@ -48,9 +48,9 @@
 <div class="cmts">
     <ul>
         <li *ngFor="let comment of post.comments">
-            <p markdown>
-                <b>{{comment.body}}</b>
-            </p>
+            <div markdown>
+                {{comment.body}} - <b>{{comment.authorId}}</b> - {{comment.timestamp | date : 'yyyy-MM-dd'}}
+            </div>
             <div *ngIf="currUser != null">
                 <button *ngIf="currUser.id == comment.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
                     <mat-icon color="primary" (click)="editComment(comment)">edit</mat-icon>
@@ -120,9 +120,9 @@
         <div class="comments">
             <ul class="cmts">
                 <li *ngFor="let comment of answer.comments">
-                    <p markdown>
-                        <b>{{comment.body}}</b>
-                    </p>
+                    <div markdown>
+                        {{comment.body}} - <b>{{comment.authorId}}</b> - {{comment.timestamp | date : 'yyyy-MM-dd'}}
+                    </div>
                     <div *ngIf="currUser != null">
                         <button *ngIf="currUser.id == comment.authorId || currUser.role == 2" mat-icon-button
                             tabindex="-1">

@@ -96,7 +96,7 @@ namespace prid1920_g10.Controllers {
                     select u.Id).FirstOrDefault();
         }
 
-        [Authorized(Role.Admin)]
+        [Authorized(Role.Admin, Role.Member)]
         [HttpPut("{pseudo}")]
         public async Task<IActionResult> PutUser(string pseudo, UserDTO userDTO) {
             if (pseudo != userDTO.Pseudo)
@@ -114,7 +114,7 @@ namespace prid1920_g10.Controllers {
             user.FirstName = userDTO.FirstName;
             user.LastName = userDTO.LastName;
             user.BirthDate = userDTO.BirthDate;
-
+            user.Reputation = userDTO.Reputation;
             var res = await _context.SaveChangesAsyncWithValidation();
 
             if (!res.IsEmpty)
