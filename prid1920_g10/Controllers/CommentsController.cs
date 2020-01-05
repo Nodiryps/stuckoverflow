@@ -89,5 +89,27 @@ namespace prid1920_g10.Controllers {
             return (from u in _context.Comments
                     select u.Id).Max() + 1;
         }
+
+        [Authorized(Role.Admin)]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, CommentDTO dto) {
+            if (id != dto.Id)
+                return BadRequest();
+
+            var comment = await _context.Comments.FindAsync(id);
+
+            if (comment == null)
+                return NotFound();
+
+            //comment.Id = dto.Id;
+            comment.Body = dto.Body;
+
+            var res = await _context.SaveChangesAsyncWithValidation();
+
+            if (!res.IsEmpty)
+                return BadRequest(res);
+
+            return NoContent();
+        }
     }
 }

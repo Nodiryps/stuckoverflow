@@ -94,6 +94,16 @@ export class PostService {
     );
   }
 
+  public updateComment(c: Comment): Observable<boolean> {
+    return this.http.put<Comment>(`${this.baseUrl}api/comments/${c.id}`, c).pipe(
+      map(res => true),
+      catchError(err => {
+        console.error(err);
+        return of(false);
+      })
+    );
+  }
+
   public delete(p: Post): Observable<boolean> {
     return this.http.delete<boolean>(`${this.baseUrl}api/posts/${p.id}`).pipe(
       map(res => true),

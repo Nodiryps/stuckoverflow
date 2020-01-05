@@ -44,7 +44,8 @@ export class EditCommentComponent {
             body: this.ctlBody,
         });
         console.log(data);
-
+        this.isNew = data.isNew;
+        this.frm.patchValue(data.comment);
     }
 
     onNoClick(): void {

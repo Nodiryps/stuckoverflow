@@ -238,6 +238,20 @@ export class PostDetailComponent { // implements OnDestroy {
     });
   }
 
+  editComment(comment: Comment) {
+    const dlg = this.dialog.open(EditCommentComponent, { data: { comment, isNew: false, isComment: true, isAnswer: false } });
+    dlg.beforeClose().subscribe(res => {
+      if (res) {
+        _.assign(comment, res);
+        this.postService.updateComment(comment).subscribe(res => {
+          if (!res) {
+            this.snackBar.open(`There was an error at the server. The POST Comment has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+            this.refreshPost();
+          }
+        });
+      }
+    });
+  }
 
   delete(post: Post) {
     if (this.authService.isTheAuthor(post) || this.authService.isAdmin()) {
