@@ -1,5 +1,5 @@
 <form id="frm" [formGroup]="frm" novalidate>
-    <h1>{{(!isNew ? 'Edit existing' : 'Add a new') + ' post'}}</h1>
+    <h1>{{(!isNew ? 'Edit existing' : 'Add a new') + (isAnswer ? ' answer' : ' question')}}</h1>
     <div>
         <mat-form-field *ngIf="!isAnswer"> 
             <input matInput placeholder="Title" [formControl]="ctlTitle"
