@@ -53,6 +53,7 @@ export class PostDetailComponent { // implements OnDestroy {
     if (authService.currentUser !== null)
       this.currUser = authService.currentUser;
     this.post = new Post({});
+    this.author = new User({});
     this.getQuestion()
       .then(() => {
         this.post.currScore = this.post.score = postService.score;

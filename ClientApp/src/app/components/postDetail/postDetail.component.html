@@ -18,18 +18,19 @@
     </div>
 
     <h3>{{post.title}}</h3>
-    <!-- <p style="text-align: right;"> by: <b>{{author !== null ? author.pseudo : 'unknown'}}</b> </p> -->
+    <p style="text-align: right;"> by: <b>{{author !== null ? author.pseudo : 'unknown'}}</b> </p>
+    <p style="text-align: right;">{{post.timestamp | date : 'yyyy-MM-dd'}}</p>
 </div>
 
-<button mat-icon-button tabindex="-1">
-    <mat-icon color="primary" (click)="edit(post, false, false)">edit</mat-icon>
-</button>
-
-<button mat-icon-button tabindex="-1">
-    <mat-icon color="primary" (click)="delete(post)">delete</mat-icon>
-</button>
-
-<button mat-icon-button tabindex="-1">
+<div *ngIf="currUser != null">
+    <button *ngIf="currUser.id == post.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
+        <mat-icon color="primary" (click)="edit(post, false, false)">edit</mat-icon>
+    </button>
+    <button *ngIf="currUser.id == post.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
+        <mat-icon color="primary" (click)="delete(post)">delete</mat-icon>
+    </button>
+</div>
+<button *ngIf="currUser != null" mat-icon-button tabindex="-1">
     Add comment
     <mat-icon color="primary" (click)="comment(post)">add</mat-icon>
 </button>
@@ -50,12 +51,14 @@
             <p markdown>
                 <b>{{comment.body}}</b>
             </p>
-            <button mat-icon-button tabindex="-1">
-                <mat-icon color="primary" (click)="editComment(comment)">edit</mat-icon>
-            </button>
-            <button mat-icon-button tabindex="-1">
-                <mat-icon color="primary" (click)="deleteComment(comment)">delete</mat-icon>
-            </button>
+            <div *ngIf="currUser != null">
+                <button *ngIf="currUser.id == comment.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
+                    <mat-icon color="primary" (click)="editComment(comment)">edit</mat-icon>
+                </button>
+                <button *ngIf="currUser.id == comment.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
+                    <mat-icon color="primary" (click)="deleteComment(comment)">delete</mat-icon>
+                </button>
+            </div>
         </li>
         <p *ngIf="comments?.length == 0">No comments...</p>
     </ul>
@@ -94,21 +97,22 @@
 
             <li markdown>{{answer.body}}</li>
             <p style="text-align: right;"> by: <b>{{answer.author !== null ? answer.author.pseudo : 'unknown'}}</b> </p>
+            <p style="text-align: right;">{{answer.timestamp | date : 'yyyy-MM-dd'}}</p>
         </div>
 
-        <button mat-icon-button tabindex="-1">
-            <mat-icon color="primary" (click)="edit(answer,false, true)">edit</mat-icon>
-        </button>
+        <div *ngIf="currUser != null">
+            <button *ngIf="currUser.id == answer.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
+                <mat-icon color="primary" (click)="edit(answer,false, true)">edit</mat-icon>
+            </button>
+            <button *ngIf="currUser.id == answer.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
+                <mat-icon color="primary" (click)="delete(answer)">delete</mat-icon>
+            </button>
+            <button *ngIf="currUser.id == post.authorId" mat-icon-button tabindex="-1">
+                <mat-icon color="primary" (click)="accept(answer)">check</mat-icon>
+            </button>
+        </div>
 
-        <button mat-icon-button tabindex="-1">
-            <mat-icon color="primary" (click)="delete(answer)">delete</mat-icon>
-        </button>
-
-        <button mat-icon-button tabindex="-1">
-            <mat-icon color="primary" (click)="accept(answer)">check</mat-icon>
-        </button>
-
-        <button mat-icon-button tabindex="-1">
+        <button *ngIf="currUser != null" mat-icon-button tabindex="-1">
             Add comment
             <mat-icon color="primary" (click)="comment(answer)">add</mat-icon>
         </button>
@@ -119,12 +123,16 @@
                     <p markdown>
                         <b>{{comment.body}}</b>
                     </p>
-                    <button mat-icon-button tabindex="-1">
-                        <mat-icon color="primary" (click)="editComment(comment)">edit</mat-icon>
-                    </button>
-                    <button mat-icon-button tabindex="-1">
-                        <mat-icon color="primary" (click)="deleteComment(comment)">delete</mat-icon>
-                    </button>
+                    <div *ngIf="currUser != null">
+                        <button *ngIf="currUser.id == comment.authorId || currUser.role == 2" mat-icon-button
+                            tabindex="-1">
+                            <mat-icon color="primary" (click)="editComment(comment)">edit</mat-icon>
+                        </button>
+                        <button *ngIf="currUser.id == comment.authorId || currUser.role == 2" mat-icon-button
+                            tabindex="-1">
+                            <mat-icon color="primary" (click)="deleteComment(comment)">delete</mat-icon>
+                        </button>
+                    </div>
                 </li>
                 <p *ngIf="answer.comments?.length == 0">No comments...</p>
             </ul>

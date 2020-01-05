@@ -45,7 +45,9 @@ export class EditCommentComponent {
         });
         console.log(data);
         this.isNew = data.isNew;
-        this.frm.patchValue(data.comment);
+        if (!this.isNew) {
+            this.frm.patchValue(data.comment);
+        }
     }
 
     onNoClick(): void {

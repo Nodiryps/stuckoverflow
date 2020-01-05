@@ -41,7 +41,7 @@ const appRoutes: Routes = [
   {
     path: 'postdetail',
     component: PostDetailComponent,
-    canActivate: [AuthGuard],
+    //canActivate: [AuthGuard],
   },
   {
     path: 'login',

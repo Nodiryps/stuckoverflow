@@ -93,7 +93,7 @@ namespace prid1920_g10.Controllers {
                     select pt.PostId);
         }
 
-        [AllowAnonymous] //[Authorized(Role.Admin, Role.Member)]
+        [Authorized(Role.Admin, Role.Member)]
         [HttpPost]
         public async Task<ActionResult<PostDTO>> PostPost(PostDTO data) {
             var postDto = await _context.Posts.FindAsync(data.Id);
