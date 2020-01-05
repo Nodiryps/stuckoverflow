@@ -1,75 +1,75 @@
-<div class="title">
-    <div class="reputation">
-        <p class="score"><b>{{post.currScore}}</b></p>
+<div class="question">
+    <div class="title">
+        <div class="reputation">
+            <p class="score"><b>{{post.currScore}}</b></p>
 
-        <div class="vote">
-            <button mat-icon-button tabindex="-1" [disabled]="post.alreadyVotedUp">
-                <mat-icon (click)="voteUp(post)">keyboard_arrow_up</mat-icon>
-            </button>
+            <div class="vote">
+                <button mat-icon-button tabindex="-1" [disabled]="post.alreadyVotedUp">
+                    <mat-icon (click)="voteUp(post)">keyboard_arrow_up</mat-icon>
+                </button>
 
-            <button mat-icon-button tabindex="-1" [disabled]="!post.undoableVote">
-                <mat-icon style="margin: auto; font-size: 20px;" (click)="voteUndo(post)">undo</mat-icon>
-            </button>
+                <button mat-icon-button tabindex="-1" [disabled]="!post.undoableVote">
+                    <mat-icon style="margin: auto; font-size: 20px;" (click)="voteUndo(post)">undo</mat-icon>
+                </button>
 
-            <button mat-icon-button tabindex="-1" [disabled]="post.alreadyVotedDown">
-                <mat-icon (click)="voteDown(post)">keyboard_arrow_down</mat-icon>
-            </button>
+                <button mat-icon-button tabindex="-1" [disabled]="post.alreadyVotedDown">
+                    <mat-icon (click)="voteDown(post)">keyboard_arrow_down</mat-icon>
+                </button>
+            </div>
         </div>
+
+
+        <h3>{{post.title}}</h3>
+        <div class="body">
+            <p>{{post.body}}</p>
+        </div>
+        <p style="text-align: right; font-size: 10px;"> 
+            by: <b>{{author !== null ? author.pseudo : 'unknown'}}</b> 
+        </p>
+        <p style="text-align: right; font-size: 10px;">
+            {{post.timestamp | date : 'dd-MM-yyyy'}}
+        </p>
     </div>
 
-    <h3>{{post.title}}</h3>
-    <p style="text-align: right;"> by: <b>{{author !== null ? author.pseudo : 'unknown'}}</b> </p>
-    <p style="text-align: right;">{{post.timestamp | date : 'yyyy-MM-dd'}}</p>
+    <div *ngIf="currUser != null">
+        <button *ngIf="currUser.id == post.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
+            <mat-icon color="primary" (click)="edit(post)">edit</mat-icon>
+        </button>
+        <button *ngIf="currUser.id == post.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
+            <mat-icon color="primary" (click)="delete(post)">delete</mat-icon>
+        </button>
+    </div>
+
+
+
+    <div>
+        <mat-chip-list>
+            <mat-chip *ngFor="let tag of post.tags">{{tag.name}}</mat-chip>
+        </mat-chip-list>
+    </div>
+
+    <div class="cmts">
+        <ul>
+            <li *ngFor="let comment of post.comments">
+                <div markdown>
+                    {{comment.body}} - <b>{{comment.authorId}}</b> - {{comment.timestamp | date : 'dd-MM-yyyy'}}
+                </div>
+                <div *ngIf="currUser != null">
+                    <button *ngIf="currUser.id == comment.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
+                        <mat-icon color="primary" (click)="editComment(comment)">edit</mat-icon>
+                    </button>
+                    <button *ngIf="currUser.id == comment.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
+                        <mat-icon color="primary" (click)="deleteComment(comment)">delete</mat-icon>
+                    </button>
+                </div>
+            </li>
+            <p *ngIf="post.comments?.length == 0">No comments...</p>
+        </ul>
+        <button *ngIf="currUser != null" mat-icon-button tabindex="-1">
+            <mat-icon color="primary" (click)="comment(post)">add_comment</mat-icon>
+        </button>
+    </div>
 </div>
-
-<div *ngIf="currUser != null">
-    <button *ngIf="currUser.id == post.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
-        <mat-icon color="primary" (click)="edit(post)">edit</mat-icon>
-    </button>
-    <button *ngIf="currUser.id == post.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
-        <mat-icon color="primary" (click)="delete(post)">delete</mat-icon>
-    </button>
-</div>
-<button *ngIf="currUser != null" mat-icon-button tabindex="-1">
-    Add comment
-    <mat-icon color="primary" (click)="comment(post)">add</mat-icon>
-</button>
-
-<div>
-    <p markdown>{{post.body}}</p>
-</div>
-
-<div>
-    <mat-chip-list>
-        <mat-chip *ngFor="let tag of post.tags">{{tag.name}}</mat-chip>
-    </mat-chip-list>
-</div>
-
-<div class="cmts">
-    <ul>
-        <li *ngFor="let comment of post.comments">
-            <div markdown>
-                {{comment.body}} - <b>{{comment.authorId}}</b> - {{comment.timestamp | date : 'yyyy-MM-dd'}}
-            </div>
-            <div *ngIf="currUser != null">
-                <button *ngIf="currUser.id == comment.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
-                    <mat-icon color="primary" (click)="editComment(comment)">edit</mat-icon>
-                </button>
-                <button *ngIf="currUser.id == comment.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
-                    <mat-icon color="primary" (click)="deleteComment(comment)">delete</mat-icon>
-                </button>
-            </div>
-        </li>
-        <p *ngIf="comments?.length == 0">No comments...</p>
-    </ul>
-</div>
-
-
-
-<!-- <div class="accept">
-    <p style="text-align: right;"> Accepted answer : <b>{{acceptedAnswer.body}}</b> </p>
-    <p style="text-align: right;"> Accepted answer authorID : <b>{{acceptedAnswer.authorId}}</b> </p>
-</div> -->
 
 <div class="answers">
     <ul *ngFor="let answer of answers">
@@ -97,7 +97,7 @@
 
             <li markdown>{{answer.body}}</li>
             <p style="text-align: right;"> by: <b>{{answer.author !== null ? answer.author.pseudo : 'unknown'}}</b> </p>
-            <p style="text-align: right;">{{answer.timestamp | date : 'yyyy-MM-dd'}}</p>
+            <p style="text-align: right;">{{answer.timestamp | date : 'dd-MM-yyyy'}}</p>
         </div>
 
         <div *ngIf="currUser != null">
@@ -112,13 +112,10 @@
             </button>
         </div>
 
-        <button *ngIf="currUser != null" mat-icon-button tabindex="-1">
-            Add comment
-            <mat-icon color="primary" (click)="comment(answer)">add</mat-icon>
-        </button>
 
-        <div class="comments">
-            <ul class="cmts">
+
+        <div class="cmts">
+            <ul>
                 <li *ngFor="let comment of answer.comments">
                     <div markdown>
                         {{comment.body}} - <b>{{comment.authorId}}</b> - {{comment.timestamp | date : 'yyyy-MM-dd'}}
@@ -136,6 +133,9 @@
                 </li>
                 <p *ngIf="answer.comments?.length == 0">No comments...</p>
             </ul>
+            <button *ngIf="currUser != null" mat-icon-button tabindex="-1">
+                <mat-icon color="primary" (click)="comment(answer)">add_comment</mat-icon>
+            </button>
         </div>
     </ul>
 </div>

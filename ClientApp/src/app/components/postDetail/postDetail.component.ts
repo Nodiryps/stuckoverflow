@@ -272,6 +272,7 @@ export class PostDetailComponent { // implements OnDestroy {
         });
       }
     });
+    this.refreshPost();
   }
 
   editComment(comment: Comment) {
@@ -287,6 +288,7 @@ export class PostDetailComponent { // implements OnDestroy {
         });
       }
     });
+    this.refreshPost();
   }
 
   delete(post: Post) {
