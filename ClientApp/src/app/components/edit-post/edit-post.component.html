@@ -1,7 +1,8 @@
 <form id="frm" [formGroup]="frm" novalidate>
-    <h1>{{(!isNew ? 'Edit existing' : 'Add a new') + ' question'}}</h1>
+    <h1>{{(!isNew ? 'Edit existing' : 'Add a new') + ' post'}}</h1>
     <div>
-        <mat-form-field *ngIf="!isComment && !isAnswer"> <input matInput placeholder="Title" [formControl]="ctlTitle"
+        <mat-form-field *ngIf="!isAnswer"> 
+            <input matInput placeholder="Title" [formControl]="ctlTitle"
                 required appSetFocus>
             <mat-error class="float-right" *ngIf="ctlTitle.hasError('required')">Required</mat-error>
             <mat-error class="float-right" *ngIf="ctlTitle.hasError('minlength')">Minimum length is

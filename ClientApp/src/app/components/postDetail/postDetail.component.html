@@ -24,7 +24,7 @@
 
 <div *ngIf="currUser != null">
     <button *ngIf="currUser.id == post.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
-        <mat-icon color="primary" (click)="edit(post, false, false)">edit</mat-icon>
+        <mat-icon color="primary" (click)="edit(post)">edit</mat-icon>
     </button>
     <button *ngIf="currUser.id == post.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
         <mat-icon color="primary" (click)="delete(post)">delete</mat-icon>
@@ -102,7 +102,7 @@
 
         <div *ngIf="currUser != null">
             <button *ngIf="currUser.id == answer.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
-                <mat-icon color="primary" (click)="edit(answer,false, true)">edit</mat-icon>
+                <mat-icon color="primary" (click)="edit(answer)">edit</mat-icon>
             </button>
             <button *ngIf="currUser.id == answer.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
                 <mat-icon color="primary" (click)="delete(answer)">delete</mat-icon>

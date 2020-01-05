@@ -239,8 +239,8 @@ export class PostDetailComponent { // implements OnDestroy {
       this.snackBar.open(`Can't accept. Your reputation is < ` + this.reputationMin, 'Dismiss', { duration: 10000 });
   }
 
-  edit(post: Post, isComment: boolean, isAnswer: boolean) {
-    const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: false, isComment: isComment, isAnswer: isAnswer } });
+  edit(post: Post) {
+    const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: false, isAnswer: post.title === null  } });
     dlg.beforeClose().subscribe(res => {
       if (res) {
         _.assign(post, res);

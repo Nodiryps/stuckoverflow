@@ -22,15 +22,15 @@ export class EditPostComponent {
     public ctlTitle: FormControl;
     public ctlBody: FormControl;
     public isNew: boolean;
-    public isComment: boolean;
-    public isAnswer: boolean;
+    public isAnswer: boolean = false;
 
     constructor(
         public dialogRef: MatDialogRef<EditPostComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: { post: Post; isNew: boolean; isComment: boolean, isAnswer: boolean }, private fb: FormBuilder,
+        @Inject(MAT_DIALOG_DATA) public data: { post: Post; isNew: boolean; isAnswer: boolean }, private fb: FormBuilder,
         public postService: PostService,
         public router: Router,
     ) {
+        this.isAnswer = data.isAnswer;
         this.ctlTitle = this.fb.control('',
             [
                 //Ajouter une condition sur ce validator if(!isComment && !isAnswer)
