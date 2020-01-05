@@ -113,4 +113,13 @@ export class PostService {
       })
     );
   }
+  public deleteComment(c: Comment): Observable<boolean> {
+    return this.http.delete<boolean>(`${this.baseUrl}api/comments/${c.id}`).pipe(
+      map(res => true),
+      catchError(err => {
+        console.error(err);
+        return of(false);
+      })
+    );
+  }
 }

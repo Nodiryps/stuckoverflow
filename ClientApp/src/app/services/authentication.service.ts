@@ -4,6 +4,7 @@ import { map, flatMap } from 'rxjs/operators';
 import { User, Role } from '../models/user';
 import { Observable } from 'rxjs';
 import { Post } from '../models/post';
+import { Comment } from '../models/comment';
 
 
 @Injectable({ providedIn: 'root' })
@@ -21,8 +22,12 @@ export class AuthenticationService {
     }
 
 
-    isTheAuthor(post: Post) {
+    isTheAuthorOfAPost(post: Post) {
         return this.currentUser.id === post.authorId;
+    }
+
+    isTheAuthorOfAComment(comment: Comment) {
+        return this.currentUser.id === comment.authorId;
     }
 
     login(pseudo: string, password: string) {

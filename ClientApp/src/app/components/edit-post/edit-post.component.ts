@@ -33,6 +33,7 @@ export class EditPostComponent {
     ) {
         this.ctlTitle = this.fb.control('',
             [
+                //Ajouter une condition sur ce validator if(!isComment && !isAnswer)
                 //Validators.required, 
             ]
         );

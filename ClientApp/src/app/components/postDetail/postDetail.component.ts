@@ -177,7 +177,7 @@ export class PostDetailComponent { // implements OnDestroy {
 
   accept(answer: Post) {
     if (this.isCurrUserReputationOK(this.reputationMin) &&
-      this.authService.isTheAuthor(this.post)) {
+      this.authService.isTheAuthorOfAPost(this.post)) {
       const acceptedAnswer = this.answers.find(a => this.post.acceptedAnswerId === a.id);
       if (acceptedAnswer != undefined) {
         this.post.acceptedAnswerId = null;
@@ -254,7 +254,7 @@ export class PostDetailComponent { // implements OnDestroy {
   }
 
   delete(post: Post) {
-    if (this.authService.isTheAuthor(post) || this.authService.isAdmin()) {
+    if (this.authService.isTheAuthorOfAPost(post) || this.authService.isAdmin()) {
       const backup = this.dataSource.data;
       this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
       const snackBarRef = this.snackBar.open(`Post '${post.title}' will be deleted`, 'Undo', { duration: 10000 });
@@ -263,6 +263,22 @@ export class PostDetailComponent { // implements OnDestroy {
           this.postService.delete(post).subscribe();
           this.router.navigate(['/']);
           this.refresh();
+        }
+        else
+          this.dataSource.data = backup;
+      });
+    }
+  }
+
+  deleteComment(comment: Comment) {
+    if (this.authService.isTheAuthorOfAComment(comment) || this.authService.isAdmin()) {
+      const backup = this.dataSource.data;
+      //this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
+      const snackBarRef = this.snackBar.open(`Comment '${comment.body}' will be deleted`, 'Undo', { duration: 10000 });
+      snackBarRef.afterDismissed().subscribe(res => {
+        if (!res.dismissedByAction) {
+          this.postService.deleteComment(comment).subscribe();
+          this.refreshPost();
         }
         else
           this.dataSource.data = backup;

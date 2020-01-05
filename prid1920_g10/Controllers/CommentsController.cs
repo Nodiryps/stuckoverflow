@@ -55,7 +55,7 @@ namespace prid1920_g10.Controllers {
             );
         }
 
-        [AllowAnonymous] //[Authorized(Role.Admin, Role.Member)]
+        [Authorized(Role.Admin, Role.Member)]
         [HttpPost]
         public async Task<ActionResult<CommentDTO>> PostComment(CommentDTO data) {
             var commentDto = await _context.Comments.FindAsync(data.Id);
@@ -90,7 +90,7 @@ namespace prid1920_g10.Controllers {
                     select u.Id).Max() + 1;
         }
 
-        [Authorized(Role.Admin)]
+        [Authorized(Role.Admin, Role.Member)]
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, CommentDTO dto) {
             if (id != dto.Id)
@@ -108,6 +108,20 @@ namespace prid1920_g10.Controllers {
 
             if (!res.IsEmpty)
                 return BadRequest(res);
+
+            return NoContent();
+        }
+
+        [Authorized(Role.Admin, Role.Member)]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id) {
+            var comment = await _context.Comments.FindAsync(id);
+
+            if (comment == null)
+                return NotFound();
+
+            _context.Comments.Remove(comment);
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
