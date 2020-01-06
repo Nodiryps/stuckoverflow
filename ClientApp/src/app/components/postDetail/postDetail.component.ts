@@ -203,8 +203,12 @@ export class PostDetailComponent { // implements OnDestroy {
       if (acceptedAnswer != undefined) {
         this.post.acceptedAnswerId = null;
       }
-      this.post.acceptedAnswerId = answer.id;
-
+      else if(this.post.acceptedAnswerId ===  answer.id){
+        this.post.acceptedAnswerId = null;
+      }
+      else
+        this.post.acceptedAnswerId = answer.id;
+        
       answer.author.reputation += 15;
       this.currUser.reputation += 2;
       console.log("userQ: " + this.currUser.pseudo)
