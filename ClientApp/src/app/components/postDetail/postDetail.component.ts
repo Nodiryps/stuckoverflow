@@ -33,7 +33,7 @@ export class PostDetailComponent { // implements OnDestroy {
   author: User;
   answers: Post[] = [];
   // dataSource: MatTableDataSource<Post> = new MatTableDataSource();
-  state: MatTableState;
+  //state: MatTableState;
   currUser: User;
   reputationToVoteUp = 15;
   reputationToVoteDown = 30;
@@ -74,6 +74,10 @@ export class PostDetailComponent { // implements OnDestroy {
     this.frm = this.fb.group({
       body: this.ctlReply,
     });
+  }
+
+  setCommentAuthor(authid: number) {
+
   }
 
   getQuestion() {
@@ -192,12 +196,12 @@ export class PostDetailComponent { // implements OnDestroy {
       if (acceptedAnswer != undefined) {
         this.post.acceptedAnswerId = null;
       }
-      else if(this.post.acceptedAnswerId ===  answer.id){
+      else if (this.post.acceptedAnswerId === answer.id) {
         this.post.acceptedAnswerId = null;
       }
       else
         this.post.acceptedAnswerId = answer.id;
-        
+
       answer.author.reputation += 15;
       this.currUser.reputation += 2;
       console.log("userQ: " + this.currUser.pseudo)
@@ -233,8 +237,9 @@ export class PostDetailComponent { // implements OnDestroy {
   }
 
   edit(post: Post) {
-    const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: false, isAnswer: post.title === null  } });
+    const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: false, isAnswer: post.title === null } });
     dlg.beforeClose().subscribe(res => {
+      console.log(res);
       if (res) {
         _.assign(post, res);
         this.postService.update(res).subscribe(res => {
@@ -315,7 +320,7 @@ export class PostDetailComponent { // implements OnDestroy {
           this.refreshPost();
         }
         // else
-          // this.dataSource.data = backup;
+        // this.dataSource.data = backup;
       });
       this.refreshPost();
     }
@@ -359,7 +364,12 @@ export class PostDetailComponent { // implements OnDestroy {
   }
 
   refresh() {
-        this.postService.getAllComments(this.post.id).subscribe(c => this.post.comments = c);
-        this.userService.getById(this.post.authorId).subscribe(u => this.post.author = new User(u));
+    this.postService.getAllComments(this.post.id).subscribe(c => this.post.comments = c);
+
+    // this.post.comments.forEach(element => {
+    //   this.userService.getById(element.authorId).subscribe(
+    //     u => this.author = new User(u));
+    // });
+    this.userService.getById(this.post.authorId).subscribe(u => this.post.author = new User(u));
   }
 }
