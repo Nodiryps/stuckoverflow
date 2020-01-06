@@ -53,7 +53,8 @@ export class PostDetailComponent { // implements OnDestroy {
     this.post = new Post({});
     this.author = new User({});
     this.getQuestion()
-      .then(() => {
+      .then((p) => {
+        console.log(this.post);
         this.post.currScore = this.post.score = postService.score;
       })
       .then(() => {
