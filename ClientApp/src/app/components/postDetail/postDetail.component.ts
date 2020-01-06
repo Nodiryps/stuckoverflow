@@ -34,7 +34,7 @@ export class PostDetailComponent { // implements OnDestroy {
   post: Post;
   author: User;
   answers: Post[] = [];
-  dataSource: MatTableDataSource<Post> = new MatTableDataSource();
+  // dataSource: MatTableDataSource<Post> = new MatTableDataSource();
   state: MatTableState;
   currUser: User;
   reputationToVoteUp = 15;
@@ -247,8 +247,8 @@ export class PostDetailComponent { // implements OnDestroy {
         this.postService.update(res).subscribe(res => {
           if (!res) {
             this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
-            this.refreshPost();
           }
+          this.refreshPost();
         });
       }
     });
@@ -267,8 +267,8 @@ export class PostDetailComponent { // implements OnDestroy {
         this.postService.addComment(newComment).subscribe(res => {
           if (!res) {
             this.snackBar.open(`There was an error at the server. The POST Comment has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
-            this.refreshPost();
           }
+          this.refreshPost();
         });
       }
     });
@@ -281,10 +281,11 @@ export class PostDetailComponent { // implements OnDestroy {
       if (res) {
         _.assign(comment, res);
         this.postService.updateComment(comment).subscribe(res => {
+          this.refreshPost();
           if (!res) {
             this.snackBar.open(`There was an error at the server. The POST Comment has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
-            this.refreshPost();
           }
+          this.refreshPost();
         });
       }
     });
@@ -293,24 +294,26 @@ export class PostDetailComponent { // implements OnDestroy {
 
   delete(post: Post) {
     if (this.authService.isTheAuthorOfAPost(post) || this.authService.isAdmin()) {
-      const backup = this.dataSource.data;
-      this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
+      // const backup = this.dataSource.data;
+      // this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
       const snackBarRef = this.snackBar.open(`Post '${post.title}' will be deleted`, 'Undo', { duration: 10000 });
       snackBarRef.afterDismissed().subscribe(res => {
         if (!res.dismissedByAction) {
           this.postService.delete(post).subscribe();
           this.router.navigate(['/']);
-          this.refresh();
+          // this.refresh();
+          this.refreshPost();
         }
-        else
-          this.dataSource.data = backup;
+        // else
+        //   this.dataSource.data = backup;
       });
+      this.refreshPost();
     }
   }
 
   deleteComment(comment: Comment) {
     if (this.authService.isTheAuthorOfAComment(comment) || this.authService.isAdmin()) {
-      const backup = this.dataSource.data;
+      // const backup = this.dataSource.data;
       //this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
       const snackBarRef = this.snackBar.open(`Comment '${comment.body}' will be deleted`, 'Undo', { duration: 10000 });
       snackBarRef.afterDismissed().subscribe(res => {
@@ -318,9 +321,10 @@ export class PostDetailComponent { // implements OnDestroy {
           this.postService.deleteComment(comment).subscribe();
           this.refreshPost();
         }
-        else
-          this.dataSource.data = backup;
+        // else
+          // this.dataSource.data = backup;
       });
+      this.refreshPost();
     }
   }
 
@@ -342,6 +346,7 @@ export class PostDetailComponent { // implements OnDestroy {
   }
 
   refreshPost() {
+    this.refresh();
     this.postService.getAllAnswers().subscribe(a => {
       this.answers = a;
       let acceptedAnswer = null;
@@ -350,7 +355,7 @@ export class PostDetailComponent { // implements OnDestroy {
         if (this.post.acceptedAnswerId === element.id)
           acceptedAnswer = element;
         this.postService.getAllComments(element.id).subscribe(c => element.comments = c);
-        this.userService.getById(element.authorId).subscribe(u => element.author = new User(u))
+        this.userService.getById(element.authorId).subscribe(u => element.author = new User(u));
       });
       this.answers = _.orderBy(this.answers, (p => p.score), "desc");
       this.answers = _.filter(this.answers, a => this.post.acceptedAnswerId !== a.id); // to avoid duplicating accepted answers
@@ -361,11 +366,7 @@ export class PostDetailComponent { // implements OnDestroy {
   }
 
   refresh() {
-    this.postService.getAllQuestions().subscribe(posts => {
-      // assigne les données récupérées au datasource
-      this.dataSource.data = posts;
-      // restaure l'état du datasource (tri et pagination) à partir du state
-      this.state.restoreState(this.dataSource);
-    });
+        this.postService.getAllComments(this.post.id).subscribe(c => this.post.comments = c);
+        this.userService.getById(this.post.authorId).subscribe(u => this.post.author = new User(u));
   }
 }

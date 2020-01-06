@@ -38,11 +38,11 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
         private stateService: StateService,
         public dialog: MatDialog,
         public snackBar: MatSnackBar,
-        authenticationService: AuthenticationService,
+        private authService: AuthenticationService,
         private router: Router
     ) {
         this.state = this.stateService.postListState;
-        this.currUser = authenticationService.currentUser;
+        this.currUser = authService.currentUser;
     }
 
     ngAfterViewInit(): void {
@@ -103,7 +103,8 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
     }
 
     delete(post: Post) {
-        if (this.currUser.role == Role.Admin) {
+        if (this.authService.isAdmin() 
+            || this.authorDeleteRulesOk(post)) {
             const backup = this.dataSource.data;
             this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
             const snackBarRef = this.snackBar.open(`Post '${post.title}' will be deleted`, 'Undo', { duration: 10000 });
@@ -117,6 +118,32 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
                     this.dataSource.data = backup;
             });
         }
+    }
+
+    authorDeleteRulesOk(post: Post) {
+        if (this.authService.isTheAuthorOfAPost(post)) {
+            if (this.isAnAnswer(post))
+                return this.hasNoComments(post);
+            else {
+                return this.hasNoComments(post) 
+                    && this.hasNoAnswers(post);
+            }
+        } return false;
+    }
+
+    isAnAnswer(post: Post) {
+        return post.title === null;
+    }
+
+    hasNoAnswers(post: Post) {
+        this.dataSource.data.some(p => {
+            return p.parentId !== post.id;
+        });
+        return false;
+    }
+
+    hasNoComments(post: Post) {
+        return post.comments.length === 0;
     }
 
     filterChanged(filterValue: string) {
