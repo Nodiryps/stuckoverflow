@@ -29,8 +29,6 @@ import { Subscription } from 'rxjs';
 export class PostDetailComponent { // implements OnDestroy {
   frm: FormGroup;
   ctlReply: FormControl;
-  frmComment: FormGroup;
-  ctlComment: FormControl;
   post: Post;
   author: User;
   answers: Post[] = [];
@@ -73,16 +71,6 @@ export class PostDetailComponent { // implements OnDestroy {
     );
 
     this.frm = this.fb.group({
-      body: this.ctlReply,
-    });
-
-    this.ctlComment = this.fb.control('',
-      [
-        //Validators.required,
-      ]
-    );
-
-    this.frmComment = this.fb.group({
       body: this.ctlReply,
     });
   }
