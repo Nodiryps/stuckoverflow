@@ -77,17 +77,19 @@ export class CreatePostComponent {
         post.authorId = this.authenticationService.currentUser.id;
         post.tags = [];
         post.postTags = [];
-        this.ctlTagSelect.value.forEach(t => {
-            this.tags.forEach(elm => {
-                if (elm.name === t) {
-                    post.tags.push(elm);
-                    let pt = new PostTag({});
-                    pt.postId = post.id;
-                    pt.tagId = elm.id;
-                    post.postTags.push(pt);
-                }
+        if (this.ctlTagSelect.value !== '') {
+            this.ctlTagSelect.value.forEach(t => {
+                this.tags.forEach(elm => {
+                    if (elm.name === t) {
+                        post.tags.push(elm);
+                        let pt = new PostTag({});
+                        pt.postId = post.id;
+                        pt.tagId = elm.id;
+                        post.postTags.push(pt);
+                    }
+                });
             });
-        });
+        }
 
         this.postService.add(post).subscribe(() => {
             //this.showDetail(post);

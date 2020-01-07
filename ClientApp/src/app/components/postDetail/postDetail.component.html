@@ -20,15 +20,15 @@
 
 
         <h3>{{post.title}}</h3>
-        <div class="body">
-            <p>{{post.body}}</p>
-        </div>
         <p style="text-align: right; font-size: 10px;">
             by: <b>{{author !== null ? author.pseudo : 'unknown'}}</b>
         </p>
         <p style="text-align: right; font-size: 10px;">
             {{post.timestamp | date : 'dd-MM-yyyy'}}
         </p>
+        <div class="body">
+            <markdown [data]="post.body"></markdown>
+        </div>
     </div>
 
     <div *ngIf="currUser != null">
@@ -49,8 +49,9 @@
     <div class="cmts">
         <ul>
             <li *ngFor="let comment of post.comments">
-                <div markdown>
-                    {{comment.body}} - <b>{{comment.authorId}}</b> - {{comment.timestamp | date : 'dd-MM-yyyy'}}
+                <div>
+                    <markdown [data]="comment.body"></markdown>
+                    - <b>{{comment.authorId}}</b> - {{comment.timestamp | date : 'dd-MM-yyyy'}}
                 </div>
                 <div *ngIf="currUser != null">
                     <button *ngIf="currUser.id == comment.authorId || currUser.role == 2" mat-icon-button tabindex="-1">
@@ -92,8 +93,9 @@
             <mat-icon class="acceptedAnswerIcon" *ngIf="post.acceptedAnswerId == answer.id">
                 check
             </mat-icon>
-
-            <li markdown>{{answer.body}}</li>
+            <li>
+                <markdown [data]="answer.body"></markdown>
+            </li>
             <p style="text-align: right;"> by: <b>{{answer.author !== null ? answer.author.pseudo : 'unknown'}}</b> </p>
             <p style="text-align: right;">{{answer.timestamp | date : 'dd-MM-yyyy'}}</p>
         </div>
@@ -115,8 +117,9 @@
         <div class="cmts">
             <ul>
                 <li *ngFor="let comment of answer.comments">
-                    <div markdown>
-                        {{comment.body}} - <b>{{comment.authorId}}</b> - {{comment.timestamp | date : 'yyyy-MM-dd'}}
+                    <div>
+                        <markdown [data]="comment.body"></markdown> - <b>{{comment.authorId}}</b> -
+                        {{comment.timestamp | date : 'yyyy-MM-dd'}}
                     </div>
                     <div *ngIf="currUser != null">
                         <button *ngIf="currUser.id == comment.authorId || currUser.role == 2" mat-icon-button

@@ -65,21 +65,7 @@ import { SetFocusDirective } from '../directives/setfocus.directive';
     AppRoutes,
     BrowserAnimationsModule,
     SharedModule,
-    MarkdownModule.forRoot({
-      loader: HttpClient, // to keep only one instance of http and to avoid interceptors issues
-      markedOptions: { // optional, only if you use [src] attribute
-        provide: MarkedOptions,
-        useValue: {
-          gfm: true,
-          tables: true,
-          breaks: false,
-          pedantic: false,
-          sanitize: false,
-          smartLists: true,
-          smartypants: false,
-        },
-      },
-    }),
+    MarkdownModule.forRoot(),
     SimplemdeModule.forRoot({
       // autosave: { enabled: true, uniqueId: 'MyUniqueID' }
     })

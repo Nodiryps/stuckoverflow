@@ -34,7 +34,7 @@ export class PostDetailComponent { // implements OnDestroy {
   author: User;
   answers: Post[] = [];
   // dataSource: MatTableDataSource<Post> = new MatTableDataSource();
-  state: MatTableState;
+  //state: MatTableState;
   currUser: User;
   reputationToVoteUp = 15;
   reputationToVoteDown = 30;
@@ -54,7 +54,8 @@ export class PostDetailComponent { // implements OnDestroy {
     this.post = new Post({});
     this.author = new User({});
     this.getQuestion()
-      .then(() => {
+      .then((p) => {
+        console.log(this.post);
         this.post.currScore = this.post.score = postService.score;
       })
       .then(() => {
@@ -74,6 +75,10 @@ export class PostDetailComponent { // implements OnDestroy {
     this.frm = this.fb.group({
       body: this.ctlReply,
     });
+  }
+
+  setCommentAuthor(authid: number) {
+
   }
 
   getQuestion() {
@@ -235,6 +240,7 @@ export class PostDetailComponent { // implements OnDestroy {
   edit(post: Post) {
     const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: false, isAnswer: post.title === null }, height: "800px", width: "600px" });
     dlg.beforeClose().subscribe(res => {
+      console.log(res);
       if (res) {
         _.assign(post, res);
         this.postService.update(res).subscribe(res => {
