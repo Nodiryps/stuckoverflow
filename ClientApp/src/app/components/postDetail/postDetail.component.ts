@@ -18,6 +18,7 @@ import { MatTableDataSource, MatDialog, MatSnackBar } from '@angular/material';
 import { Validators, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Subscription } from 'rxjs';
+import { subscribeOn } from 'rxjs/operators';
 
 
 @Component({
@@ -187,20 +188,21 @@ export class PostDetailComponent { // implements OnDestroy {
   accept(answer: Post) {
     if (this.isCurrUserReputationOK(this.reputationMin) &&
       this.authService.isTheAuthorOfAPost(this.post)) {
+
       const acceptedAnswer = this.answers.find(a => this.post.acceptedAnswerId === a.id);
-      if (acceptedAnswer != undefined) {
-        this.post.acceptedAnswerId = null;
+
+      if (acceptedAnswer != undefined) { // if exists
+        if (acceptedAnswer.id !== answer.id) // if different answer
+          this.post.acceptedAnswerId = answer.id;
+        else
+          this.post.acceptedAnswerId = null;
       }
-      else if(this.post.acceptedAnswerId ===  answer.id){
-        this.post.acceptedAnswerId = null;
-      }
-      else
+      else {
         this.post.acceptedAnswerId = answer.id;
-        
+      }
+
       answer.author.reputation += 15;
       this.currUser.reputation += 2;
-      console.log("userQ: " + this.currUser.pseudo)
-      console.log("userA: " + answer.author.pseudo)
 
       this.userService.update(this.currUser).subscribe(res => {
         if (!res) {
@@ -221,7 +223,6 @@ export class PostDetailComponent { // implements OnDestroy {
             The update (post) has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
         }
       });
-
       this.refreshPost();
     }
     else if (!this.authService.isTheAuthorOfAPost(this.post)) {
@@ -232,7 +233,7 @@ export class PostDetailComponent { // implements OnDestroy {
   }
 
   edit(post: Post) {
-    const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: false, isAnswer: post.title === null  } });
+    const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: false, isAnswer: post.title === null }, height: "800px", width: "600px" });
     dlg.beforeClose().subscribe(res => {
       if (res) {
         _.assign(post, res);
@@ -251,8 +252,8 @@ export class PostDetailComponent { // implements OnDestroy {
     const newComment = new Comment({});
     newComment.authorId = this.currUser.id;
     newComment.postId = post.id;
-    console.log('ID:  ' + newComment.authorId)
-    const dlg = this.dialog.open(EditCommentComponent, { data: { newComment, isNew: true, isComment: true, isAnswer: false } });
+    // console.log('ID:  ' + newComment.authorId)
+    const dlg = this.dialog.open(EditCommentComponent, { data: { newComment, isNew: true, isComment: true, isAnswer: false }, height: "800px", width: "600px" });
     dlg.beforeClose().subscribe(res => {
       if (res) {
         _.assign(newComment, res);
@@ -268,7 +269,7 @@ export class PostDetailComponent { // implements OnDestroy {
   }
 
   editComment(comment: Comment) {
-    const dlg = this.dialog.open(EditCommentComponent, { data: { comment, isNew: false, isComment: true, isAnswer: false } });
+    const dlg = this.dialog.open(EditCommentComponent, { data: { comment, isNew: false, isComment: true, isAnswer: false }, height: "800px", width: "600px" });
     dlg.beforeClose().subscribe(res => {
       if (res) {
         _.assign(comment, res);
@@ -284,40 +285,66 @@ export class PostDetailComponent { // implements OnDestroy {
     this.refreshPost();
   }
 
-  delete(post: Post) {
-    if (this.authService.isTheAuthorOfAPost(post) || this.authService.isAdmin()) {
-      // const backup = this.dataSource.data;
-      // this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
-      const snackBarRef = this.snackBar.open(`Post '${post.title}' will be deleted`, 'Undo', { duration: 10000 });
-      snackBarRef.afterDismissed().subscribe(res => {
-        if (!res.dismissedByAction) {
-          this.postService.delete(post).subscribe();
-          this.router.navigate(['/']);
-          // this.refresh();
-          this.refreshPost();
-        }
-        // else
-        //   this.dataSource.data = backup;
-      });
-      this.refreshPost();
-    }
-  }
-
   deleteComment(comment: Comment) {
     if (this.authService.isTheAuthorOfAComment(comment) || this.authService.isAdmin()) {
-      // const backup = this.dataSource.data;
-      //this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
       const snackBarRef = this.snackBar.open(`Comment '${comment.body}' will be deleted`, 'Undo', { duration: 10000 });
       snackBarRef.afterDismissed().subscribe(res => {
         if (!res.dismissedByAction) {
           this.postService.deleteComment(comment).subscribe();
           this.refreshPost();
         }
-        // else
-          // this.dataSource.data = backup;
       });
       this.refreshPost();
     }
+    else
+      this.snackBar.open(`You have to be the author or an admin to delete.`, 'Dismiss', { duration: 10000 });
+  }
+
+  delete(post: Post) {
+    if (this.authorDeleteRulesOk(post) || this.authService.isAdmin()) {
+      const snackBarRef = this.snackBar.open(`${post.title !== null ? "Post '" + post.title + "'" : 'This answer'} will be deleted`, 'Undo', { duration: 10000 });
+      snackBarRef.afterDismissed().subscribe(res => {
+        if (!res.dismissedByAction) {
+          this.postService.delete(post).subscribe();
+          if (post.title !== null) // redirect only if question
+            this.router.navigate(['/']);
+          this.refreshPost();
+        }
+      });
+      this.refreshPost();
+    }
+    else if (!this.authService.isTheAuthorOfAPost(post) || !this.authService.isAdmin())
+      this.snackBar.open(`You have to be the author or an admin to delete.`, 'Dismiss', { duration: 10000 });
+    else
+      this.snackBar.open(`Shouldn't have no cmt nor answer to delete a post.`, 'Dismiss', { duration: 10000 });
+  }
+
+  authorDeleteRulesOk(post: Post) {
+    let bool = false;
+    if (this.authService.isTheAuthorOfAPost(post)) {
+      if (this.isAnAnswer(post))
+        bool = this.hasNoComments(post);
+      else {
+        bool = this.hasNoComments(post)
+          && this.hasNoAnswers(post);
+      }
+      // console.log("authDelRulesOK: " + bool)
+    } return bool;
+  }
+
+  isAnAnswer(post: Post) {
+    // console.log("isAnAnswer: " + (post.title === null))
+    return post.title === null;
+  }
+
+  hasNoAnswers(post: Post) {
+    // console.log("hasnoanswers:" + (this.answers.length === 0))
+    return this.answers.length === 0;
+  }
+
+  hasNoComments(post: Post) {
+    // console.log("hasNoComments: " + (post.comments.length === 0))
+    return post.comments.length === 0;
   }
 
   reply() {
@@ -338,7 +365,7 @@ export class PostDetailComponent { // implements OnDestroy {
   }
 
   refreshPost() {
-    this.refresh();
+
     this.postService.getAllAnswers().subscribe(a => {
       this.answers = a;
       let acceptedAnswer = null;
@@ -349,16 +376,17 @@ export class PostDetailComponent { // implements OnDestroy {
         this.postService.getAllComments(element.id).subscribe(c => element.comments = c);
         this.userService.getById(element.authorId).subscribe(u => element.author = new User(u));
       });
-      this.answers = _.orderBy(this.answers, (p => p.score), "desc");
+      this.answers = _.orderBy(_.orderBy(this.answers, (p => p.timestamp), "desc"), (p => p.score), "desc");
       this.answers = _.filter(this.answers, a => this.post.acceptedAnswerId !== a.id); // to avoid duplicating accepted answers
 
       if (acceptedAnswer != undefined)
         this.answers.unshift(acceptedAnswer);
+      this.refresh();
     });
   }
 
   refresh() {
-        this.postService.getAllComments(this.post.id).subscribe(c => this.post.comments = c);
-        this.userService.getById(this.post.authorId).subscribe(u => this.post.author = new User(u));
+    this.postService.getAllComments(this.post.id).subscribe(c => this.post.comments = c);
+    this.userService.getById(this.post.authorId).subscribe(u => this.post.author = new User(u));
   }
 }

@@ -21,7 +21,6 @@ export class AuthenticationService {
         return this.currentUser.role === Role.Admin;
     }
 
-
     isTheAuthorOfAPost(post: Post) {
         return this.currentUser.id === post.authorId;
     }

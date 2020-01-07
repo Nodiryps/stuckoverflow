@@ -23,8 +23,8 @@
         <div class="body">
             <p>{{post.body}}</p>
         </div>
-        <p style="text-align: right; font-size: 10px;"> 
-            by: <b>{{author !== null ? author.pseudo : 'unknown'}}</b> 
+        <p style="text-align: right; font-size: 10px;">
+            by: <b>{{author !== null ? author.pseudo : 'unknown'}}</b>
         </p>
         <p style="text-align: right; font-size: 10px;">
             {{post.timestamp | date : 'dd-MM-yyyy'}}
@@ -39,8 +39,6 @@
             <mat-icon color="primary" (click)="delete(post)">delete</mat-icon>
         </button>
     </div>
-
-
 
     <div>
         <mat-chip-list>
@@ -146,8 +144,7 @@
         <label for="simple">
             <h4>Reply</h4>
         </label>
-        <simplemde name="simple" matInput [formControl]="ctlReply"
-            [options]="{ toolbar: ['bold', 'italic', 'heading', '|', 'quote'] }" required></simplemde>
+        <simplemde name="simple" matInput [formControl]="ctlReply" required></simplemde>
         <input type="text" matInput [formControl]="ctlReply" hidden>
         <!-- <mat-error class="float-right" *ngIf="ctlReply.hasError('required')">Required</mat-error> -->
     </mat-form-field>

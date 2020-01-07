@@ -1,9 +1,8 @@
 <form id="frm" [formGroup]="frm" novalidate>
     <h1>{{(!isNew ? 'Edit existing' : 'Add a new') + (isAnswer ? ' answer' : ' question')}}</h1>
     <div>
-        <mat-form-field *ngIf="!isAnswer"> 
-            <input matInput placeholder="Title" [formControl]="ctlTitle"
-                required appSetFocus>
+        <mat-form-field *ngIf="!isAnswer">
+            <input matInput placeholder="Title" [formControl]="ctlTitle" required appSetFocus>
             <mat-error class="float-right" *ngIf="ctlTitle.hasError('required')">Required</mat-error>
             <mat-error class="float-right" *ngIf="ctlTitle.hasError('minlength')">Minimum length is
                 {{ctlTitle.errors['minlength'].requiredLength}}</mat-error>
@@ -16,8 +15,7 @@
         </mat-form-field>
 
         <mat-form-field>
-            <simplemde matInput [formControl]="ctlBody"
-                [options]="{ toolbar: ['bold', 'italic', 'heading', '|', 'quote'] }" required></simplemde>
+            <simplemde matInput [formControl]="ctlBody" required></simplemde>
             <input type="text" matInput [formControl]="ctlBody" hidden>
             <mat-error class="float-right" *ngIf="ctlBody.hasError('required')">Required</mat-error>
             <mat-error class="float-right" *ngIf="ctlBody.hasError('minlength')">Minimum length is

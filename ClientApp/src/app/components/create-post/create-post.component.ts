@@ -79,19 +79,15 @@ export class CreatePostComponent {
         post.postTags = [];
         this.ctlTagSelect.value.forEach(t => {
             this.tags.forEach(elm => {
-                console.log("elems: " + elm.name);
-                console.log("ttt: " + t);
                 if (elm.name === t) {
                     post.tags.push(elm);
                     let pt = new PostTag({});
                     pt.postId = post.id;
                     pt.tagId = elm.id;
                     post.postTags.push(pt);
-                    console.log("foreach: " + pt);
                 }
             });
         });
-        console.log("postTags: " + post.tags.toString);
 
         this.postService.add(post).subscribe(() => {
             //this.showDetail(post);

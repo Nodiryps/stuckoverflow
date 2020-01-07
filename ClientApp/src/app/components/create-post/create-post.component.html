@@ -14,9 +14,10 @@
     </mat-form-field>
 
     <mat-form-field>
-        <label for="simple"><h4>Body</h4></label>
-        <simplemde name="simple" matInput [formControl]="ctlBody" [options]="{ toolbar: ['bold', 'italic', 'heading', '|', 'quote'] }"
-            required></simplemde>
+        <label for="simple">
+            <h4>Body</h4>
+        </label>
+        <simplemde name="simple" matInput [formControl]="ctlBody" required></simplemde>
         <input type="text" matInput [formControl]="ctlBody" hidden>
         <mat-error class="float-right" *ngIf="ctlBody.hasError('required')">Required</mat-error>
         <!-- <mat-error class="float-right" *ngIf="ctlBody.hasError('minlength')">Minimum length is
@@ -31,7 +32,7 @@
                     (+{{ctlTagSelect.value.length - 1}} {{ctlTagSelect.value?.length === 2 ? 'other' : 'others'}})
                 </span>
             </mat-select-trigger>
-            <mat-option *ngFor="let tag of tags" [value]="tag.name" >{{tag.name}}</mat-option>
+            <mat-option *ngFor="let tag of tags" [value]="tag.name">{{tag.name}}</mat-option>
         </mat-select>
     </mat-form-field>
 

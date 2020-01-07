@@ -2,18 +2,20 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, flatMap, catchError } from 'rxjs/operators';
 import { Observable, of, Subject } from 'rxjs';
+import { AuthenticationService } from './authentication.service';
 
 import { Post } from '../models/post';
 import { Tag } from '../models/tag';
 import { Comment } from '../models/comment';
 import { Vote } from '../models/vote';
+import { MatTableDataSource } from '@angular/material';
 
 @Injectable({ providedIn: 'root' })
 export class PostService {
   public post: Post;
   public score: number = 0;
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
+  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private authService: AuthenticationService) { }
 
   getById(id: number) {
     return this.http.get<Post>(`${this.baseUrl}api/posts/${id}`).pipe(
@@ -121,5 +123,31 @@ export class PostService {
         return of(false);
       })
     );
+  }
+
+  authorDeleteRulesOk(datas: MatTableDataSource<Post>, post: Post) {
+    if (this.authService.isTheAuthorOfAPost(post)) {
+      if (this.isAnAnswer(post))
+        return this.hasNoComments(post);
+      else {
+        return this.hasNoComments(post)
+          && this.hasNoAnswers(datas, post);
+      }
+    } return false;
+  }
+
+  isAnAnswer(post: Post) {
+    return post.title === null;
+  }
+
+  hasNoAnswers(dataSource: MatTableDataSource<Post>, post: Post) {
+    dataSource.data.some(p => {
+      return p.parentId !== post.id;
+    });
+    return false;
+  }
+
+  hasNoComments(post: Post) {
+    return post.comments.length === 0;
   }
 }

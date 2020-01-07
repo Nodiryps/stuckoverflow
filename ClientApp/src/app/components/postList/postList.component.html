@@ -1,4 +1,4 @@
-<div class="row">
+<div *ngIf="currUser != null" class="row">
   <div class="col-sm-12">
     <mat-form-field>
       <input matInput (keyup)="filterChanged($event.target.value)" [value]="filter" placeholder="Filter" appSetFocus>
@@ -42,9 +42,6 @@
               <mat-chip *ngFor="let tag of row.tags">{{tag.name}}</mat-chip>
               <p *ngIf="row.tags.length == 0">No tags...</p>
             </mat-chip-list>
-
-
-
           </td>
         </ng-container>
 
@@ -55,9 +52,9 @@
               <b>Details</b>
             </button>
 
-            <button class="btnDelete" mat-button color="primary" (click)="delete(row)">
-                <mat-icon>delete</mat-icon>
-              </button>
+            <button *ngIf="currUser.role == 2" class="btnDelete" mat-button color="primary" (click)="delete(row)">
+              <mat-icon>delete</mat-icon>
+            </button>
           </td>
         </ng-container>
 
@@ -67,7 +64,4 @@
       <mat-paginator [pageSize]="5" [pageSizeOptions]="[3, 5, 10, 25, 100]"></mat-paginator>
     </div>
   </div>
-</div>
-<div class="row mt-3">
-
 </div>

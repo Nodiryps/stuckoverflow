@@ -75,16 +75,6 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
 
             this.state.restoreState(this.dataSource);
             this.filter = this.state.filter;
-
-            //     this.dataSource.data.forEach(element => {
-            //         this.postService.getAllQuestionsUnanswered(element.id).subscribe(a => {
-            //             element.answers = a;
-            //             if (element.answers.length === 0) {
-            //                 this.unanswered.push(element);
-            //             }
-            //         });
-            //     });
-            //     console.log(this.unanswered);
         });
     }
 
@@ -103,7 +93,7 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
     }
 
     delete(post: Post) {
-        if (this.authService.isAdmin() 
+        if (this.authService.isAdmin()
             || this.authorDeleteRulesOk(post)) {
             const backup = this.dataSource.data;
             this.dataSource.data = _.filter(this.dataSource.data, p => p.id !== post.id);
@@ -125,7 +115,7 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
             if (this.isAnAnswer(post))
                 return this.hasNoComments(post);
             else {
-                return this.hasNoComments(post) 
+                return this.hasNoComments(post)
                     && this.hasNoAnswers(post);
             }
         } return false;
@@ -156,17 +146,17 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
     create() {
         if (this.currUser.role == Role.Admin || this.currUser.role == Role.Member) {
             const post = new Post({});
-            const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: true } });
+            const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: true }, height: "800px", width: "600px" });
             dlg.beforeClose().subscribe(res => {
                 if (res) {
                     this.dataSource.data = [...this.dataSource.data, new Post(res)];
                     this.postService.add(res).subscribe(res => {
                         if (!res) {
-                            this.snackBar.open(`There was an error at the server. 
-                                                The post has not been created! Please try again.`,
+                            this.snackBar.open(`There was an error at the server. The post has not been created! Please try again.`,
                                 'Dismiss', { duration: 10000 });
-                            this.refresh();
-                        } this.refresh();
+                            // this.refresh();
+                        }
+                        this.refresh();
                     });
                 }
             });

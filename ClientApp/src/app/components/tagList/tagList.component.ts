@@ -24,7 +24,7 @@ export class TagListComponent implements AfterViewInit, OnDestroy {
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     constructor(
-        private tagService: TagService, 
+        private tagService: TagService,
         private stateService: StateService, private router: Router,
         public dialog: MatDialog, public snackBar: MatSnackBar) {
         this.state = this.stateService.tagListState;
@@ -88,7 +88,7 @@ export class TagListComponent implements AfterViewInit, OnDestroy {
 
     // appelée quand on clique sur le bouton "edit" d'un membre
     edit(tag: Tag) {
-        const dlg = this.dialog.open(EditTagComponent, { data: { tag, isNew: false } });
+        const dlg = this.dialog.open(EditTagComponent, { data: { tag, isNew: false }, height: "800px", width: "600px" });
         dlg.beforeClose().subscribe(res => {
             if (res) {
                 _.assign(tag, res);
@@ -118,7 +118,7 @@ export class TagListComponent implements AfterViewInit, OnDestroy {
     // appelée quand on clique sur le bouton "new tag"
     create() {
         const tag = new Tag({});
-        const dlg = this.dialog.open(EditTagComponent, { data: { tag, isNew: true } });
+        const dlg = this.dialog.open(EditTagComponent, { data: { tag, isNew: true }, height: "800px", width: "600px" });
         dlg.beforeClose().subscribe(res => {
             if (res) {
                 this.dataSource.data = [...this.dataSource.data, new Tag(res)];
