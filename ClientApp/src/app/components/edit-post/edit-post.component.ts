@@ -27,10 +27,15 @@ export class EditPostComponent {
     public ctlTagSelect: FormControl;
     public tags: Tag[] = [];
     public postTags: PostTag[] = [];
-    public selectedTags: Tag[] = [];
+    public selectedTags: string[] = [];
+
+    private minLengthTitle = 2;
+    private maxLengthTitle = 300;
+    private minLengthBody = 2;
+    private maxLengthBody = 2000;
 
     public isNew: boolean;
-    public isAnswer: boolean = false;
+    public isAnswer: boolean;
 
     constructor(
         public dialogRef: MatDialogRef<EditPostComponent>,
@@ -38,38 +43,46 @@ export class EditPostComponent {
         public postService: PostService,
         public router: Router,
     ) {
+        this.isAnswer = data.isAnswer;
 
         this.postService.getAllTags().subscribe(t => this.tags = t);
-        this.ctlTagSelect = this.fb.control('', []);
+        //this.ctlTagSelect = this.fb.control('', []);
 
-        this.tags = [];
-        this.postTags = [];
-        if (this.ctlTagSelect.value !== '') {
-            this.ctlTagSelect.value.forEach(t => {
-                this.tags.forEach(elm => {
-                    if (elm.name === t) {
-                        this.tags.push(elm);
-                        let pt = new PostTag({});
-                        pt.postId = this.data.post.id;
-                        pt.tagId = elm.id;
-                        this.data.post.postTags.push(pt);
-                    }
-                });
-            });
-        }
+        this.data.post.tags.forEach(element => {
+            this.selectedTags.push(element.name);
+        });
+
+        // if (this.ctlTagSelect.value !== '') {
+        //     this.ctlTagSelect.value.forEach(t => {
+        //         data.post.tags = [];
+        //         data.post.postTags = [];
+        //         this.tags.forEach(elm => {
+        //             if (elm.name === t) {
+
+        //                 data.post.tags.push(elm);
+        //                 let pt = new PostTag({});
+        //                 pt.postId = data.post.id;
+        //                 pt.tagId = elm.id;
+        //                 data.post.postTags.push(pt);
+        //             }
+        //         });
+        //     });
+        // }
 
 
-        this.isAnswer = data.isAnswer;
+
         this.ctlTitle = this.fb.control('',
             [
-                //Ajouter une condition sur ce validator if(!isComment && !isAnswer)
-                //Validators.required, 
+                Validators.minLength(this.minLengthTitle),
+                Validators.maxLength(this.maxLengthTitle),
             ]
         );
 
         this.ctlBody = this.fb.control('',
             [
                 Validators.required,
+                Validators.minLength(this.minLengthBody),
+                Validators.maxLength(this.maxLengthBody),
             ]
         );
 
@@ -77,13 +90,22 @@ export class EditPostComponent {
             id: this.ctlId,
             title: this.ctlTitle,
             body: this.ctlBody,
-            tagSelect: this.ctlTagSelect
-        });
+            //tags: this.ctlTagSelect
+        },
+            // { validator: this.isTitleRequired }
+        );
         console.log(data);
         this.isNew = data.isNew;
         this.frm.patchValue(data.post);
 
     }
+
+    // isTitleRequired(group: FormGroup): ValidationErrors {
+    //     if (!group.value) { return null; }
+
+    //     if (!this.isAnswer)
+    //         return { titleRequired: true };
+    // }
 
     onNoClick(): void {
         this.dialogRef.close();

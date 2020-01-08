@@ -31,12 +31,12 @@ const appRoutes: Routes = [
   {
     path: 'tags',
     component: TagListComponent,
-    canActivate: [AuthGuard],
+    //canActivate: [AuthGuard],
   },
   {
     path: 'tagQuestions',
     component: TagQuestionsComponent,
-    canActivate: [AuthGuard],
+    //canActivate: [AuthGuard],
   },
   {
     path: 'postdetail',

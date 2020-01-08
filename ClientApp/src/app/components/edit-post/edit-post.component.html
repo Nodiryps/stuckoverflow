@@ -2,8 +2,8 @@
     <h1>{{(!isNew ? 'Edit existing' : 'Add a new') + (isAnswer ? ' answer' : ' question')}}</h1>
     <div>
         <mat-form-field *ngIf="!isAnswer">
-            <input matInput placeholder="Title" [formControl]="ctlTitle" required appSetFocus>
-            <mat-error class="float-right" *ngIf="ctlTitle.hasError('required')">Required</mat-error>
+            <input matInput placeholder="Title" [formControl]="ctlTitle" appSetFocus>
+            <!-- <mat-error class="float-right" *ngIf="ctlTitle.hasError('required')">Required</mat-error> -->
             <mat-error class="float-right" *ngIf="ctlTitle.hasError('minlength')">Minimum length is
                 {{ctlTitle.errors['minlength'].requiredLength}}</mat-error>
             <mat-error class="float-right" *ngIf="ctlTitle.hasError('maxlength')">Maximum length is
@@ -13,6 +13,10 @@
             <!-- <mat-error class="float-right" *ngIf="ctlPseudo.hasError('pattern')">(chars, numbs, _ or .)</mat-error> -->
             <!-- <mat-error class="float-right" *ngIf="ctlPseudo.hasError('forbiddenValue')">Forbidden value '@'</mat-error> -->
         </mat-form-field>
+        <p></p>
+        <!-- <div *ngIf="!isAnswer && frm.errors">
+            <mat-error class="field-error" *ngIf="frm.hasError('titleRequired')">Title required</mat-error>
+        </div> -->
 
         <mat-form-field>
             <simplemde matInput [formControl]="ctlBody" required></simplemde>
@@ -20,10 +24,12 @@
             <mat-error class="float-right" *ngIf="ctlBody.hasError('required')">Required</mat-error>
             <mat-error class="float-right" *ngIf="ctlBody.hasError('minlength')">Minimum length is
                 {{ctlBody.errors['minlength'].requiredLength}}</mat-error>
+            <mat-error class="float-right" *ngIf="ctlBody.hasError('maxlength')">Maximum length is
+                {{ctlBody.errors['maxlength'].requiredLength}}</mat-error>
         </mat-form-field>
-
-        <mat-form-field>
-            <mat-select [formControl]="ctlTagSelect" multiple placeholder="Select Tag(s)">
+        <p></p>
+        <!-- <mat-form-field>
+            <mat-select [(ngModel)]="selectedTags" [formControl]="ctlTagSelect" multiple placeholder="Select Tag(s)">
                 <mat-select-trigger>
                     {{ctlTagSelect.value ? ctlTagSelect.value[0] : ''}}
                     <span *ngIf="ctlTagSelect.value?.length > 1">
@@ -32,10 +38,11 @@
                 </mat-select-trigger>
                 <mat-option *ngFor="let tag of tags" [value]="tag.name">{{tag.name}}</mat-option>
             </mat-select>
-        </mat-form-field>
+        </mat-form-field> -->
 
         <div *ngIf="frm.errors">
         </div>
+        <p></p>
     </div>
     <div class="footer">
         <button type="submit" mat-button form="frm" [disabled]="frm.pristine || frm.invalid || frm.pending"

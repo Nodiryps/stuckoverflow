@@ -36,6 +36,10 @@ export class TagService {
         this.tag = t;
     }
 
+    public isAvailable(tagName: string): Observable<boolean> {
+        return this.http.get<boolean>(`${this.baseUrl}api/tags/available/${tagName}`);
+    }
+
     public update(u: Tag): Observable<boolean> {
         return this.http.put<Tag>(`${this.baseUrl}api/tags/${u.id}`, u).pipe(
             map(res => true),

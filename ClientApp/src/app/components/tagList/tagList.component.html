@@ -6,7 +6,7 @@
         </mat-form-field>
 
         <br>
-        <div class="row mt-3">
+        <div *ngIf="currUser != null && isAdmin" class="row mt-3">
             <div class="col-12">
                 <button mat-raised-button color="primary" (click)="create()">New Tag</button>
             </div>
@@ -28,15 +28,16 @@
                 <ng-container matColumnDef="nbOcc">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Nb Questions </th>
                     <td mat-cell *matCellDef="let row">
-                        <button *ngIf="row.nbOcc > 0; else zeroQuestion" (click)="getTagQuestions(row)" mat-icon-button color="primary" tabindex="-1"> 
-                            <b>{{row.nbOcc}} question(s)</b> 
+                        <button *ngIf="row.nbOcc > 0; else zeroQuestion" (click)="getTagQuestions(row)" mat-icon-button
+                            color="primary" tabindex="-1">
+                            <b>{{row.nbOcc}} question(s)</b>
                         </button>
 
                         <ng-template #zeroQuestion>{{row.nbOcc}} question</ng-template>
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="actions">
+                <ng-container *ngIf="currUser != null && isAdmin " matColumnDef="actions">
                     <th mat-header-cell *matHeaderCellDef> Actions </th>
 
                     <td mat-cell *matCellDef="let row">

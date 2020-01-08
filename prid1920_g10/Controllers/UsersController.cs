@@ -97,7 +97,7 @@ namespace prid1920_g10.Controllers {
                     select u.Id).FirstOrDefault();
         }
 
-        [Authorized(Role.Admin, Role.Member)]
+        [Authorized(Role.Admin)]
         [HttpPut("{pseudo}")]
         public async Task<IActionResult> PutUser(string pseudo, UserDTO userDTO) {
             if (pseudo != userDTO.Pseudo)

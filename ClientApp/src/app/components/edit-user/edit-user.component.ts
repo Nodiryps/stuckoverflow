@@ -72,18 +72,18 @@ export class EditUserComponent {
             pseudo: this.ctlPseudo,
             password: this.ctlPassword,
             email: this.ctlEmail,
-            firstName: this.ctlFirstName,
-            lastName: this.ctlLastName,
+            firstname: this.ctlFirstName,
+            lastname: this.ctlLastName,
             birthDate: this.ctlBirthDate,
             // reputation: this.ctlReputation,
             role: this.ctlRole
-        }, { validator: this.nameValidations });
+        }, { validator: this.crossValidations });
         console.log(data);
         this.isNew = data.isNew;
         this.frm.patchValue(data.user);
     }
 
-    nameValidations(group: FormGroup): ValidationErrors {
+    crossValidations(group: FormGroup): ValidationErrors {
         if (!group.value) { return null; }
         if (group.value.firstname !== '' && group.value.lastname === '') {
             return { lastnameRequired: true };
@@ -91,7 +91,18 @@ export class EditUserComponent {
         if (group.value.firstname === '' && group.value.lastname !== '') {
             return { firstnameRequired: true };
         }
+        return group.value.password === group.value.passwordConfirm ? null : { passwordNotConfirmed: true };
     }
+
+    // nameValidations(group: FormGroup): ValidationErrors {
+    //     if (!group.value) { return null; }
+    //     if (group.value.firstName !== '' && group.value.lastName === '') {
+    //         return { lastNameRequired: true };
+    //     }
+    //     if (group.value.firstName === '' && group.value.lastName !== '') {
+    //         return { firstNameRequired: true };
+    //     }
+    // }
 
     forbiddenValues(arr: Array<string>): any {
         return (ctl: FormControl) => {

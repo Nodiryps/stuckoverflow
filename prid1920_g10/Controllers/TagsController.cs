@@ -33,7 +33,7 @@ namespace prid1920_g10.Controllers {
             return (await _context.Tags.ToListAsync()).ToDTO();
         }
 
-        [Authorized(Role.Admin, Role.Member)]
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<TagDTO>> GetTagById(int id) {
             var tag = new Tag();
@@ -42,6 +42,20 @@ namespace prid1920_g10.Controllers {
             if (tag == null)
                 return NotFound();
             return tag.ToDTO();
+        }
+
+        [Authorized(Role.Admin)]
+        [HttpGet("available/{str}")]
+        public async Task<ActionResult<bool>> IsAvailable(string str) {
+            var tag = new Tag();
+            tag = await _context.Tags.FindAsync(this.GetTagIdByName(str));
+            return tag == null;
+        }
+
+        private int GetTagIdByName(string name) {
+            return (from t in _context.Tags
+                    where t.Name == name
+                    select t.Id).FirstOrDefault();
         }
 
         [AllowAnonymous]

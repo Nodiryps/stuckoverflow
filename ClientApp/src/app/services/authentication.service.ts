@@ -18,7 +18,8 @@ export class AuthenticationService {
     }
 
     isAdmin() {
-        return this.currentUser.role === Role.Admin;
+        if (this.currentUser != null)
+            return this.currentUser.role === Role.Admin;
     }
 
     isTheAuthorOfAPost(post: Post) {

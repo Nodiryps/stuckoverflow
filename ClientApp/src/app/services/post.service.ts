@@ -86,8 +86,8 @@ export class PostService {
     );
   }
 
-  public update(u: Post): Observable<boolean> {
-    return this.http.put<Post>(`${this.baseUrl}api/posts/${u.id}`, u).pipe(
+  public update(p: Post): Observable<boolean> {
+    return this.http.put<Post>(`${this.baseUrl}api/posts/${p.id}`, p).pipe(
       map(res => true),
       catchError(err => {
         console.error(err);

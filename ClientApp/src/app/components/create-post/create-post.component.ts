@@ -22,6 +22,10 @@ export class CreatePostComponent {
     public tags: Tag[] = [];
     public postTags: PostTag[] = [];
     public selectedTags: Tag[] = [];
+    private minLengthTitle = 2;
+    private maxLengthTitle = 300;
+    private minLengthBody = 2;
+    private maxLengthBody = 2000;
 
     constructor(
         public postService: PostService,  // pour pouvoir faire le login
@@ -37,8 +41,8 @@ export class CreatePostComponent {
         this.ctlTitle = this.fb.control('',
             [
                 Validators.required,
-                // Validators.minLength(this.minLengthPseudoPasswordName), 
-                // Validators.maxLength(this.maxLengthPseudo),
+                Validators.minLength(this.minLengthTitle),
+                Validators.maxLength(this.maxLengthTitle),
                 // Validators.pattern(/^[a-z]+[a-z0-9._]/),
                 // this.forbiddenValue('@')
             ]
@@ -47,6 +51,8 @@ export class CreatePostComponent {
         this.ctlBody = this.fb.control('',
             [
                 Validators.required,
+                Validators.minLength(this.minLengthBody),
+                Validators.maxLength(this.maxLengthBody),
                 // Validators.pattern(/^[a-z]+[a-z0-9._]/),
                 // Validators.minLength(this.minLengthPseudoPasswordName)
             ]

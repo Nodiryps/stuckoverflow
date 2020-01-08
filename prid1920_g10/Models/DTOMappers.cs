@@ -16,7 +16,8 @@ namespace prid1920_g10.Models {
             Role = user.Role,
             Posts = user.Posts.ToDTO(),
             Comments = user.Comments.ToDTO(),
-            Votes = user.Votes.ToDTO()
+            Votes = user.Votes.ToDTO(),
+            Reputation = user.Reputation
         };
         public static List<UserDTO> ToDTO(this IEnumerable<User> users) {
             return users.Select(m => m.ToDTO()).ToList();

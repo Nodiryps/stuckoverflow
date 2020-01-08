@@ -39,7 +39,7 @@ export class EditTagComponent {
                 Validators.minLength(this.minLengthPseudoPasswordName),
                 Validators.maxLength(this.maxLengthPseudo),
                 // this.forbiddenValues(['@', ' '])
-            ], []
+            ], [this.tagUsed()]
         );
 
         this.frm = this.fb.group({
@@ -50,6 +50,21 @@ export class EditTagComponent {
         console.log(data);
         this.isNew = data.isNew;
         this.frm.patchValue(data.tag);
+    }
+
+    tagUsed(): AsyncValidatorFn {
+        let timeout: NodeJS.Timeout;
+        return (ctl: FormControl) => {
+            clearTimeout(timeout);
+            const name = ctl.value;
+            return new Promise(resolve => {
+                timeout = setTimeout(() => {
+                    this.tagService.isAvailable(name).subscribe(res => {
+                        resolve(res ? null : { tagUsed: true });
+                    });
+                }, 300);
+            });
+        };
     }
 
     forbiddenValues(arr: Array<string>): any {

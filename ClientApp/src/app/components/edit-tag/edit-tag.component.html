@@ -3,11 +3,10 @@
     <div class="form">
         <mat-form-field>
             <input matInput placeholder="Tag" [formControl]="ctlName" required>
-            <!-- <mat-error class="field-error" *ngIf="ctlPseudo.hasError('required')">Required</mat-error>
-            <mat-error class="field-error" *ngIf="ctlPseudo.hasError('minlength')">Minimum length is -->
-            <!-- {{ctlPseudo.errors['minlength'].requiredLength}}</mat-error> -->
-            <!-- <mat-error class="field-error" *ngIf="ctlPseudo.hasError('pseudoUsed')">Pseudo already in use</mat-error> -->
-            <!-- <mat-error class="field-error" *ngIf="ctlPseudo.hasError('forbiddenValue')">Forbiddent value '@'</mat-error> -->
+            <mat-error class="field-error" *ngIf="ctlName.hasError('required')">Required</mat-error>
+            <mat-error class="field-error" *ngIf="ctlName.hasError('tagUsed')">Tag already used</mat-error>
+
+
         </mat-form-field>
     </div>
     <div class="footer">

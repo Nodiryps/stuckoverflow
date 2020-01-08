@@ -166,6 +166,23 @@ namespace prid1920_g10.Controllers {
             post.Body = dto.Body;
             post.AcceptedAnswerId = dto.AcceptedAnswerId;
             // post.Timestamp = DateTime.Now;
+            //post.Tags = dto.Tags;
+
+            // if (dto.Tags != null) {
+            //     foreach (var t in dto.Tags) {
+            //         var tag = await _context.Tags.SingleOrDefaultAsync(tg => tg.Name == t.Name);
+            //         var pst = await _context.Posts.SingleOrDefaultAsync(p => p.Id == post.Id);
+
+            //         var newPostTag = new PostTag() {
+            //             Post = pst,
+            //             Tag = tag,
+            //             PostId = pst.Id,
+            //             TagId = tag.Id
+            //         };
+
+            //         _context.PostTags.Add(newPostTag);
+            //     }
+            // }
 
 
             if (dto.Votes != null) {

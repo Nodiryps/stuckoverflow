@@ -8,6 +8,8 @@ import { TagQuestionsComponent } from '../tagQuestions/tagQuestions.component';
 import { StateService } from 'src/app/services/state.service';
 import { MatTableState } from 'src/app/helpers/mattable.state';
 import { Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { User } from 'src/app/models/user';
 
 @Component({
     selector: 'app-taglist',
@@ -16,18 +18,25 @@ import { Router } from '@angular/router';
 })
 
 export class TagListComponent implements AfterViewInit, OnDestroy {
-    displayedColumns: string[] = ['id', 'name', 'nbOcc', 'actions'];
+    displayedColumns: string[] = ['id', 'name', 'nbOcc'];
     dataSource: MatTableDataSource<Tag> = new MatTableDataSource();
     filter: string;
     state: MatTableState;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
+    currUser: User;
+    isAdmin: boolean;
 
     constructor(
         private tagService: TagService,
         private stateService: StateService, private router: Router,
-        public dialog: MatDialog, public snackBar: MatSnackBar) {
+        public dialog: MatDialog, public snackBar: MatSnackBar,
+        private authService: AuthenticationService) {
         this.state = this.stateService.tagListState;
+        this.currUser = authService.currentUser;
+        this.isAdmin = authService.isAdmin();
+        if (this.isAdmin)
+            this.displayedColumns.push('actions');
     }
 
     ngAfterViewInit(): void {
