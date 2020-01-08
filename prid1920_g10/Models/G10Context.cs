@@ -33,6 +33,10 @@ namespace prid1920_g10.Models {
             builder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique(); // unicity email
+            builder.Entity<Tag>()
+                .HasIndex(t => t.Name)
+                .IsUnique(); // unicity name
+
 
             builder.Entity<Vote>()
                 .HasKey(v => new { v.AuthorId, v.PostId }); // vote keys => authId & postId

@@ -119,7 +119,7 @@
                 <li *ngFor="let comment of answer.comments">
                     <div>
                         <markdown [data]="comment.body"></markdown> - <b>{{comment.authorId}}</b> -
-                        {{comment.timestamp | date : 'yyyy-MM-dd'}}
+                        {{comment.timestamp | date : 'dd-MM-yyyy'}}
                     </div>
                     <div *ngIf="currUser != null">
                         <button *ngIf="currUser.id == comment.authorId || currUser.role == 2" mat-icon-button

@@ -28,48 +28,48 @@ export class SignUpComponent {
         public router: Router,                      // pour rediriger vers la page d'accueil en cas de login
         private fb: FormBuilder                     // pour construire le formulaire, du côté TypeScript
     ) {
-        this.ctlPseudo = this.fb.control('', 
+        this.ctlPseudo = this.fb.control('',
             [
-                Validators.required, 
-                Validators.minLength(this.minLengthPseudoPasswordName), 
+                Validators.required,
+                Validators.minLength(this.minLengthPseudoPasswordName),
                 Validators.maxLength(this.maxLengthPseudo),
                 Validators.pattern(/^[a-z]+[a-z0-9._]/),
                 // this.forbiddenValue('@')
             ], [this.pseudoUsed()]
         );
-        this.ctlPassword = this.fb.control('', 
+        this.ctlPassword = this.fb.control('',
             [
-                Validators.required, 
+                Validators.required,
                 Validators.minLength(this.minLengthPseudoPasswordName)
             ]
         );
-        this.ctlPasswordConfirm = this.fb.control('', 
+        this.ctlPasswordConfirm = this.fb.control('',
             [
-                Validators.required, 
+                Validators.required,
                 Validators.minLength(3)
             ]
         );
-        this.ctlEmail = this.fb.control('', 
+        this.ctlEmail = this.fb.control('',
             [
                 Validators.pattern(/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/)
             ], [this.emailUsed()]
         );
-        this.ctlFirstName = this.fb.control('', 
+        this.ctlFirstName = this.fb.control('',
             [
-                Validators.minLength(this.minLengthPseudoPasswordName), 
+                Validators.minLength(this.minLengthPseudoPasswordName),
                 Validators.maxLength(this.maxLengthName),
                 Validators.pattern(/^(\w+\S+)$/)
             ]
         );
-        this.ctlLastName = this.fb.control('', 
+        this.ctlLastName = this.fb.control('',
             [
-                Validators.minLength(this.minLengthPseudoPasswordName), 
+                Validators.minLength(this.minLengthPseudoPasswordName),
                 Validators.maxLength(this.maxLengthName),
                 Validators.pattern(/^(\w+\S+)$/)
             ]
         );
         this.ctlBirthDate = this.fb.control('', [this.validateBirthDate()]);
-        
+
         this.frm = this.fb.group({
             pseudo: this.ctlPseudo,
             password: this.ctlPassword,
@@ -120,6 +120,8 @@ export class SignUpComponent {
             var age = new Date(diff).getUTCFullYear() - 1970;
             if (age < 18)
                 return { tooYoung: true };
+            if (age > 130)
+                return { tooooOld: true };
             return null;
         };
     }

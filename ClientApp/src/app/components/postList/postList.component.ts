@@ -48,16 +48,18 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
     ngAfterViewInit(): void {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+
         this.dataSource.filterPredicate = (data: Post, filter: string) => {
+            let stringTags;
+            data.tags.forEach(element => {
+                stringTags += element.name + ' ';
+            });
             const str = data.votes + ' ' + data.timestamp + ' ' +
-                data.title + ' ' + data.body + ' ' + data.tags;
+                data.title + ' ' + data.body + ' ' + stringTags;
             return str.toLowerCase().includes(filter);
         };
         this.state.bind(this.dataSource);
         this.refresh();
-
-        // this.showUnanswered();
-
     }
 
     refresh() {

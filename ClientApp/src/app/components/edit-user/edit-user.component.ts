@@ -24,7 +24,7 @@ export class EditUserComponent {
     public ctlLastName: FormControl;
     public ctlPassword: FormControl;
     public ctlBirthDate: FormControl;
-    public ctlReputation: FormControl;
+    // public ctlReputation: FormControl;
     public ctlRole: FormControl;
     public isNew: boolean;
 
@@ -65,7 +65,7 @@ export class EditUserComponent {
             Validators.maxLength(this.maxLengthName)
         ]);
         this.ctlBirthDate = this.fb.control('', [this.validateBirthDate()]);
-        this.ctlReputation = this.fb.control('', []);
+        // this.ctlReputation = this.fb.control('', []);
         this.ctlRole = this.fb.control(Role.Member, []);
         this.frm = this.fb.group({
             id: this.ctlId,
@@ -75,7 +75,7 @@ export class EditUserComponent {
             firstName: this.ctlFirstName,
             lastName: this.ctlLastName,
             birthDate: this.ctlBirthDate,
-            reputation: this.ctlReputation,
+            // reputation: this.ctlReputation,
             role: this.ctlRole
         }, { validator: this.nameValidations });
         console.log(data);

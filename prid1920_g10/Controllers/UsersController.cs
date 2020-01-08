@@ -43,7 +43,7 @@ namespace prid1920_g10.Controllers {
             }
 
             if (user == null)
-                return NotFound();
+                return NoContent();
             return user.ToDTO();
         }
 
@@ -75,6 +75,7 @@ namespace prid1920_g10.Controllers {
                 FirstName = data.FirstName,
                 LastName = data.LastName,
                 BirthDate = data.BirthDate,
+                Reputation = 0,
                 Role = data.Role
             };
             _context.Users.Add(newUser);
@@ -319,7 +320,7 @@ namespace prid1920_g10.Controllers {
                         }
                     ),
                     IssuedAt = DateTime.UtcNow,
-                    Expires = DateTime.UtcNow.AddMinutes(10000),
+                    Expires = DateTime.UtcNow.AddMinutes(60),
                     SigningCredentials = new SigningCredentials
                         (
                             new SymmetricSecurityKey(key),
