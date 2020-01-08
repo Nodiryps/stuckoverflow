@@ -7,6 +7,8 @@ import * as _ from 'lodash';
 import { Post } from 'src/app/models/post';
 import { Router } from '@angular/router';
 import { MatTableState } from 'src/app/helpers/mattable.state';
+import { Tag } from 'src/app/models/tag';
+import { PostTag } from 'src/app/models/postTag';
 //import { post } from 'selenium-webdriver/http';
 
 
@@ -21,6 +23,12 @@ export class EditPostComponent {
     public ctlId: FormControl;
     public ctlTitle: FormControl;
     public ctlBody: FormControl;
+
+    public ctlTagSelect: FormControl;
+    public tags: Tag[] = [];
+    public postTags: PostTag[] = [];
+    public selectedTags: Tag[] = [];
+
     public isNew: boolean;
     public isAnswer: boolean = false;
 
@@ -30,6 +38,27 @@ export class EditPostComponent {
         public postService: PostService,
         public router: Router,
     ) {
+
+        this.postService.getAllTags().subscribe(t => this.tags = t);
+        this.ctlTagSelect = this.fb.control('', []);
+
+        this.tags = [];
+        this.postTags = [];
+        if (this.ctlTagSelect.value !== '') {
+            this.ctlTagSelect.value.forEach(t => {
+                this.tags.forEach(elm => {
+                    if (elm.name === t) {
+                        this.tags.push(elm);
+                        let pt = new PostTag({});
+                        pt.postId = this.data.post.id;
+                        pt.tagId = elm.id;
+                        this.data.post.postTags.push(pt);
+                    }
+                });
+            });
+        }
+
+
         this.isAnswer = data.isAnswer;
         this.ctlTitle = this.fb.control('',
             [
@@ -48,10 +77,12 @@ export class EditPostComponent {
             id: this.ctlId,
             title: this.ctlTitle,
             body: this.ctlBody,
+            tagSelect: this.ctlTagSelect
         });
         console.log(data);
         this.isNew = data.isNew;
         this.frm.patchValue(data.post);
+
     }
 
     onNoClick(): void {

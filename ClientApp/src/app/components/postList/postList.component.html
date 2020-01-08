@@ -1,14 +1,15 @@
-<div *ngIf="currUser != null" class="row">
+<div class="row">
   <div class="col-sm-12">
     <mat-form-field>
       <input matInput (keyup)="filterChanged($event.target.value)" [value]="filter" placeholder="Filter" appSetFocus>
     </mat-form-field>
 
     <div class="col-12 btnAskQuestion">
-      <button mat-raised-button color='primary' [routerLink]='["/create-post"]'>Ask question</button>
+      <button *ngIf="currUser != null" mat-raised-button color='primary' [routerLink]='["/create-post"]'>Ask
+        question</button>
       <!-- <button mat-raised-button color='primary' (click)="create()">Ask question</button> -->
 
-      <mat-button-toggle-group [(value)]="selectedValue" class="toggleBtn">
+      <mat-button-toggle-group [(value)]="selectedValue" class="toggleBtn" appearance="legacy">
         <mat-button-toggle *ngFor="let item of toggleBtnOptions" (change)="selectionChanged(item)" [value]="item">
           {{item}}</mat-button-toggle>
       </mat-button-toggle-group>
@@ -51,8 +52,8 @@
             <button class="btnDetails" mat-button color="primary" (click)="showDetail(row)">
               <b>Details</b>
             </button>
-
-            <button *ngIf="currUser.role == 2" class="btnDelete" mat-button color="primary" (click)="delete(row)">
+            <button *ngIf="currUser != null && currUser.role == 2" class="btnDelete" mat-button color="primary"
+              (click)="delete(row)">
               <mat-icon>delete</mat-icon>
             </button>
           </td>

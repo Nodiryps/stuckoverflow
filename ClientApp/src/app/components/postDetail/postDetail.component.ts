@@ -314,10 +314,9 @@ export class PostDetailComponent { // implements OnDestroy {
           this.postService.delete(post).subscribe();
           if (post.title !== null) // redirect only if question
             this.router.navigate(['/']);
-          this.refreshPost();
+          this.answers = _.filter(this.answers, a => post.id !== a.id); // to avoid duplicating accepted answers
         }
       });
-      this.refreshPost();
     }
     else if (!this.authService.isTheAuthorOfAPost(post) || !this.authService.isAdmin())
       this.snackBar.open(`You have to be the author or an admin to delete.`, 'Dismiss', { duration: 10000 });
@@ -361,6 +360,7 @@ export class PostDetailComponent { // implements OnDestroy {
     post.parentId = this.post.id;
 
     this.postService.add(post).subscribe(() => {
+      this.ctlReply.setValue('');
       this.refreshPost();
     });
   }
@@ -371,6 +371,8 @@ export class PostDetailComponent { // implements OnDestroy {
   }
 
   refreshPost() {
+
+
 
     this.postService.getAllAnswers().subscribe(a => {
       this.answers = a;

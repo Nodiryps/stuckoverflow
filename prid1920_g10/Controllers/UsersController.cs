@@ -143,6 +143,7 @@ namespace prid1920_g10.Controllers {
         [AllowAnonymous]
         [HttpPost("signup")]
         public async Task<ActionResult<UserDTO>> SignUp(UserDTO data) {
+            data.Role = Role.Member;
             return await PostUser(data);
         }
 

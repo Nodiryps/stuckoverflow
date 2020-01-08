@@ -3,7 +3,7 @@
         <div class="reputation">
             <p class="score"><b>{{post.currScore}}</b></p>
 
-            <div class="vote">
+            <div *ngIf="currUser != null" class="vote">
                 <button mat-icon-button tabindex="-1" [disabled]="post.alreadyVotedUp">
                     <mat-icon (click)="voteUp(post)">keyboard_arrow_up</mat-icon>
                 </button>
@@ -75,7 +75,7 @@
 
         <p class="score"><b>{{answer.currScore}}</b></p>
 
-        <div class="vote">
+        <div *ngIf="currUser != null" class="vote">
             <button mat-icon-button tabindex="-1" [disabled]="answer.alreadyVotedUp">
                 <mat-icon (click)="voteUp(answer)">keyboard_arrow_up</mat-icon>
             </button>
@@ -141,7 +141,7 @@
     </ul>
 </div>
 
-<form [formGroup]="frm" novalidate>
+<form *ngIf="currUser != null" [formGroup]="frm" novalidate>
     <h1>Answer this question: </h1>
     <mat-form-field>
         <label for="simple">
