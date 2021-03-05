@@ -26,6 +26,14 @@
         </ul>
 
         <ul class="navbar-nav">
+          <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="currentUser">
+            <a class="nav-link text-dark" [routerLink]='["/profile"]'>
+              <span class="material-icons">person</span>
+              <span> Profile </span>
+              <span class="text-info">({{authenticationService.currentUser.pseudo}})</span>
+            </a>
+          </li>
+
           <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="!currentUser">
             <a class="nav-link text-dark" [routerLink]='["/login"]'>
               <span class="material-icons">exit_to_app</span>
@@ -35,7 +43,6 @@
 
           <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="!currentUser">
             <a class="nav-link text-dark" [routerLink]='["/signup"]'>
-
               <span> Sign Up </span>
             </a>
           </li>
@@ -44,7 +51,6 @@
             <a class="nav-link text-dark" [routerLink]='' (click)='logout()'>
               <span class="material-icons">power_settings_new</span>
               <span> Logout </span>
-              <span class="text-info">({{authenticationService.currentUser.pseudo}})</span>
             </a>
           </li>
         </ul>

@@ -1,10 +1,8 @@
 import { Post } from '../../models/post';
 import { User, Role } from '../../models/user';
-import { Tag } from '../../models/tag';
 import { Vote } from 'src/app/models/vote';
 import { PostService } from '../../services/post.service';
 import { UserService } from 'src/app/services/user.service';
-import { CounterService } from 'src/app/services/counter.service';
 import { Comment } from '../../models/comment';
 import { EditCommentComponent } from '../edit-comment/edit-comment.component';
 
@@ -381,20 +379,26 @@ export class PostDetailComponent { // implements OnDestroy {
       this.answers.forEach(element => {
         if (this.post.acceptedAnswerId === element.id)
           acceptedAnswer = element;
-        this.postService.getAllComments(element.id).subscribe(c => element.comments = c);
+        this.postService.getAllComments(element.id).subscribe(c => {
+          element.comments = c;
+          element.comments.forEach(com => this.userService.getById(com.authorId).subscribe(u => com.authorPseudo = new User(u).pseudo))
+        });
         this.userService.getById(element.authorId).subscribe(u => element.author = new User(u));
       });
       this.answers = _.orderBy(_.orderBy(this.answers, (p => p.timestamp), "desc"), (p => p.score), "desc");
       this.answers = _.filter(this.answers, a => this.post.acceptedAnswerId !== a.id); // to avoid duplicating accepted answers
 
-      if (acceptedAnswer != undefined)
+      if (acceptedAnswer != null)
         this.answers.unshift(acceptedAnswer);
       this.refresh();
     });
   }
 
   refresh() {
-    this.postService.getAllComments(this.post.id).subscribe(c => this.post.comments = c);
+    this.postService.getAllComments(this.post.id).subscribe(c => {
+      this.post.comments = c;
+      this.post.comments.forEach(com => this.userService.getById(com.authorId).subscribe(u => com.authorPseudo = new User(u).pseudo))
+    });
     this.userService.getById(this.post.authorId).subscribe(u => this.post.author = new User(u));
   }
 }

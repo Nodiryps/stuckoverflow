@@ -1,0 +1,15 @@
+<h1>{{currUser.pseudo}}'s profile</h1>
+
+<h3>Questions</h3>
+<ul>
+    <li *ngFor="let question of questions">
+        <a>{{question.title.substring(0,100)}} ...</a>
+    </li>
+</ul>
+
+<h3>Answers</h3>
+<ul>
+    <li *ngFor="let answer of answers">
+        <a>{{answer.body.substring(0,100)}} ...</a>
+    </li>
+</ul>

@@ -145,26 +145,6 @@ export class PostListComponent implements AfterViewInit /*, OnDestroy */ {
             this.dataSource.paginator.firstPage();
     }
 
-    create() {
-        if (this.currUser.role == Role.Admin || this.currUser.role == Role.Member) {
-            const post = new Post({});
-            const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: true }, height: "800px", width: "600px" });
-            dlg.beforeClose().subscribe(res => {
-                if (res) {
-                    this.dataSource.data = [...this.dataSource.data, new Post(res)];
-                    this.postService.add(res).subscribe(res => {
-                        if (!res) {
-                            this.snackBar.open(`There was an error at the server. The post has not been created! Please try again.`,
-                                'Dismiss', { duration: 10000 });
-                            // this.refresh();
-                        }
-                        this.refresh();
-                    });
-                }
-            });
-        }
-    }
-
     ngOnDestroy(): void {
         this.snackBar.dismiss();
     }

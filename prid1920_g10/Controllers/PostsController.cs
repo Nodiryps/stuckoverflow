@@ -40,6 +40,24 @@ namespace prid1920_g10.Controllers {
             );
         }
 
+        [Authorized(Role.Member, Role.Admin)]
+        [HttpGet("usersPosts/{id}")]
+        public async Task<ActionResult<IEnumerable<PostDTO>>> GetPostsByUserId(int id) {
+            var posts = GetUsersPosts(id);
+
+            if (posts == null)
+                return NotFound();
+            return (await posts.ToListAsync()).ToDTO();
+        }
+
+        private IQueryable<Post> GetUsersPosts(int userid) {
+            return (
+                from p in _context.Posts
+                where p.AuthorId == userid
+                select p
+            );
+        }
+
         [AllowAnonymous]
         [HttpGet("answers/{id}")]
         public async Task<ActionResult<IEnumerable<PostDTO>>> GetPostsById(int id) {
@@ -74,7 +92,7 @@ namespace prid1920_g10.Controllers {
             var posts = GetPosts(id);
             if (posts == null)
                 return NotFound();
-            Console.WriteLine("POOOSTS: " + posts);
+
             return (await posts.ToListAsync()).ToDTO();
         }
 
@@ -168,23 +186,23 @@ namespace prid1920_g10.Controllers {
             // post.Timestamp = DateTime.Now;
             //post.Tags = dto.Tags;
 
-            // if (dto.Tags != null) {
-            //     foreach (var t in dto.Tags) {
-            //         var tag = await _context.Tags.SingleOrDefaultAsync(tg => tg.Name == t.Name);
-            //         var pst = await _context.Posts.SingleOrDefaultAsync(p => p.Id == post.Id);
+            if (post.Tags != dto.Tags) {
+                await this.DeletePostsPostTags(post);
+            }
+            if (dto.Tags != null) {
+                foreach (var t in dto.Tags) {
+                    var tag = await _context.Tags.SingleOrDefaultAsync(tg => tg.Name == t.Name);
+                    var pst = await _context.Posts.SingleOrDefaultAsync(p => p.Id == post.Id);
 
-            //         var newPostTag = new PostTag() {
-            //             Post = pst,
-            //             Tag = tag,
-            //             PostId = pst.Id,
-            //             TagId = tag.Id
-            //         };
-
-            //         _context.PostTags.Add(newPostTag);
-            //     }
-            // }
-
-
+                    var newPostTag = new PostTag() {
+                        Post = pst,
+                        Tag = tag,
+                        PostId = pst.Id,
+                        TagId = tag.Id
+                    };
+                    _context.PostTags.Add(newPostTag);
+                }
+            }
             if (dto.Votes != null) {
                 foreach (var v in dto.Votes) {
                     if (VoteAlreadyExists(v)) {

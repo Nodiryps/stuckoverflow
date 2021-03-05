@@ -29,16 +29,32 @@
         </mat-form-field>
         <p></p>
         <!-- <mat-form-field>
-            <mat-select [(ngModel)]="selectedTags" [formControl]="ctlTagSelect" multiple placeholder="Select Tag(s)">
+            <mat-select [formControl]="ctlTagSelect" multiple placeholder="Select Tag(s)" [(ngModel)]="selectedTags"
+                [compareWith]="objectComparisonFunction">
+
                 <mat-select-trigger>
                     {{ctlTagSelect.value ? ctlTagSelect.value[0] : ''}}
                     <span *ngIf="ctlTagSelect.value?.length > 1">
                         (+{{ctlTagSelect.value.length - 1}} {{ctlTagSelect.value?.length === 2 ? 'other' : 'others'}})
                     </span>
                 </mat-select-trigger>
-                <mat-option *ngFor="let tag of tags" [value]="tag.name">{{tag.name}}</mat-option>
+                <mat-option *ngFor="let tag of tags" [value]="tag">{{tag.name}}
+                </mat-option>
             </mat-select>
         </mat-form-field> -->
+
+        <mat-form-field>
+            <mat-select [formControl]="ctlTagSelect" placeholder="Select Tag(s)"
+                [compareWith]="objectComparisonFunction" multiple>
+                <mat-select-trigger>
+                    {{ctlTagSelect.value?.length > 0 ? ctlTagSelect.value[0].name : '...'}}
+                    <span *ngIf="ctlTagSelect.value?.length > 1">
+                        (+{{ctlTagSelect.value.length - 1}} {{ctlTagSelect.value?.length === 2 ? 'other' : 'others'}})
+                    </span>
+                </mat-select-trigger>
+                <mat-option *ngFor="let tag of tags" [value]="tag">{{tag.name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
 
         <div *ngIf="frm.errors">
         </div>

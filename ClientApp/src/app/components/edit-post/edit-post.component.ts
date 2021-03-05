@@ -1,3 +1,4 @@
+
 import { Component, OnInit, ɵɵcontainerRefreshEnd } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatTableDataSource, MatSnackBar } from '@angular/material';
 import { Inject } from '@angular/core';
@@ -23,11 +24,11 @@ export class EditPostComponent {
     public ctlId: FormControl;
     public ctlTitle: FormControl;
     public ctlBody: FormControl;
-
     public ctlTagSelect: FormControl;
+
     public tags: Tag[] = [];
-    public postTags: PostTag[] = [];
-    public selectedTags: string[] = [];
+    //public postTags: PostTag[] = [];
+    public selectedTags: Tag[] = [];
 
     private minLengthTitle = 2;
     private maxLengthTitle = 300;
@@ -46,30 +47,11 @@ export class EditPostComponent {
         this.isAnswer = data.isAnswer;
 
         this.postService.getAllTags().subscribe(t => this.tags = t);
-        //this.ctlTagSelect = this.fb.control('', []);
+        this.ctlTagSelect = this.fb.control('', []);
 
         this.data.post.tags.forEach(element => {
-            this.selectedTags.push(element.name);
+            this.selectedTags.push(element);
         });
-
-        // if (this.ctlTagSelect.value !== '') {
-        //     this.ctlTagSelect.value.forEach(t => {
-        //         data.post.tags = [];
-        //         data.post.postTags = [];
-        //         this.tags.forEach(elm => {
-        //             if (elm.name === t) {
-
-        //                 data.post.tags.push(elm);
-        //                 let pt = new PostTag({});
-        //                 pt.postId = data.post.id;
-        //                 pt.tagId = elm.id;
-        //                 data.post.postTags.push(pt);
-        //             }
-        //         });
-        //     });
-        // }
-
-
 
         this.ctlTitle = this.fb.control('',
             [
@@ -90,16 +72,18 @@ export class EditPostComponent {
             id: this.ctlId,
             title: this.ctlTitle,
             body: this.ctlBody,
-            //tags: this.ctlTagSelect
-        },
+            tags: this.ctlTagSelect
+        }
             // { validator: this.isTitleRequired }
         );
         console.log(data);
         this.isNew = data.isNew;
         this.frm.patchValue(data.post);
-
     }
 
+    public objectComparisonFunction = function (option, value): boolean {
+        return option.name === value.name;
+    }
     // isTitleRequired(group: FormGroup): ValidationErrors {
     //     if (!group.value) { return null; }
 

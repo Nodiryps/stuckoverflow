@@ -18,6 +18,7 @@ import { TagQuestionsComponent } from '../components/tagQuestions/tagQuestions.c
 import { PostListComponent } from '../components/postList/postList.component';
 import { PostDetailComponent } from '../components/postDetail/postDetail.component';
 import { UnknownComponent } from '../components/unknown/unknown.component';
+import { ProfileComponent } from '../components/profile/profile.component';
 import { RestrictedComponent } from '../components/restricted/restricted.component';
 import { SignUpComponent } from '../components/signup/signup.component';
 import { CreatePostComponent } from '../components/create-post/create-post.component';
@@ -50,6 +51,7 @@ import { SetFocusDirective } from '../directives/setfocus.directive';
     EditPostComponent,
     EditCommentComponent,
     TagQuestionsComponent,
+    ProfileComponent,
   ],
   entryComponents: [
     EditUserComponent,

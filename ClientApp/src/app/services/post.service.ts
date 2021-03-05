@@ -17,6 +17,12 @@ export class PostService {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private authService: AuthenticationService) { }
 
+  getPostsByUserId(userId: number) {
+    return this.http.get<Post[]>(`${this.baseUrl}api/posts/usersPosts/${userId}`).pipe(
+      map(res => res.map(p => new Post(p)))
+    );
+  }
+
   getById(id: number) {
     return this.http.get<Post>(`${this.baseUrl}api/posts/${id}`).pipe(
       map(u => !u ? null : new Post(u)),
@@ -123,31 +129,5 @@ export class PostService {
         return of(false);
       })
     );
-  }
-
-  authorDeleteRulesOk(datas: MatTableDataSource<Post>, post: Post) {
-    if (this.authService.isTheAuthorOfAPost(post)) {
-      if (this.isAnAnswer(post))
-        return this.hasNoComments(post);
-      else {
-        return this.hasNoComments(post)
-          && this.hasNoAnswers(datas, post);
-      }
-    } return false;
-  }
-
-  isAnAnswer(post: Post) {
-    return post.title === null;
-  }
-
-  hasNoAnswers(dataSource: MatTableDataSource<Post>, post: Post) {
-    dataSource.data.some(p => {
-      return p.parentId !== post.id;
-    });
-    return false;
-  }
-
-  hasNoComments(post: Post) {
-    return post.comments.length === 0;
   }
 }

@@ -66,14 +66,14 @@ export class EditUserComponent {
         ]);
         this.ctlBirthDate = this.fb.control('', [this.validateBirthDate()]);
         // this.ctlReputation = this.fb.control('', []);
-        this.ctlRole = this.fb.control(Role.Member, []);
+        this.ctlRole = this.fb.control('', []);
         this.frm = this.fb.group({
             id: this.ctlId,
             pseudo: this.ctlPseudo,
             password: this.ctlPassword,
             email: this.ctlEmail,
-            firstname: this.ctlFirstName,
-            lastname: this.ctlLastName,
+            firstName: this.ctlFirstName,
+            lastName: this.ctlLastName,
             birthDate: this.ctlBirthDate,
             // reputation: this.ctlReputation,
             role: this.ctlRole
@@ -85,13 +85,12 @@ export class EditUserComponent {
 
     crossValidations(group: FormGroup): ValidationErrors {
         if (!group.value) { return null; }
-        if (group.value.firstname !== '' && group.value.lastname === '') {
+        if (group.value.firstName !== '' && group.value.lastName === '') {
             return { lastnameRequired: true };
         }
-        if (group.value.firstname === '' && group.value.lastname !== '') {
+        if (group.value.firstName === '' && group.value.lastName !== '') {
             return { firstnameRequired: true };
         }
-        return group.value.password === group.value.passwordConfirm ? null : { passwordNotConfirmed: true };
     }
 
     // nameValidations(group: FormGroup): ValidationErrors {

@@ -99,8 +99,10 @@ export class CreatePostComponent {
 
         this.postService.add(post).subscribe(() => {
             //this.showDetail(post);
+            this.postService.post = null;
             this.router.navigate(['./postdetail']);
         });
+
     }
 
 

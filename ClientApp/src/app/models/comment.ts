@@ -6,7 +6,7 @@ export class Comment {
     timestamp: string;
     authorId: number;
     postId: number;
-    //author: User;
+    authorPseudo: string;
 
     constructor(data: any) {
         if (data) {
@@ -15,7 +15,7 @@ export class Comment {
             this.timestamp = data.timestamp;
             this.authorId = data.authorId;
             this.postId = data.postId;
-            //this.author = new User({});
+            this.authorPseudo = '';
         }
     }
 }

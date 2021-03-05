@@ -14,7 +14,7 @@ import { PostDetailComponent } from '../components/postDetail/postDetail.compone
 import { UnknownComponent } from '../components/unknown/unknown.component';
 import { AuthGuard } from '../services/auth.guard';
 import { Role } from '../models/user';
-import { Post } from '../models/post';
+import { ProfileComponent } from '../components/profile/profile.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -22,6 +22,7 @@ const appRoutes: Routes = [
   { path: 'create-post', component: CreatePostComponent },
   { path: 'edit-comment', component: EditCommentComponent },
   { path: 'edit-post', component: EditPostComponent },
+  { path: 'profile', component: ProfileComponent },
   {
     path: 'users',
     component: UserListComponent,
